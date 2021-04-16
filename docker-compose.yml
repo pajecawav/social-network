@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+    db:
+        image: postgres:12
+        env_file:
+            - ./.env
+        volumes:
+            - app-db-data:/var/lib/postgresql/data/pgdata
+        environment:
+            PGDATA: "/var/lib/postgresql/data/pgdata"
+
+    api:
+        build:
+            context: ./api
+            args:
+                INSTALL_DEV: ${INSTALL_DEV-false}
+        depends_on:
+            - db
+        env_file:
+            - ./.env
+        environment:
+            WAIT_HOSTS: db:5432
+
+    frontend:
+        build: ./frontend
+        depends_on:
+            - api
+        ports:
+            - ${PORT-3000}:80
+
+volumes:
+    app-db-data:
