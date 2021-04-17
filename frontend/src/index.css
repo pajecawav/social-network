@@ -13,13 +13,22 @@ html {
 
 body {
     margin: 0;
-    font-family: "Helvetica Neue", "Calibri Light", Roboto, sans-serif;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", "Calibri Light", "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 0.02em;
+
+    @apply bg-gray-100;
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
+}
+
+@layer components {
+    .base-button {
+        @apply px-6 py-2 text-white transition-all duration-100 bg-purple-500 rounded hover:bg-opacity-90;
+    }
 }

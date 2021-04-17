@@ -16,7 +16,6 @@ fileConfig(config.config_file_name)
 
 from app.models import *  # noqa
 
-
 target_metadata = Base.metadata
 
 

@@ -14,6 +14,8 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         obj = self.model(
             username=object_in.username,
             password_hashed=get_password_hash(object_in.password),
+            first_name=object_in.first_name,
+            last_name=object_in.last_name,
         )
         db.add(obj)
         db.commit()

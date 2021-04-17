@@ -20,7 +20,7 @@ def login_access_token(
             detail="Incorrect username or password.",
         )
     result = {
-        "access_token": security.create_access_token(str(user.id)),
+        "access_token": security.create_access_token(str(user.user_id)),
         "token_type": "bearer",
     }
     return result

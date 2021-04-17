@@ -9,8 +9,8 @@ from app.api.dependencies import get_current_user, get_db
 router = APIRouter()
 
 
-@router.post("/", response_model=schemas.User)
-def create_user(
+@router.post("", response_model=schemas.User)
+def users_create_user(
     user_in: schemas.UserCreate, db: Session = Depends(dependencies.get_db)
 ):
     if crud.user.get_by_username(db, username=user_in.username):
@@ -24,8 +24,24 @@ def create_user(
     return user
 
 
-@router.post("/me", response_model=schemas.User)
+@router.get("/me", response_model=schemas.User)
 def users_get_current_user(
     db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
 ):
     return current_user
+
+
+@router.get("/{user_id}", response_model=schemas.User)
+def users_get_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
+    user = crud.user.get(db, user_id)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    return user
