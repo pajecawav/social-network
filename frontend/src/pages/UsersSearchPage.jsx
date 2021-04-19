@@ -13,7 +13,7 @@ function UserCard({ user }) {
     return (
         <div className="flex my-4">
             <CircleAvatar />
-            <div className="ml-6 h-auto">
+            <div className="h-auto ml-6">
                 <Link className="text-purple-600" to={`/users/${user.userId}`}>
                     {user.firstName} {user.lastName}
                 </Link>
@@ -64,14 +64,19 @@ export function UsersSearchPage() {
     const noResults = !(loadOnScroll || users.length);
 
     return (
-        <Container className="flex flex-col flex-grow">
-            <div className="flex items-center py-3 px-4">
-                <span>People</span>
-                {totalMatches > 0 && (
-                    <span className="ml-3 text-gray-300">{totalMatches}</span>
-                )}
-            </div>
-
+        <Container
+            className="flex flex-col flex-grow"
+            header={
+                <>
+                    <span>People</span>
+                    {totalMatches > 0 && (
+                        <span className="ml-3 text-gray-300">
+                            {totalMatches}
+                        </span>
+                    )}
+                </>
+            }
+        >
             <HorizontalSeparator />
 
             <form className="flex gap-4 p-4" onSubmit={handleSubmit}>

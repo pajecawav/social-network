@@ -32,13 +32,15 @@ export function SignupForm() {
                     history.push("/");
                 });
             })
-            .catch((error) => setError(error.response.data.detail));
+            .catch((error) => {
+                setError(error.response.data.detail);
+            });
     };
 
     return (
         <Container className="p-4">
             <form
-                className="flex flex-col gap-4 w-64 max-w-64"
+                className="flex flex-col w-64 gap-4 max-w-64"
                 onSubmit={handleSubmit}
             >
                 <div className="flex flex-col gap-1">

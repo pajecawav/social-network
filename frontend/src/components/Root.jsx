@@ -18,10 +18,12 @@ export function Root() {
             <div className="flex-grow">
                 <Topbar />
                 <Switch>
+                    <Route exact path="/">
+                        <Redirect to={loggedIn ? "/me" : "/login"} />
+                    </Route>
                     <Route exact path="/login">
                         {loggedIn ? <Redirect to="/me" /> : <LandingPage />}
                     </Route>
-                    {!loggedIn && <Redirect to="/login" />}
                     <Route component={Layout} />
                 </Switch>
             </div>

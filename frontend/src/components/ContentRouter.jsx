@@ -1,17 +1,22 @@
 import { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import { UserContext } from "../contexts/UserContext";
+import { EditProfilePage } from "../pages/EditProfilePage";
 import { UserProfilePage } from "../pages/UserProfilePage";
 import { UsersSearchPage } from "../pages/UsersSearchPage";
 
 export function ContentRouter() {
-    const { user } = useContext(UserContext);
+    const { loggedIn, user } = useContext(UserContext);
 
     return (
         <Switch>
-            <Route path="/me">
-                <UserProfilePage userId={user.userId} />
-            </Route>
+            {loggedIn && [
+                // HACK: can't use Fragment because Switch expects Route as children
+                <Route path="/me" key="/me">
+                    <UserProfilePage userId={user.userId} />
+                </Route>,
+                <Route path="/edit" component={EditProfilePage} key="/edit" />,
+            ]}
             <Route path="/users/search" component={UsersSearchPage} />
             <Route
                 path="/users/:id"
@@ -19,7 +24,7 @@ export function ContentRouter() {
                     <UserProfilePage userId={props.match.params.id} />
                 )}
             />
-            <Redirect to="/me" />
+            <Redirect to="/login" />
         </Switch>
     );
 }

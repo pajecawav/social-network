@@ -17,7 +17,7 @@ def login_access_token(
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect username or password.",
+            detail="Incorrect credentials.",
         )
     result = {
         "access_token": security.create_access_token(str(user.user_id)),

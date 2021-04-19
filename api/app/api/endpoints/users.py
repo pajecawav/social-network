@@ -1,8 +1,8 @@
-from sqlalchemy import or_
 from typing import Optional
 
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -74,5 +74,24 @@ def users_get_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found.",
         )
+
+    return user
+
+
+@router.patch("/{user_id}", response_model=schemas.User)
+def users_update_user(
+    user_id: int,
+    user_update: schemas.UserUpdate,
+    db: Session = Depends(get_db),
+):
+    user = crud.user.get(db, user_id)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    user = crud.user.update(db, object_db=user, object_update=user_update)
 
     return user

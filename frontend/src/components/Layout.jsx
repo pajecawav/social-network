@@ -3,9 +3,9 @@ import { Sidebar } from "./Sidebar";
 
 export function Layout() {
     return (
-        <div className="flex relative m-auto mt-4 max-w-4xl">
+        <div className="relative flex max-w-4xl m-auto mt-4">
             <Sidebar />
-            <div className="flex w-full">
+            <div className="w-full">
                 <ContentRouter />
             </div>
         </div>

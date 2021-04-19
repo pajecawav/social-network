@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, PositiveInt, Field
+from pydantic import BaseModel, Field, PositiveInt
 
 
 class GenderEnum(str, Enum):

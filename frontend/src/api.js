@@ -11,7 +11,7 @@ export function configureAxios() {
     });
 
     axios.interceptors.request.use((config) => {
-        if (!config.data instanceof URLSearchParams) {
+        if (!(config.data instanceof URLSearchParams)) {
             config.data = decamelizeKeys(config.data);
         }
         return config;
@@ -37,8 +37,14 @@ export async function signup(data) {
     return axios.post("/api/users", data);
 }
 
-export async function getUser(id) {
-    return axios.get(`/api/users/${id}`, { headers: getAuthHeaders() });
+export async function getUser(userId) {
+    return axios.get(`/api/users/${userId}`, { headers: getAuthHeaders() });
+}
+
+export async function updateUser(userId, data) {
+    return axios.patch(`/api/users/${userId}`, data, {
+        headers: getAuthHeaders(),
+    });
 }
 
 export async function getUsers({ cursor = null, query = null, limit = null }) {

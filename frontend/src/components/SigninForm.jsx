@@ -7,10 +7,10 @@ import { FormError } from "../ui/FormError";
 import { Input } from "../ui/Input";
 import { Container } from "./Container";
 
-export function SigninForm() {
-    const [username, setUsername] = useState("");
+export function SigninForm({ username: usernameProp, error: errorProp }) {
+    const [username, setUsername] = useState(usernameProp || "");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(errorProp || null);
     const history = useHistory();
     const { login } = useContext(UserContext);
 
@@ -31,9 +31,12 @@ export function SigninForm() {
     return (
         <Container className="p-4">
             <form
-                className="flex flex-col gap-4 w-64 max-w-64"
+                className="flex flex-col gap-4 max-w-64"
                 onSubmit={handleSubmit}
             >
+                <div className="flex flex-col gap-1">
+                    <div className="font-semibold text-center">Login to SN</div>
+                </div>
                 <Input
                     type="text"
                     placeholder="Username"
