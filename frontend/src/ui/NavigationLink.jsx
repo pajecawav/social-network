@@ -19,7 +19,7 @@ export function NavigationLink({
             {Icon && (
                 <Icon className="w-5 h-5 text-purple-500 stroke-current stroke-1" />
             )}
-            <div className="text-sm">{text}</div>
+            <div>{text}</div>
         </Link>
     );
 }

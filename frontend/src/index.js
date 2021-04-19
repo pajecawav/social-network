@@ -1,9 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { configureAxios } from "./api";
 import { App } from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
+configureAxios();
 
 ReactDOM.render(
     <React.StrictMode>

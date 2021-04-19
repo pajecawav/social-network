@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import { UserContext } from "../contexts/UserContext";
 import { UserProfilePage } from "../pages/UserProfilePage";
+import { UsersSearchPage } from "../pages/UsersSearchPage";
 
 export function ContentRouter() {
     const { user } = useContext(UserContext);
@@ -11,6 +12,7 @@ export function ContentRouter() {
             <Route path="/me">
                 <UserProfilePage userId={user.userId} />
             </Route>
+            <Route path="/users/search" component={UsersSearchPage} />
             <Route
                 path="/users/:id"
                 render={(props) => (

@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { deleteLocalToken, saveLocalToken } from "../utils";
 import { getMe } from "../api";
-import { camelizeKeys } from "humps";
+import { deleteLocalToken, saveLocalToken } from "../utils";
 
 export const UserContext = createContext();
 
@@ -12,7 +11,7 @@ export function UserProvider({ children }) {
     useEffect(() => {
         getMe()
             .then((response) => {
-                setUser(camelizeKeys(response.data));
+                setUser(response.data);
                 setLoggedIn(true);
             })
             .catch(() => {
@@ -23,7 +22,7 @@ export function UserProvider({ children }) {
     const login = (token) => {
         saveLocalToken(token);
         getMe().then((response) => {
-            setUser(camelizeKeys(response.data));
+            setUser(response.data);
             setLoggedIn(true);
         });
     };

@@ -28,7 +28,7 @@ export function SignupForm() {
         })
             .then(() => {
                 logInGetToken({ username, password }).then((response) => {
-                    login(response.data.access_token, username);
+                    login(response.data.accessToken, username);
                     history.push("/");
                 });
             })
@@ -36,9 +36,9 @@ export function SignupForm() {
     };
 
     return (
-        <Container>
+        <Container className="p-4">
             <form
-                className="flex flex-col w-64 gap-4 max-w-64"
+                className="flex flex-col gap-4 w-64 max-w-64"
                 onSubmit={handleSubmit}
             >
                 <div className="flex flex-col gap-1">

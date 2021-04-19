@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-export function Avatar({ className }) {
+export function Avatar({ className, ...props }) {
     // TODO: implement actual images
-    return <div className={clsx("w-6 h-6", className)} />;
+    return <div className={clsx("bg-gray-200", className)} {...props} />;
 }

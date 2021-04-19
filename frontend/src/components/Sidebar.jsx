@@ -12,7 +12,7 @@ import { NavigationLink } from "../ui/NavigationLink";
 
 export function Sidebar() {
     return (
-        <div className="sticky flex flex-col w-40 h-full pr-3 top-14">
+        <div className="sticky flex flex-col flex-shrink-0 h-full pr-3 top-14 w-36">
             <NavigationLink to="/me" icon={UserCircleIcon} text="My Profile" />
             <NavigationLink to="/feed" icon={NewspaperIcon} text="Feed" />
             <NavigationLink to="/messages" icon={ChatIcon} text="Messages" />

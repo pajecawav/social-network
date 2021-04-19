@@ -1,3 +1,6 @@
+from sqlalchemy import or_
+from typing import Optional
+
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
@@ -22,6 +25,34 @@ def users_create_user(
     user = crud.user.create(db, user_in)
 
     return user
+
+
+@router.get("", response_model=schemas.UsersPaginationOut)
+def users_get_users(
+    query: Optional[str] = None,
+    limit: Optional[int] = 20,
+    cursor: Optional[int] = None,
+    db: Session = Depends(get_db),
+):
+    q = db.query(models.User)
+
+    if cursor is not None:
+        q = q.filter(models.User.user_id >= cursor)
+
+    if query is not None and query != "":
+        q = q.filter(
+            or_(
+                models.User.first_name.ilike(f"%{query}%"),
+                models.User.last_name.ilike(f"%{query}%"),
+            )
+        )
+
+    total_matches = q.count()
+
+    users = q.limit(limit + 1).all()
+    next_cursor = users.pop().user_id if (len(users) == (limit + 1)) else None
+
+    return {"total_matches": total_matches, "users": users, "next_cursor": next_cursor}
 
 
 @router.get("/me", response_model=schemas.User)

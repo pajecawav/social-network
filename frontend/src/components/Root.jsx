@@ -12,7 +12,8 @@ export function Root() {
     return (
         <LoadingContentWrapper
             isLoading={loggedIn === null}
-            className="w-24 h-24 sm:w-32 sm:h-32"
+            className="sm:w-32 sm:h-32"
+            size={6}
         >
             <div className="flex-grow">
                 <Topbar />
