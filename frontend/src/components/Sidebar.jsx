@@ -17,7 +17,7 @@ export function Sidebar() {
     const { loggedIn } = useContext(UserContext);
 
     return (
-        <div className="sticky flex flex-col flex-shrink-0 w-48 h-full pr-4 top-14">
+        <div className="sticky flex flex-col flex-shrink-0 w-48 h-full pr-4 top-16">
             {loggedIn ? (
                 <>
                     <NavigationLink

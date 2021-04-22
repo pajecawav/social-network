@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-export function Avatar({ className, scale, ...props }) {
+export function SquareAvatar({ className, scale = 2, ...props }) {
     // TODO: use an actual image
     return (
         <img

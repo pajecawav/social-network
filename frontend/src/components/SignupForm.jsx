@@ -7,8 +7,8 @@ import { Button } from "../ui/Button";
 import { FormError } from "../ui/FormError";
 import { Input } from "../ui/Input";
 
-export function SignupForm() {
-    const [username, setUsername] = useState("");
+export function SignupForm({ username: usernameProp }) {
+    const [username, setUsername] = useState(usernameProp || "");
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");

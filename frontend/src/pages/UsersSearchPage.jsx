@@ -1,26 +1,15 @@
+import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
 import { getUsers } from "../api";
-import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
+import { UserCard } from "../components/UserCard";
+import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
 import { Spinner } from "../ui/Spinner";
-
-function UserCard({ user }) {
-    return (
-        <div className="flex my-4">
-            <CircleAvatar />
-            <div className="h-auto ml-6">
-                <Link className="text-purple-600" to={`/users/${user.userId}`}>
-                    {user.firstName} {user.lastName}
-                </Link>
-            </div>
-        </div>
-    );
-}
 
 export function UsersSearchPage() {
     const history = useHistory();
@@ -35,6 +24,8 @@ export function UsersSearchPage() {
     const [users, setUsers] = useState([]);
     const [nextCursor, setNextCursor] = useState(null);
     const [totalMatches, setTotalMatches] = useState(null);
+
+    useTitle(`Search results` + (search ? ` for ${search}` : ""));
 
     useEffect(() => {
         setUsers([]);
@@ -65,7 +56,7 @@ export function UsersSearchPage() {
 
     return (
         <Container
-            className="flex flex-col flex-grow"
+            className="flex flex-col"
             header={
                 <>
                     <span>People</span>
@@ -77,8 +68,6 @@ export function UsersSearchPage() {
                 </>
             }
         >
-            <HorizontalSeparator />
-
             <form className="flex gap-4 p-4" onSubmit={handleSubmit}>
                 <Input
                     className="flex-grow"
@@ -92,28 +81,34 @@ export function UsersSearchPage() {
 
             <HorizontalSeparator />
 
-            {users.length > 0 && (
-                <div className="mx-6 mt-2 mb-6">
-                    {users.map((user) => (
+            <div className={clsx("mx-6", users.length !== 0 && "mb-6")}>
+                {users.length > 0 &&
+                    users.map((user) => (
                         <React.Fragment key={user.userId}>
                             <UserCard user={user} />
                             <HorizontalSeparator />
                         </React.Fragment>
                     ))}
-                </div>
-            )}
 
-            {loadOnScroll && (
-                <Waypoint onEnter={fetchMoreUsers}>
-                    <Spinner />
-                </Waypoint>
-            )}
+                {loadOnScroll && (
+                    <Waypoint onEnter={fetchMoreUsers}>
+                        <div
+                            className={clsx(
+                                "flex mt-6",
+                                users.length === 0 && "h-20"
+                            )}
+                        >
+                            <Spinner className="m-auto" />
+                        </div>
+                    </Waypoint>
+                )}
 
-            {noResults && (
-                <div className="m-auto text-gray-400">
-                    Your search returned no results
-                </div>
-            )}
+                {noResults && (
+                    <div className="flex items-center justify-center h-24 text-gray-400">
+                        Your search returned no results
+                    </div>
+                )}
+            </div>
         </Container>
     );
 }

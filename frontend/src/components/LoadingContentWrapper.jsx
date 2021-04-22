@@ -9,10 +9,9 @@ export function LoadingContentWrapper({
     ...props
 }) {
     return isLoading ? (
-        <Spinner
-            className={clsx(className, isLoading && loadingClassName)}
-            {...props}
-        />
+        <div className={clsx("flex", className, isLoading && loadingClassName)}>
+            <Spinner className="m-auto" {...props} />
+        </div>
     ) : (
         children
     );

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "../components/Logo";
 import { UserContext } from "../contexts/UserContext";
 import { Input } from "../ui/Input";
+import { CircleAvatar } from "./CircleAvatar";
 
 export function Topbar() {
     const { loggedIn, user, logout } = useContext(UserContext);
@@ -17,16 +18,17 @@ export function Topbar() {
     };
 
     return (
-        <div className="sticky top-0 z-50 py-2 bg-white shadow-sm">
-            <div className="flex items-center m-auto w-full max-w-4xl">
-                <div className="w-36">
-                    <Link to="/">
+        <div className="sticky top-0 z-50 bg-white shadow-sm">
+            <div className="flex items-center w-full max-w-4xl mx-auto">
+                <div className="w-48 my-2">
+                    <Link className="flex ml-4 w-max sm:ml-0" to="/">
                         <Logo />
                     </Link>
                 </div>
-                <form onSubmit={handleSearch}>
+                <form className="hidden my-2 sm:block" onSubmit={handleSearch}>
                     <Input
-                        className="px-3 bg-gray-100 rounded-xl border-0"
+                        className="px-3 bg-gray-100 rounded-xl"
+                        flat={true}
                         type="text"
                         placeholder="Search"
                         value={query}
@@ -34,8 +36,12 @@ export function Topbar() {
                     />
                 </form>
                 {loggedIn && (
-                    <div className="ml-auto cursor-pointer" onClick={logout}>
-                        {user.username}
+                    <div
+                        className="flex items-center gap-3 px-2 ml-auto mr-4 transition-colors duration-200 cursor-pointer sm:mr-0 hover:bg-gray-50"
+                        onClick={logout}
+                    >
+                        <div>{user.firstName}</div>
+                        <CircleAvatar size={2} />
                     </div>
                 )}
             </div>

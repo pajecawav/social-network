@@ -1,19 +1,20 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
 from app.api import dependencies
-from app.api.dependencies import get_current_user, get_db
+from app.api.dependencies import get_current_user, get_current_user_or_none, get_db
 
 router = APIRouter()
 
 
 @router.post("", response_model=schemas.User)
-def users_create_user(
+def create_user(
     user_in: schemas.UserCreate, db: Session = Depends(dependencies.get_db)
 ):
     if crud.user.get_by_username(db, username=user_in.username):
@@ -28,9 +29,9 @@ def users_create_user(
 
 
 @router.get("", response_model=schemas.UsersPaginationOut)
-def users_get_users(
+def get_users(
     query: Optional[str] = None,
-    limit: Optional[int] = 20,
+    limit: int = 20,
     cursor: Optional[int] = None,
     db: Session = Depends(get_db),
 ):
@@ -39,11 +40,11 @@ def users_get_users(
     if cursor is not None:
         q = q.filter(models.User.user_id >= cursor)
 
-    if query is not None and query != "":
+    if query:
         q = q.filter(
             or_(
-                models.User.first_name.ilike(f"%{query}%"),
-                models.User.last_name.ilike(f"%{query}%"),
+                models.User.first_name.ilike(f"{query}%"),
+                models.User.last_name.ilike(f"{query}%"),
             )
         )
 
@@ -56,16 +57,17 @@ def users_get_users(
 
 
 @router.get("/me", response_model=schemas.User)
-def users_get_current_user(
+def get_active_user(
     db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
 ):
     return current_user
 
 
 @router.get("/{user_id}", response_model=schemas.User)
-def users_get_user(
+def get_user(
     user_id: int,
     db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_or_none),
 ):
     user = crud.user.get(db, user_id)
 
@@ -75,11 +77,16 @@ def users_get_user(
             detail="User not found.",
         )
 
-    return user
+    response = jsonable_encoder(user)
+
+    if current_user is not None and current_user.user_id != user_id:
+        response["is_friend"] = crud.user.are_friends(db, user_id, current_user.user_id)
+
+    return response
 
 
 @router.patch("/{user_id}", response_model=schemas.User)
-def users_update_user(
+def update_user(
     user_id: int,
     user_update: schemas.UserUpdate,
     db: Session = Depends(get_db),

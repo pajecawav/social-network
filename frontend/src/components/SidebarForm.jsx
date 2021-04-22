@@ -12,7 +12,10 @@ export function SidebarForm() {
     const { login } = useContext(UserContext);
 
     const navigateLandingPage = () => {
-        history.push("/login");
+        history.push({
+            pathname: "/login",
+            state: { signupUsername: username },
+        });
     };
 
     const handleLogin = (event) => {
@@ -49,8 +52,8 @@ export function SidebarForm() {
                 required
                 onChange={(event) => setPassword(event.target.value)}
             />
-            <Button className="py-1">Sign In</Button>
-            <Button className="py-1" onClick={navigateLandingPage}>
+            <Button size="thin">Sign In</Button>
+            <Button size="thin" onClick={navigateLandingPage}>
                 Sign Up
             </Button>
         </form>

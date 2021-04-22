@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { updateUser } from "../api";
 import { Container } from "../components/Container";
-import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
 import { UserContext } from "../contexts/UserContext";
+import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { FormError } from "../ui/FormError";
 import { FormSuccess } from "../ui/FormSuccess";
@@ -12,13 +12,16 @@ export function EditProfilePage() {
     const { user, setUser } = useContext(UserContext);
     const [firstName, setFirstName] = useState(user?.firstName || "");
     const [lastName, setLastName] = useState(user?.lastName || "");
+    const [birthdate, setBirthdate] = useState(user?.birthdate || new Date());
     const [success, setSuccess] = useState(null);
+
+    useTitle("Edit my profile");
 
     const updateUserProfile = (event) => {
         event.preventDefault();
         setSuccess(null);
 
-        updateUser(user.userId, { firstName, lastName })
+        updateUser(user.userId, { firstName, lastName, birthdate })
             .then((response) => {
                 setSuccess(true);
                 setUser({ ...user, ...response.data });
@@ -30,65 +33,70 @@ export function EditProfilePage() {
     };
 
     return (
-        <LoadingContentWrapper
-            loadingClassName="min-h-60"
-            isLoading={user === null}
-        >
-            <Container
-                className="flex flex-col flex-grow"
-                header={<span>Basic info</span>}
+        <Container className="flex flex-col" header={<span>Basic info</span>}>
+            <form
+                className="flex flex-col gap-4 mx-auto mt-6"
+                onSubmit={updateUserProfile}
             >
-                <form
-                    className="flex flex-col gap-4 mx-auto mt-6"
-                    onSubmit={updateUserProfile}
-                >
-                    {success !== null &&
-                        (success ? (
-                            <FormSuccess text="Successfully updated profile." />
-                        ) : (
-                            <FormError text="Error updating profile." />
-                        ))}
+                {success !== null &&
+                    (success ? (
+                        <FormSuccess text="Successfully updated profile." />
+                    ) : (
+                        <FormError text="Error updating profile." />
+                    ))}
 
-                    <div>
-                        <label
-                            className="w-10 mr-2 text-gray-500"
-                            htmlFor="firstName"
-                        >
-                            First name:
-                        </label>
-                        <Input
-                            id="firstName"
-                            type="text"
-                            placeholder="First Name"
-                            value={firstName}
-                            required
-                            onChange={(event) =>
-                                setFirstName(event.target.value)
-                            }
-                        />
-                    </div>
-                    <div>
-                        <label
-                            className="w-10 mr-2 text-gray-500"
-                            htmlFor="lastName"
-                        >
-                            Last name:
-                        </label>
-                        <Input
-                            id="lastName"
-                            type="text"
-                            placeholder="Last Name"
-                            value={lastName}
-                            required
-                            onChange={(event) =>
-                                setLastName(event.target.value)
-                            }
-                        />
-                    </div>
+                <div className="flex items-center">
+                    <label
+                        className="block text-right w-24 mr-2 text-gray-500"
+                        htmlFor="firstName"
+                    >
+                        First name:
+                    </label>
+                    <Input
+                        id="firstName"
+                        type="text"
+                        placeholder="First Name"
+                        value={firstName}
+                        required
+                        onChange={(event) => setFirstName(event.target.value)}
+                    />
+                </div>
+                <div className="flex items-center">
+                    <label
+                        className="block text-right w-24 mr-2 text-gray-500"
+                        htmlFor="lastName"
+                    >
+                        Last name:
+                    </label>
+                    <Input
+                        id="lastName"
+                        type="text"
+                        placeholder="Last Name"
+                        value={lastName}
+                        required
+                        onChange={(event) => setLastName(event.target.value)}
+                    />
+                </div>
+                <div className="flex items-center">
+                    <label
+                        className="block text-right w-24 mr-2 text-gray-500"
+                        htmlFor="birthdate"
+                    >
+                        Birthday:
+                    </label>
+                    <Input
+                        id="birthdate"
+                        type="date"
+                        value={birthdate}
+                        required
+                        min="1900-01-01"
+                        max="2020-01-01"
+                        onChange={(event) => setBirthdate(event.target.value)}
+                    />
+                </div>
 
-                    <Button className="mx-auto mb-4 w-max">Save</Button>
-                </form>
-            </Container>
-        </LoadingContentWrapper>
+                <Button className="mx-auto mb-4 w-max">Save</Button>
+            </form>
+        </Container>
     );
 }

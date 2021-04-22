@@ -16,6 +16,12 @@ export function configureAxios() {
         }
         return config;
     });
+
+    axios.interceptors.request.use((config) => {
+        const token = getLocalToken();
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    });
 }
 
 export function getAuthHeaders() {
@@ -26,7 +32,7 @@ export function getAuthHeaders() {
 }
 
 export async function getMe() {
-    return axios.get("/api/users/me", { headers: getAuthHeaders() });
+    return axios.get("/api/users/me");
 }
 
 export async function logInGetToken(data) {
@@ -38,18 +44,29 @@ export async function signup(data) {
 }
 
 export async function getUser(userId) {
-    return axios.get(`/api/users/${userId}`, { headers: getAuthHeaders() });
+    return axios.get(`/api/users/${userId}`);
 }
 
 export async function updateUser(userId, data) {
-    return axios.patch(`/api/users/${userId}`, data, {
-        headers: getAuthHeaders(),
+    return axios.patch(`/api/users/${userId}`, data);
+}
+
+export async function getUsers({ cursor, query, limit }) {
+    return axios.get("/api/users", {
+        params: { cursor, query, limit },
     });
 }
 
-export async function getUsers({ cursor = null, query = null, limit = null }) {
-    return axios.get("/api/users", {
-        headers: getAuthHeaders(),
-        params: { cursor, query, limit },
+export async function getFriends() {
+    return axios.get("/api/friends");
+}
+
+export async function addFriend(userId) {
+    return axios.post("/api/friends", { userId });
+}
+
+export async function unfriend(userId) {
+    return axios.delete("/api/friends", {
+        data: { userId },
     });
 }

@@ -1,1 +1,1 @@
-from .user import User  # noqa: F401
+from .user import User, friends_association_table  # noqa: F401

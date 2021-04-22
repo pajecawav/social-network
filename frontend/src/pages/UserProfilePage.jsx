@@ -1,29 +1,59 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { getUser } from "../api";
+import { getUser, unfriend, addFriend } from "../api";
 import { Container } from "../components/Container";
 import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
-import { SquareImage } from "../components/SquareImage";
+import { SquareAvatar } from "../components/SquareAvatar";
 import { UserProfileInfo } from "../components/UserProfileInfo";
 import { UserContext } from "../contexts/UserContext";
+import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 
-function ProfileImage({ editable }) {
+function ImageBlock({ user, isMe }) {
     const history = useHistory();
+    const [isFriend, setIsFriend] = useState(user?.isFriend === true);
 
     const navigateEditProfilePage = () => {
         history.push("/edit");
     };
 
+    const handleToggleFriend = (event) => {
+        event.preventDefault();
+
+        if (isFriend) {
+            unfriend(user.userId)
+                .then(() => {
+                    setIsFriend(false);
+                })
+                .catch(console.error);
+        } else {
+            addFriend(user.userId)
+                .then(() => {
+                    setIsFriend(true);
+                })
+                .catch(console.error);
+        }
+    };
+
     return (
-        <Container className="flex flex-col gap-4 p-4">
-            <SquareImage className="w-60 h-60" />
-            {editable && (
+        <Container className="flex flex-col gap-4 p-4 w-60">
+            <SquareAvatar className="object-cover w-full" scale={13} />
+            {isMe && (
                 <Button
-                    className="py-1 text-gray-500 bg-purple-200"
+                    size="thin"
+                    color="secondary"
                     onClick={navigateEditProfilePage}
                 >
                     Edit
+                </Button>
+            )}
+            {!isMe && (
+                <Button
+                    color="secondary"
+                    size="thin"
+                    onClick={handleToggleFriend}
+                >
+                    {isFriend === true ? "Unfriend" : "Add friend"}
                 </Button>
             )}
         </Container>
@@ -36,6 +66,10 @@ export function UserProfilePage({ userId }) {
 
     const isMe = user && currentUser?.userId === user.userId;
 
+    useTitle(user ? `${user.firstName} ${user.lastName}` : "Social Network", [
+        user,
+    ]);
+
     useEffect(() => {
         getUser(userId)
             .then((response) => {
@@ -45,11 +79,13 @@ export function UserProfilePage({ userId }) {
     }, [userId]);
 
     return (
-        <LoadingContentWrapper className="min-h-60" isLoading={user === null}>
+        <LoadingContentWrapper
+            className="h-full"
+            loadingClassName="min-h-96"
+            isLoading={user === null}
+        >
             <div className="flex flex-grow gap-4">
-                <div className="min-w-60">
-                    <ProfileImage editable={isMe} />
-                </div>
+                <ImageBlock user={user} isMe={isMe} />
                 <div className="flex-grow">
                     <UserProfileInfo user={user} />
                 </div>
