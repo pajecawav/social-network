@@ -5,13 +5,16 @@
     "dependencies": {
         "@craco/craco": "^6.1.1",
         "@heroicons/react": "^1.0.1",
+        "@tailwindcss/postcss7-compat": "^2.1.2",
         "@testing-library/jest-dom": "^5.11.10",
         "@testing-library/react": "^11.2.6",
         "@testing-library/user-event": "^12.8.3",
+        "autoprefixer": "^9.8.6",
         "axios": "^0.21.1",
         "clsx": "^1.1.1",
         "dayjs": "^1.10.4",
         "humps": "^2.0.1",
+        "postcss": "^7.0.35",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-modal": "^3.13.1",
@@ -19,6 +22,7 @@
         "react-scripts": "4.0.3",
         "react-waypoint": "^9.0.3",
         "socket.io-client": "^4.0.1",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
         "web-vitals": "^0.2.4",
         "workbox-background-sync": "^5.1.4",
         "workbox-broadcast-update": "^5.1.4",
@@ -41,19 +45,21 @@
     },
     "proxy": "http://localhost:3000/",
     "eslintConfig": {
-        "extends": ["react-app", "react-app/jest"]
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     },
     "browserslist": {
-        "production": [">0.2%", "not dead", "not op_mini all"],
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
         "development": [
             "last 1 chrome version",
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "devDependencies": {
-        "@tailwindcss/postcss7-compat": "^2.1.0",
-        "autoprefixer": "^9.8.6",
-        "postcss": "^7.0.35"
     }
 }
