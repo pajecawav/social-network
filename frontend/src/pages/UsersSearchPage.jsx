@@ -4,6 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
 import { getUsers } from "../api";
 import { Container } from "../components/Container";
+import { HeaderWithCount } from "../components/HeaderWithCount";
 import { UserCard } from "../components/UserCard";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
@@ -48,26 +49,17 @@ export function UsersSearchPage() {
             setUsers([...users, ...response.data.users]);
             setNextCursor(response.data.nextCursor);
             setTotalMatches(response.data.totalMatches);
-            setLoadOnScroll(response.data.nextCursor !== null);
+            setLoadOnScroll(Boolean(response.data.nextCursor));
         });
     };
 
     const noResults = !(loadOnScroll || users.length);
 
     return (
-        <Container
-            className="flex flex-col"
-            header={
-                <>
-                    <span>People</span>
-                    {totalMatches > 0 && (
-                        <span className="ml-3 text-gray-300">
-                            {totalMatches}
-                        </span>
-                    )}
-                </>
-            }
-        >
+        <Container className="flex flex-col">
+            <HeaderWithCount title="People" count={totalMatches} />
+            <HorizontalSeparator />
+
             <form className="flex gap-4 p-4" onSubmit={handleSubmit}>
                 <Input
                     className="flex-grow"
@@ -104,7 +96,7 @@ export function UsersSearchPage() {
                 )}
 
                 {noResults && (
-                    <div className="flex items-center justify-center h-24 text-gray-400">
+                    <div className="flex justify-center items-center h-24 text-gray-400">
                         Your search returned no results
                     </div>
                 )}

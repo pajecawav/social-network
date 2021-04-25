@@ -19,8 +19,10 @@ def login_access_token(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect credentials.",
         )
+
     result = {
         "access_token": security.create_access_token(str(user.user_id)),
         "token_type": "bearer",
     }
+
     return result

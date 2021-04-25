@@ -1,16 +1,11 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, String, Table
+from sqlalchemy import Column, Date, Integer, String
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 from app.schemas.user import GenderEnum
 
-friends_association_table = Table(
-    "friends_association",
-    Base.metadata,
-    Column("first_user_id", Integer, ForeignKey("users.user_id")),
-    Column("second_user_id", Integer, ForeignKey("users.user_id")),
-)
+from .association_tables import chat_user_association_table, friends_association_table
 
 
 class User(Base):
@@ -39,4 +34,13 @@ class User(Base):
         primaryjoin=user_id == friends_association_table.c.first_user_id,
         secondaryjoin=user_id == friends_association_table.c.second_user_id,
         order_by="User.user_id",
+    )
+
+    messages = relationship("Message", back_populates="user", lazy="dynamic")
+    chats = relationship(
+        "Chat",
+        secondary=chat_user_association_table,
+        back_populates="users",
+        lazy="dynamic",
+        order_by="Chat.chat_id",
     )

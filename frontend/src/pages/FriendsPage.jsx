@@ -2,12 +2,14 @@ import clsx from "clsx";
 import React, { useState } from "react";
 import { getFriends, unfriend } from "../api";
 import { Container } from "../components/Container";
+import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
 import { UserCard } from "../components/UserCard";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
+import { splitLowercaseWords } from "../utils";
 
 export function FriendsPage() {
     const [query, setQuery] = useState("");
@@ -35,11 +37,7 @@ export function FriendsPage() {
             .catch(console.error);
     };
 
-    const queryWords = query
-        .toLocaleLowerCase()
-        .split(" ")
-        .filter((word) => word);
-
+    const queryWords = splitLowercaseWords(query);
     const matchingFriends = query
         ? friends.filter((friend) =>
               queryWords.every(
@@ -51,19 +49,10 @@ export function FriendsPage() {
         : friends;
 
     return (
-        <Container
-            className="flex flex-col"
-            header={
-                <>
-                    <span>Friends</span>
-                    {matchingFriends.length > 0 && (
-                        <span className="ml-3 text-gray-300">
-                            {matchingFriends.length}
-                        </span>
-                    )}
-                </>
-            }
-        >
+        <Container className="flex flex-col">
+            <HeaderWithCount title="Friends" count={matchingFriends.length} />
+            <HorizontalSeparator />
+
             <LoadingContentWrapper
                 isLoading={isLoading}
                 loadingClassName="h-20"
@@ -89,7 +78,7 @@ export function FriendsPage() {
                             <React.Fragment key={user.userId}>
                                 <UserCard user={user}>
                                     <Button
-                                        className="h-full ml-auto"
+                                        className="ml-auto h-full"
                                         size="thin"
                                         onClick={() => handleUnfriend(user)}
                                     >
@@ -101,7 +90,7 @@ export function FriendsPage() {
                         ))}
 
                     {!matchingFriends.length && (
-                        <div className="flex items-center justify-center h-20 m-auto my-6 text-gray-400">
+                        <div className="flex justify-center items-center m-auto my-6 h-20 text-gray-400">
                             No friends were found
                         </div>
                     )}

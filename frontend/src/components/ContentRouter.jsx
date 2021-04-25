@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import { UserContext } from "../contexts/UserContext";
+import { ChatListPage } from "../pages/ChatListPage";
+import { ChatPage } from "../pages/ChatPage";
 import { EditProfilePage } from "../pages/EditProfilePage";
 import { FriendsPage } from "../pages/FriendsPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
@@ -21,6 +23,19 @@ export function ContentRouter() {
                     path="/friends"
                     component={FriendsPage}
                     key="/friends"
+                />,
+                <Route
+                    exact
+                    path="/chats"
+                    component={ChatListPage}
+                    key="/chats"
+                />,
+                <Route
+                    path="/chats/:id"
+                    render={(props) => (
+                        <ChatPage chatId={props.match.params.id} />
+                    )}
+                    key="/chats/id"
                 />,
             ]}
             <Route path="/users/search" component={UsersSearchPage} />

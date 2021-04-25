@@ -1,5 +1,6 @@
 from typing import Any, Generic, List, Optional, Type, TypeVar
 
+from fastapi import HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -17,6 +18,19 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.query(self.model).get(id)
+
+    def get_or_404(self, db: Session, id: Any) -> ModelType:
+        item = db.query(self.model).get(id)
+
+        if item is None:
+            display_name = self.model.__name__
+
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"{display_name} not found.",
+            )
+
+        return item
 
     def get_many(
         self, db: Session, *, offset: int = 0, limit: int = 20

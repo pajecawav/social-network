@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { Spinner } from "../ui/Spinner";
 
+// TODO: remove this component
 export function LoadingContentWrapper({
     isLoading,
     className,

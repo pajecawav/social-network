@@ -13,7 +13,7 @@ from app.api.dependencies import get_current_user, get_current_user_or_none, get
 router = APIRouter()
 
 
-@router.post("", response_model=schemas.User)
+@router.post("", response_model=schemas.User, response_model_exclude_none=True)
 def create_user(
     user_in: schemas.UserCreate, db: Session = Depends(dependencies.get_db)
 ):
@@ -28,7 +28,9 @@ def create_user(
     return user
 
 
-@router.get("", response_model=schemas.UsersPaginationOut)
+@router.get(
+    "", response_model=schemas.UsersPaginationOut, response_model_exclude_none=True
+)
 def get_users(
     query: Optional[str] = None,
     limit: int = 20,
@@ -56,26 +58,20 @@ def get_users(
     return {"total_matches": total_matches, "users": users, "next_cursor": next_cursor}
 
 
-@router.get("/me", response_model=schemas.User)
+@router.get("/me", response_model=schemas.User, response_model_exclude_none=True)
 def get_active_user(
     db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
 ):
     return current_user
 
 
-@router.get("/{user_id}", response_model=schemas.User)
+@router.get("/{user_id}", response_model=schemas.User, response_model_exclude_none=True)
 def get_user(
     user_id: int,
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(get_current_user_or_none),
 ):
-    user = crud.user.get(db, user_id)
-
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found.",
-        )
+    user = crud.user.get_or_404(db, user_id)
 
     response = jsonable_encoder(user)
 
@@ -85,20 +81,14 @@ def get_user(
     return response
 
 
-@router.patch("/{user_id}", response_model=schemas.User)
+@router.patch(
+    "/{user_id}", response_model=schemas.User, response_model_exclude_none=True
+)
 def update_user(
     user_id: int,
     user_update: schemas.UserUpdate,
     db: Session = Depends(get_db),
 ):
-    user = crud.user.get(db, user_id)
-
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found.",
-        )
-
+    user = crud.user.get_or_404(db, user_id)
     user = crud.user.update(db, object_db=user, object_update=user_update)
-
     return user

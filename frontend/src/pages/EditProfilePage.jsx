@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
 import { updateUser } from "../api";
 import { Container } from "../components/Container";
+import { HeaderWithCount } from "../components/HeaderWithCount";
 import { UserContext } from "../contexts/UserContext";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { FormError } from "../ui/FormError";
 import { FormSuccess } from "../ui/FormSuccess";
+import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
 
 export function EditProfilePage() {
@@ -33,7 +35,10 @@ export function EditProfilePage() {
     };
 
     return (
-        <Container className="flex flex-col" header={<span>Basic info</span>}>
+        <Container className="flex flex-col">
+            <HeaderWithCount title="Basic info" />
+            <HorizontalSeparator />
+
             <form
                 className="flex flex-col gap-4 mx-auto mt-6"
                 onSubmit={updateUserProfile}
@@ -47,7 +52,7 @@ export function EditProfilePage() {
 
                 <div className="flex items-center">
                     <label
-                        className="block text-right w-24 mr-2 text-gray-500"
+                        className="block mr-2 w-24 text-right text-gray-500"
                         htmlFor="firstName"
                     >
                         First name:
@@ -63,7 +68,7 @@ export function EditProfilePage() {
                 </div>
                 <div className="flex items-center">
                     <label
-                        className="block text-right w-24 mr-2 text-gray-500"
+                        className="block mr-2 w-24 text-right text-gray-500"
                         htmlFor="lastName"
                     >
                         Last name:
@@ -79,7 +84,7 @@ export function EditProfilePage() {
                 </div>
                 <div className="flex items-center">
                     <label
-                        className="block text-right w-24 mr-2 text-gray-500"
+                        className="block mr-2 w-24 text-right text-gray-500"
                         htmlFor="birthdate"
                     >
                         Birthday:

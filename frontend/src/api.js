@@ -3,8 +3,6 @@ import { camelizeKeys, decamelizeKeys } from "humps";
 import { getLocalToken } from "./utils";
 
 export function configureAxios() {
-    // TODO: should I those interceptors?
-
     axios.interceptors.response.use((response) => {
         response.data = camelizeKeys(response.data);
         return response;
@@ -69,4 +67,24 @@ export async function unfriend(userId) {
     return axios.delete("/api/friends", {
         data: { userId },
     });
+}
+
+export async function getChat(chatId) {
+    return axios.get(`/api/chats/${chatId}`);
+}
+
+export async function getChats() {
+    return axios.get("/api/chats");
+}
+
+export async function createChat(data) {
+    return axios.post("/api/chats", data);
+}
+
+export async function deleteChat(chatId) {
+    return axios.delete(`/api/chats/${chatId}`);
+}
+
+export async function getChatMessages(chatId) {
+    return axios.get(`/api/chats/${chatId}/messages`);
 }

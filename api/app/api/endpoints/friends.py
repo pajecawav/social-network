@@ -28,12 +28,7 @@ def add_friend(
             detail="Can't add yourself as friend.",
         )
 
-    other_user = crud.user.get(db, user_id)
-    if other_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User not found.",
-        )
+    other_user = crud.user.get_or_404(db, user_id)
 
     existing_friend = other_user.friends.filter(
         models.User.user_id == current_user.user_id
@@ -56,12 +51,7 @@ def delete_friend(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    other_user = crud.user.get(db, user_id)
-    if other_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User not found.",
-        )
+    other_user = crud.user.get_or_404(db, user_id)
 
     existing_friend = other_user.friends.filter(
         models.User.user_id == current_user.user_id

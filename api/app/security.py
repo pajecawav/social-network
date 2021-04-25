@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Dict
 
 from jose import jwt
 from passlib.context import CryptContext
@@ -23,3 +24,16 @@ def verify_password(password: str, hashed_password: str) -> bool:
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
+
+
+class TokenDecodingError(jwt.JWTError):
+    pass
+
+
+def decode_token(token: str) -> Dict[str, str]:
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.JWTError:
+        raise TokenDecodingError
+
+    return payload

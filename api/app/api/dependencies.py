@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas, security
 from app.config import settings
 from app.db.database import SessionLocal
+from app.security import TokenDecodingError, decode_token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/token")
 oauth2_scheme_no_error = OAuth2PasswordBearer(tokenUrl="login/token", auto_error=False)
@@ -26,11 +27,9 @@ def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ) -> models.User:
     try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
-        )
+        payload = decode_token(token)
         token_data = schemas.TokenPayload(**payload)
-    except (jwt.JWTError, ValidationError):
+    except (TokenDecodingError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",

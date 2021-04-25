@@ -8,7 +8,7 @@ export function UserCard({ user, children }) {
             <Link to={`/users/${user.userId}`}>
                 <CircleAvatar />
             </Link>
-            <div className="h-auto ml-6">
+            <div className="ml-6 h-auto">
                 <Link
                     className="text-purple-600 hover:underline"
                     to={`/users/${user.userId}`}

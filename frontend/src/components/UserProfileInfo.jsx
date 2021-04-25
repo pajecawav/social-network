@@ -5,17 +5,17 @@ import dayjs from "dayjs";
 export function UserProfileInfo({ user }) {
     return (
         <Container className="p-4">
-            <div className="text-lg font-medium mb-2">
+            <div className="mb-2 text-lg font-medium">
                 {user.firstName} {user.lastName}
             </div>
             {user.status && <div className="mb-2">{user.status}</div>}
 
             <HorizontalSeparator />
 
-            <div className="mt-2 flex flex-col gap-3 text-sm">
+            <div className="flex flex-col gap-3 mt-2 text-sm">
                 {user.birthdate && (
                     <div className="flex">
-                        <div className="text-gray-400 w-32">Birthday:</div>
+                        <div className="w-32 text-gray-400">Birthday:</div>
                         <div>
                             {dayjs(user.birthdate).format("MMMM D, YYYY")}
                         </div>

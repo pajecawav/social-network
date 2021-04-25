@@ -19,8 +19,8 @@ export function Topbar() {
 
     return (
         <div className="sticky top-0 z-50 bg-white shadow-sm">
-            <div className="flex items-center w-full max-w-4xl mx-auto">
-                <div className="w-48 my-2">
+            <div className="flex items-center px-3 mx-auto w-full max-w-4xl">
+                <div className="my-2 w-48">
                     <Link className="flex ml-4 w-max sm:ml-0" to="/">
                         <Logo />
                     </Link>
@@ -37,7 +37,7 @@ export function Topbar() {
                 </form>
                 {loggedIn && (
                     <div
-                        className="flex items-center gap-3 px-2 ml-auto mr-4 transition-colors duration-200 cursor-pointer sm:mr-0 hover:bg-gray-50"
+                        className="flex gap-3 items-center px-2 mr-4 ml-auto transition-colors duration-200 cursor-pointer sm:mr-0 hover:bg-gray-50"
                         onClick={logout}
                     >
                         <div>{user.firstName}</div>

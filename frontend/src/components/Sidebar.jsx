@@ -17,7 +17,7 @@ export function Sidebar() {
     const { loggedIn } = useContext(UserContext);
 
     return (
-        <div className="sticky flex flex-col flex-shrink-0 w-48 h-full pr-4 top-16">
+        <div className="flex sticky top-16 flex-col flex-shrink-0 pr-4 w-48 h-full">
             {loggedIn ? (
                 <>
                     <NavigationLink
@@ -30,11 +30,7 @@ export function Sidebar() {
                         icon={NewspaperIcon}
                         text="Feed"
                     />
-                    <NavigationLink
-                        to="/messages"
-                        icon={ChatIcon}
-                        text="Messages"
-                    />
+                    <NavigationLink to="/chats" icon={ChatIcon} text="Chats" />
                     <NavigationLink
                         to="/friends"
                         icon={UsersIcon}

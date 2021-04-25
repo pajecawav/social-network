@@ -40,7 +40,7 @@ export function SignupForm({ username: usernameProp }) {
     return (
         <Container className="p-4">
             <form
-                className="flex flex-col w-64 gap-4 max-w-64"
+                className="flex flex-col gap-4 w-64 max-w-64"
                 onSubmit={handleSubmit}
             >
                 <div className="flex flex-col gap-1">

@@ -19,7 +19,7 @@ export function Root() {
                 <Topbar />
                 <Switch>
                     <Route exact path="/">
-                        <Redirect to={loggedIn ? "/me" : "/login"} />
+                        <Redirect push to={loggedIn ? "/me" : "/login"} />
                     </Route>
                     <Route exact path="/login">
                         {loggedIn ? <Redirect to="/me" /> : <LandingPage />}
