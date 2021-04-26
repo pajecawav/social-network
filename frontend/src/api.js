@@ -9,9 +9,14 @@ export function configureAxios() {
     });
 
     axios.interceptors.request.use((config) => {
-        if (!(config.data instanceof URLSearchParams)) {
+        if (!(config.data instanceof URLSearchParams) && config.data) {
             config.data = decamelizeKeys(config.data);
         }
+
+        if (config.params) {
+            config.params = decamelizeKeys(config.params);
+        }
+
         return config;
     });
 
@@ -55,8 +60,10 @@ export async function getUsers({ cursor, query, limit }) {
     });
 }
 
-export async function getFriends() {
-    return axios.get("/api/friends");
+export async function getFriends(params) {
+    return axios.get("/api/friends", {
+        params,
+    });
 }
 
 export async function addFriend(userId) {

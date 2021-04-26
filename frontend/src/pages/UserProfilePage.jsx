@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, Link } from "react-router-dom";
 import { addFriend, getUser, unfriend } from "../api";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
@@ -36,7 +36,7 @@ function ImageBlock({ user, isMe }) {
     };
 
     return (
-        <Container className="flex flex-col gap-4 p-4 w-60">
+        <Container className="flex flex-col gap-4 p-4">
             <SquareAvatar className="object-cover w-full" scale={13} />
             {isMe && (
                 <Button
@@ -86,7 +86,12 @@ export function UserProfilePage({ userId }) {
         />
     ) : (
         <div className="flex flex-grow gap-4">
-            <ImageBlock user={user} isMe={isMe} />
+            <div className="w-60 flex flex-col gap-4">
+                <ImageBlock user={user} isMe={isMe} />
+                <Container className="p-4">
+                    <Link to={`/friends?id=${user.userId}`}>Friends</Link>
+                </Container>
+            </div>
             <div className="flex-grow">
                 <UserProfileInfo user={user} />
             </div>

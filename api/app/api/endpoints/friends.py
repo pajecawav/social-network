@@ -1,19 +1,32 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
-from app.api.dependencies import get_current_user, get_db
+from app.api.dependencies import get_current_user, get_current_user_or_none, get_db
 
 router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.User])
 def get_friends(
-    db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
+    user_id: Optional[int] = None,
+    db: Session = Depends(get_db),
+    current_user: Optional[models.User] = Depends(get_current_user_or_none),
 ):
-    return current_user.friends.all()
+    if user_id is None:
+        if current_user is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User id or token is required.",
+            )
+        else:
+            user = current_user
+    else:
+        user = crud.user.get_or_404(db, user_id)
+
+    return user.friends.all()
 
 
 @router.post("", response_model=schemas.User)

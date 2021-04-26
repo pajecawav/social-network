@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Waypoint } from "react-waypoint";
 import { getFriends, unfriend } from "../api";
 import { Container } from "../components/Container";
 import { HeaderWithCount } from "../components/HeaderWithCount";
@@ -11,21 +13,26 @@ import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
 import { splitLowercaseWords } from "../utils";
 
+const INITIAL_VISIBLE_AMOUNT = 10;
+
 export function FriendsPage() {
+    const location = useLocation();
+    const userId = new URLSearchParams(location.search).get("id") || null;
     const [query, setQuery] = useState("");
     const [friends, setFriends] = useState([]);
+    const [visibleAmount, setVisibleAmount] = useState(INITIAL_VISIBLE_AMOUNT);
     const [isLoading, setIsLoading] = useState(true);
 
     useTitle(`Friends – ${friends.length} friends`);
 
     useState(() => {
-        getFriends()
+        getFriends({ userId })
             .then((response) => {
                 setFriends(response.data);
                 setIsLoading(false);
             })
             .catch(console.error);
-    });
+    }, [userId]);
 
     const handleUnfriend = ({ userId }) => {
         unfriend(userId)
@@ -62,7 +69,10 @@ export function FriendsPage() {
                         type="text"
                         placeholder="Search friends"
                         value={query || ""}
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={(event) => {
+                            setQuery(event.target.value);
+                            setVisibleAmount(INITIAL_VISIBLE_AMOUNT);
+                        }}
                     />
 
                     <HorizontalSeparator />
@@ -74,25 +84,40 @@ export function FriendsPage() {
                         )}
                     >
                         {matchingFriends.length > 0 &&
-                            matchingFriends.map((user) => (
-                                <React.Fragment key={user.userId}>
-                                    <UserCard user={user}>
-                                        <Button
-                                            className="ml-auto h-full"
-                                            size="thin"
-                                            onClick={() => handleUnfriend(user)}
-                                        >
-                                            Unfriend
-                                        </Button>
-                                    </UserCard>
-                                    <HorizontalSeparator />
-                                </React.Fragment>
-                            ))}
+                            matchingFriends
+                                .slice(0, visibleAmount)
+                                .map((user) => (
+                                    <React.Fragment key={user.userId}>
+                                        <UserCard user={user}>
+                                            <Button
+                                                className="ml-auto h-full"
+                                                size="thin"
+                                                onClick={() =>
+                                                    handleUnfriend(user)
+                                                }
+                                            >
+                                                Unfriend
+                                            </Button>
+                                        </UserCard>
+                                        <HorizontalSeparator />
+                                    </React.Fragment>
+                                ))}
 
                         {!matchingFriends.length && (
                             <div className="flex justify-center items-center m-auto my-6 h-20 text-gray-400">
                                 No friends were found
                             </div>
+                        )}
+
+                        {visibleAmount < matchingFriends.length && (
+                            <Waypoint
+                                onEnter={() =>
+                                    setVisibleAmount(
+                                        visibleAmount + INITIAL_VISIBLE_AMOUNT
+                                    )
+                                }
+                                bottomOffset={-200}
+                            />
                         )}
                     </div>
                 </>
