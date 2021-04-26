@@ -8,6 +8,7 @@ const sizeClassnames = {
 const colorClassnames = {
     primary: "text-white bg-purple-500",
     secondary: "text-gray-600 bg-purple-200",
+    transparent: "text-gray-600 hover:bg-purple-200",
 };
 
 export function Button({
