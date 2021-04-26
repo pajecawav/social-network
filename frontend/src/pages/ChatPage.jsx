@@ -1,15 +1,13 @@
 import clsx from "clsx";
-import { camelizeKeys, decamelizeKeys } from "humps";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import io from "socket.io-client";
-import { getChat, getChatMessages } from "../api";
+import { getChat } from "../api";
 import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
+import { useChat } from "../hooks/useChat";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
-import { getLocalToken } from "../utils";
 
 function ChatHeader({ chat }) {
     return (
@@ -59,65 +57,29 @@ function ChatMessage({ message, showUser = true }) {
 
 export function ChatPage({ chatId }) {
     const [chat, setChat] = useState(null);
+    const { isLoading, messages, sendMessage } = useChat(chatId);
+
     const [text, setText] = useState("");
-    const [messages, setMessages] = useState([]);
-    const socket = useRef(null);
     const messagesEnd = useRef(null);
 
     useEffect(() => {
         getChat(chatId)
             .then((response) => setChat(response.data))
             .catch(console.error);
-
-        getChatMessages(chatId)
-            .then((response) => {
-                setMessages(response.data);
-                scrollToBottom();
-            })
-            .catch(console.error);
     }, [chatId]);
 
     useEffect(() => {
-        const sio = io("/chat", {
-            path: "/api/ws/socket.io",
-            auth: {
-                token: getLocalToken(),
-            },
-            query: {
-                chat_id: chatId,
-            },
-        });
-
-        socket.current = sio;
-
-        sio.on("message", (data) => {
-            data = camelizeKeys(data);
-            setMessages((messages) => [...messages, data]);
-            scrollToBottom({ behavior: "smooth" });
-        });
-
-        return () => sio.disconnect();
-    }, [chatId]);
-
-    const scrollToBottom = (config) => {
-        messagesEnd.current?.scrollIntoView(config);
-    };
-
-    const sendMessage = (event) => {
-        event.preventDefault();
-
-        if (!text || socket.current === null) {
-            return;
+        if (!isLoading) {
+            scrollToBottom("auto");
         }
+    }, [isLoading]);
 
-        const data = decamelizeKeys({
-            chatId,
-            message: { text },
-        });
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
-        socket.current.emit("message", data, () => {
-            setText("");
-        });
+    const scrollToBottom = (behavior = "smooth") => {
+        messagesEnd.current?.scrollIntoView({ behavior });
     };
 
     return (
@@ -130,6 +92,7 @@ export function ChatPage({ chatId }) {
 
                     {/* TODO: implement better scrolling (scrollbar should be at the right of the page */}
                     <div className="flex flex-col max-h-80 gap-2 px-4 overflow-y-auto">
+                        {isLoading && <LoadingPlaceholder />}
                         {messages.map((message, index) => (
                             <ChatMessage
                                 key={message.messageId}
@@ -146,7 +109,10 @@ export function ChatPage({ chatId }) {
 
                     <form
                         className="flex gap-4 px-4 pb-4"
-                        onSubmit={sendMessage}
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            sendMessage(text, () => setText(""));
+                        }}
                     >
                         <Input
                             className="flex-grow"
