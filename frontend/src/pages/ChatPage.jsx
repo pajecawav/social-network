@@ -72,7 +72,7 @@ export function ChatPage({ chatId }) {
         getChatMessages(chatId)
             .then((response) => {
                 setMessages(response.data);
-                messagesEnd.current.scrollIntoView();
+                scrollToBottom();
             })
             .catch(console.error);
     }, [chatId]);
@@ -93,14 +93,14 @@ export function ChatPage({ chatId }) {
         sio.on("message", (data) => {
             data = camelizeKeys(data);
             setMessages((messages) => [...messages, data]);
-            scrollToBottom();
+            scrollToBottom({ behavior: "smooth" });
         });
 
         return () => sio.disconnect();
     }, [chatId]);
 
-    const scrollToBottom = () => {
-        messagesEnd.current?.scrollIntoView({ behavior: "smooth" });
+    const scrollToBottom = (config) => {
+        messagesEnd.current?.scrollIntoView(config);
     };
 
     const sendMessage = (event) => {
