@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { getFriends, unfriend } from "../api";
 import { Container } from "../components/Container";
 import { HeaderWithCount } from "../components/HeaderWithCount";
-import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
+import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { UserCard } from "../components/UserCard";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
@@ -53,49 +53,50 @@ export function FriendsPage() {
             <HeaderWithCount title="Friends" count={matchingFriends.length} />
             <HorizontalSeparator />
 
-            <LoadingContentWrapper
-                isLoading={isLoading}
-                loadingClassName="h-20"
-            >
-                <Input
-                    className="flex-grow py-2 m-4"
-                    type="text"
-                    placeholder="Search friends"
-                    value={query || ""}
-                    onChange={(event) => setQuery(event.target.value)}
-                />
+            {isLoading ? (
+                <LoadingPlaceholder />
+            ) : (
+                <>
+                    <Input
+                        className="flex-grow py-2 m-4"
+                        type="text"
+                        placeholder="Search friends"
+                        value={query || ""}
+                        onChange={(event) => setQuery(event.target.value)}
+                    />
 
-                <HorizontalSeparator />
+                    <HorizontalSeparator />
 
-                <div
-                    className={clsx(
-                        "mx-6",
-                        matchingFriends.length !== 0 && "mb-6"
-                    )}
-                >
-                    {matchingFriends.length > 0 &&
-                        matchingFriends.map((user) => (
-                            <React.Fragment key={user.userId}>
-                                <UserCard user={user}>
-                                    <Button
-                                        className="ml-auto h-full"
-                                        size="thin"
-                                        onClick={() => handleUnfriend(user)}
-                                    >
-                                        Unfriend
-                                    </Button>
-                                </UserCard>
-                                <HorizontalSeparator />
-                            </React.Fragment>
-                        ))}
+                    <div
+                        className={clsx(
+                            "mx-6",
+                            matchingFriends.length !== 0 && "mb-6"
+                        )}
+                    >
+                        {matchingFriends.length > 0 &&
+                            matchingFriends.map((user) => (
+                                <React.Fragment key={user.userId}>
+                                    <UserCard user={user}>
+                                        <Button
+                                            className="ml-auto h-full"
+                                            size="thin"
+                                            onClick={() => handleUnfriend(user)}
+                                        >
+                                            Unfriend
+                                        </Button>
+                                    </UserCard>
+                                    <HorizontalSeparator />
+                                </React.Fragment>
+                            ))}
 
-                    {!matchingFriends.length && (
-                        <div className="flex justify-center items-center m-auto my-6 h-20 text-gray-400">
-                            No friends were found
-                        </div>
-                    )}
-                </div>
-            </LoadingContentWrapper>
+                        {!matchingFriends.length && (
+                            <div className="flex justify-center items-center m-auto my-6 h-20 text-gray-400">
+                                No friends were found
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
         </Container>
     );
 }

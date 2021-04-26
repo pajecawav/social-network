@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import { getChat, getChatMessages } from "../api";
 import { Container } from "../components/Container";
-import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
+import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { getLocalToken } from "../utils";
@@ -107,10 +107,9 @@ export function ChatPage({ chatId }) {
 
     return (
         <Container>
-            <LoadingContentWrapper
-                isLoading={chat === null}
-                loadingClassName="h-20"
-            >
+            {chat === null ? (
+                <LoadingPlaceholder />
+            ) : (
                 <div className="flex flex-col gap-2">
                     <ChatHeader chat={chat} />
 
@@ -139,7 +138,7 @@ export function ChatPage({ chatId }) {
                         <Button>Send</Button>
                     </form>
                 </div>
-            </LoadingContentWrapper>
+            )}
         </Container>
     );
 }

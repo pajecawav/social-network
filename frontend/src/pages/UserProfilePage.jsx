@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { getUser, unfriend, addFriend } from "../api";
+import { addFriend, getUser, unfriend } from "../api";
 import { Container } from "../components/Container";
-import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
+import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { SquareAvatar } from "../components/SquareAvatar";
 import { UserProfileInfo } from "../components/UserProfileInfo";
 import { UserContext } from "../contexts/UserContext";
@@ -78,18 +78,18 @@ export function UserProfilePage({ userId }) {
             .catch((error) => console.error(error));
     }, [userId]);
 
-    return (
-        <LoadingContentWrapper
-            className="h-full"
+    return user === null ? (
+        <LoadingPlaceholder
+            className="h-full min-h-96"
             loadingClassName="min-h-96"
             isLoading={user === null}
-        >
-            <div className="flex flex-grow gap-4">
-                <ImageBlock user={user} isMe={isMe} />
-                <div className="flex-grow">
-                    <UserProfileInfo user={user} />
-                </div>
+        />
+    ) : (
+        <div className="flex flex-grow gap-4">
+            <ImageBlock user={user} isMe={isMe} />
+            <div className="flex-grow">
+                <UserProfileInfo user={user} />
             </div>
-        </LoadingContentWrapper>
+        </div>
     );
 }

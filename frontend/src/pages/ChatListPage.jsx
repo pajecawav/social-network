@@ -7,7 +7,7 @@ import { ConfirmationModal } from "../components/ConfirmationModal";
 import { Container } from "../components/Container";
 import { CreateChatModal } from "../components/CreateChatModal";
 import { HeaderWithCount } from "../components/HeaderWithCount";
-import { LoadingContentWrapper } from "../components/LoadingContentWrapper";
+import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { Button } from "../ui/Button";
 import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
@@ -79,70 +79,76 @@ export function ChatListPage() {
 
     return (
         <Container>
-            <LoadingContentWrapper
-                isLoading={isLoading}
-                loadingClassName="h-20"
-            >
-                <HeaderWithCount
-                    className="flex"
-                    title="Chats"
-                    count={matchingChats.length}
-                >
-                    <Button
-                        className="ml-auto"
-                        size="thin"
-                        onClick={() => setCreateChatModalIsOpen(true)}
+            {isLoading ? (
+                <LoadingPlaceholder />
+            ) : (
+                <>
+                    <HeaderWithCount
+                        className="flex"
+                        title="Chats"
+                        count={matchingChats.length}
                     >
-                        Create
-                    </Button>
-                </HeaderWithCount>
-                <HorizontalSeparator />
+                        <Button
+                            className="ml-auto"
+                            size="thin"
+                            onClick={() => setCreateChatModalIsOpen(true)}
+                        >
+                            Create
+                        </Button>
+                    </HeaderWithCount>
+                    <HorizontalSeparator />
 
-                <div className="flex flex-col py-4">
-                    <div className="flex pb-4 px-4 border-b">
-                        <Input
-                            className="flex-grow"
-                            value={search}
-                            placeholder="Search"
-                            onChange={(event) => setSearch(event.target.value)}
-                        />
-                    </div>
-
-                    {matchingChats && (
-                        <div className="flex flex-col">
-                            {matchingChats.map((chat) => (
-                                <ChatBlock
-                                    key={chat.chatId}
-                                    chat={chat}
-                                    onDelete={handleConfirmDeleteChat}
-                                />
-                            ))}
+                    <div className="flex flex-col py-4">
+                        <div className="flex pb-4 px-4 border-b">
+                            <Input
+                                className="flex-grow"
+                                value={search}
+                                placeholder="Search"
+                                onChange={(event) =>
+                                    setSearch(event.target.value)
+                                }
+                            />
                         </div>
-                    )}
-                </div>
 
-                <CreateChatModal
-                    isOpen={createChatModalIsOpen}
-                    onRequestClose={() => setCreateChatModalIsOpen(false)}
-                    onChatCreated={handleChatCreated}
-                />
-
-                <ConfirmationModal
-                    isOpen={deletingChatId !== null}
-                    title="Delete chat"
-                    confirmText="Delete"
-                    onRequestClose={() => setDeletingChatId(null)}
-                    onConfirm={handleDeleteChat}
-                >
-                    <div className="flex flex-col gap-2">
-                        <p>Are you sure you want to delete the entire chat?</p>
-                        <p>
-                            This <span className="font-semibold">can't</span> be
-                            undone.
-                        </p>
+                        {matchingChats && (
+                            <div className="flex flex-col">
+                                {matchingChats.map((chat) => (
+                                    <ChatBlock
+                                        key={chat.chatId}
+                                        chat={chat}
+                                        onDelete={handleConfirmDeleteChat}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
-                </ConfirmationModal>
-            </LoadingContentWrapper>
+
+                    <CreateChatModal
+                        isOpen={createChatModalIsOpen}
+                        onRequestClose={() => setCreateChatModalIsOpen(false)}
+                        onChatCreated={handleChatCreated}
+                    />
+
+                    <ConfirmationModal
+                        isOpen={deletingChatId !== null}
+                        title="Delete chat"
+                        confirmText="Delete"
+                        onRequestClose={() => setDeletingChatId(null)}
+                        onConfirm={handleDeleteChat}
+                    >
+                        <div className="flex flex-col gap-2">
+                            <p>
+                                Are you sure you want to delete the entire chat?
+                            </p>
+                            <p>
+                                This{" "}
+                                <span className="font-semibold">can't</span> be
+                                undone.
+                            </p>
+                        </div>
+                    </ConfirmationModal>
+                </>
+            )}
         </Container>
     );
 }
