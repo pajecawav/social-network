@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { configureAxios } from "./api";
 import { App } from "./App";
 import "./index.css";
-import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 configureAxios();
@@ -16,5 +15,3 @@ ReactDOM.render(
 );
 
 serviceWorkerRegistration.unregister();
-
-reportWebVitals(console.log);
