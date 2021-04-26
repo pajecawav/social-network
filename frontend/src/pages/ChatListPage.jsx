@@ -138,11 +138,11 @@ export function ChatListPage() {
                     >
                         <div className="flex flex-col gap-2">
                             <p>
-                                Are you sure you want to delete the entire chat?
+                                Are you sure you want to delete the{" "}
+                                <b className="font-semibold">entrie</b> chat?
                             </p>
                             <p>
-                                This{" "}
-                                <span className="font-semibold">can't</span> be
+                                This <b className="font-semibold">can't</b> be
                                 undone.
                             </p>
                         </div>

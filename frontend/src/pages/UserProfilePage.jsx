@@ -79,11 +79,7 @@ export function UserProfilePage({ userId }) {
     }, [userId]);
 
     return user === null ? (
-        <LoadingPlaceholder
-            className="h-full min-h-96"
-            loadingClassName="min-h-96"
-            isLoading={user === null}
-        />
+        <LoadingPlaceholder className="h-full min-h-96" />
     ) : (
         <div className="flex flex-grow gap-4">
             <div className="w-60 flex flex-col gap-4">

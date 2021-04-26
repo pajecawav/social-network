@@ -1,8 +1,10 @@
+import clsx from "clsx";
 import { camelizeKeys, decamelizeKeys } from "humps";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import { getChat, getChatMessages } from "../api";
+import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { Button } from "../ui/Button";
@@ -28,16 +30,29 @@ function ChatHeader({ chat }) {
     );
 }
 
-function ChatMessage({ message }) {
+function ChatMessage({ message, showUser = true }) {
     return (
-        <div>
-            <Link
-                className="text-purple-600 hover:underline"
-                to={`/users/${message.user.userId}`}
-            >
-                {message.user.firstName} {message.user.lastName}
-            </Link>
-            <span>: {message.text}</span>
+        <div className="flex gap-2">
+            <div className={clsx("w-10", showUser && "h-10")}>
+                {showUser && (
+                    <Link to={`/users/${message.user.userId}`}>
+                        <CircleAvatar className="object-contain" size={2} />
+                    </Link>
+                )}
+            </div>
+
+            <div className="flex flex-col">
+                {showUser && (
+                    <Link
+                        className="text-purple-600 hover:underline"
+                        to={`/users/${message.user.userId}`}
+                    >
+                        {message.user.firstName}
+                    </Link>
+                )}
+
+                <div>{message.text}</div>
+            </div>
         </div>
     );
 }
@@ -110,15 +125,20 @@ export function ChatPage({ chatId }) {
             {chat === null ? (
                 <LoadingPlaceholder />
             ) : (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-4">
                     <ChatHeader chat={chat} />
 
                     {/* TODO: implement better scrolling (scrollbar should be at the right of the page */}
                     <div className="flex flex-col max-h-80 gap-2 px-4 overflow-y-auto">
-                        {messages.map((message) => (
+                        {messages.map((message, index) => (
                             <ChatMessage
-                                message={message}
                                 key={message.messageId}
+                                message={message}
+                                showUser={
+                                    index === 0 ||
+                                    message.user.userId !==
+                                        messages[index - 1].user.userId
+                                }
                             />
                         ))}
                         <div ref={messagesEnd} />
