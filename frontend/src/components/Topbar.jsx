@@ -18,14 +18,14 @@ export function Topbar() {
     };
 
     return (
-        <div className="sticky top-0 z-50 bg-white shadow-sm">
-            <div className="flex items-center px-3 mx-auto w-full max-w-4xl">
-                <div className="my-2 w-48">
-                    <Link className="flex ml-4 w-max sm:ml-0" to="/">
+        <div className="sticky h-10 top-0 z-50 bg-white shadow-sm">
+            <div className="flex h-full items-center px-3 mx-auto w-full max-w-4xl">
+                <div className="w-48">
+                    <Link className="flex w-max" to="/">
                         <Logo />
                     </Link>
                 </div>
-                <form className="hidden my-2 sm:block" onSubmit={handleSearch}>
+                <form className="hidden sm:block" onSubmit={handleSearch}>
                     <Input
                         className="px-3 bg-gray-100 rounded-xl"
                         flat={true}
@@ -37,7 +37,7 @@ export function Topbar() {
                 </form>
                 {loggedIn && (
                     <div
-                        className="flex gap-3 items-center px-2 mr-4 ml-auto transition-colors duration-200 cursor-pointer sm:mr-0 hover:bg-gray-50"
+                        className="h-auto flex self-stretch gap-3 items-center px-2 ml-auto transition-colors duration-200 cursor-pointer hover:bg-gray-200 hover:bg-opacity-40"
                         onClick={logout}
                     >
                         <div>{user.firstName}</div>
