@@ -8,10 +8,11 @@ import { Container } from "../components/Container";
 import { CreateChatModal } from "../components/CreateChatModal";
 import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
+import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
-import { splitLowercaseWords } from "../utils";
+import { getChatTitle, splitLowercaseWords } from "../utils";
 
 function ChatBlock({ chat, onDelete }) {
     const handleDelete = (event) => {
@@ -25,7 +26,8 @@ function ChatBlock({ chat, onDelete }) {
             to={`/chats/${chat.chatId}`}
         >
             <CircleAvatar size={3} />
-            <div className="font-medium">{chat.title}</div>
+
+            <div className="font-medium">{getChatTitle(chat)}</div>
 
             <div title="Delete">
                 <XIcon
@@ -44,6 +46,8 @@ export function ChatListPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [createChatModalIsOpen, setCreateChatModalIsOpen] = useState(false);
     const [deletingChatId, setDeletingChatId] = useState(null);
+
+    useTitle("Chats");
 
     useEffect(() => {
         getChats()
@@ -71,7 +75,7 @@ export function ChatListPage() {
 
     const searchWords = splitLowercaseWords(search);
     const matchingChats = chats.filter((chat) => {
-        const titleWords = splitLowercaseWords(chat.title);
+        const titleWords = splitLowercaseWords(getChatTitle(chat));
         return searchWords.every((word) =>
             titleWords.some((titleWord) => titleWord.includes(word))
         );
@@ -139,7 +143,7 @@ export function ChatListPage() {
                         <div className="flex flex-col gap-2">
                             <p>
                                 Are you sure you want to delete the{" "}
-                                <b className="font-semibold">entrie</b> chat?
+                                <b className="font-semibold">entire</b> chat?
                             </p>
                             <p>
                                 This <b className="font-semibold">can't</b> be

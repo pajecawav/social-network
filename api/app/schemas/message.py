@@ -1,18 +1,20 @@
-from enum import Enum
-from typing import Union
+from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, PositiveInt
+from pydantic.fields import Field
 
 from .user import User
 
 
-class MessageTypeEnum(str, Enum):
-    text_message = "text_message"
+class MessageCreate(BaseModel):
+    text: Optional[str] = Field(..., min_length=1)
 
 
 class Message(BaseModel):
     message_id: PositiveInt
-    message_type: MessageTypeEnum
+    text: Optional[str]
+    time_sent: datetime
 
     user: User
 
@@ -20,7 +22,5 @@ class Message(BaseModel):
         orm_mode = True
 
 
-from .text_message import TextMessage, TextMessageCreate  # noqa: E402
-
-AnyMessage = Union[TextMessage]
-AnyMessageCreate = Union[TextMessageCreate]
+class MessageUpdate(BaseModel):
+    text: Optional[str] = Field(..., min_length=1)

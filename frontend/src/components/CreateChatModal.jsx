@@ -4,7 +4,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { ModalBase } from "../ui/ModalBase";
 
-export function CreateChatModal({ ...props }) {
+export function CreateChatModal(props) {
     const [title, setTitle] = useState("");
 
     const handleCreateChat = (event) => {

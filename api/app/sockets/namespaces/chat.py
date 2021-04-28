@@ -32,7 +32,7 @@ class ChatNamespace(AsyncNamespace):
             return False
 
         try:
-            message_in = schemas.TextMessageCreate(**data["message"])
+            message_in = schemas.MessageCreate(**data["message"])
         except ValidationError:
             return False
 
@@ -40,9 +40,9 @@ class ChatNamespace(AsyncNamespace):
         session = await self.get_session(sid)
 
         with get_db() as db:
-            text_message = crud.text_message.create(
+            message = crud.message.create(
                 db, message_in, user_id=session["user_id"], chat_id=data["chat_id"]
             )
-            response = jsonable_encoder(schemas.TextMessage.from_orm(text_message))
+            response = jsonable_encoder(schemas.Message.from_orm(message))
 
         await self.emit("message", response)

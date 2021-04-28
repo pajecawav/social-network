@@ -10,3 +10,14 @@ export const splitLowercaseWords = (str) => {
         .split(" ")
         .filter((word) => word);
 };
+
+export const getChatTitle = (chat) => {
+    switch (chat.chatType) {
+        case "direct":
+            return `${chat.peer.firstName} ${chat.peer.lastName}`;
+        case "group":
+            return chat.title;
+        default:
+            throw new Error();
+    }
+};

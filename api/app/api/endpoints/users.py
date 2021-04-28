@@ -37,7 +37,7 @@ def get_users(
     cursor: Optional[int] = None,
     db: Session = Depends(get_db),
 ):
-    q = db.query(models.User)
+    q = db.query(models.User).order_by(models.User.user_id)
 
     if cursor is not None:
         q = q.filter(models.User.user_id >= cursor)

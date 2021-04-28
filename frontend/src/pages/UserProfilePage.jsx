@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { addFriend, getUser, unfriend } from "../api";
+import { addFriend, getUser, sendMessage, unfriend } from "../api";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
+import { SendMessageModal } from "../components/SendMessageModal";
 import { SquareAvatar } from "../components/SquareAvatar";
 import { UserProfileInfo } from "../components/UserProfileInfo";
 import { UserContext } from "../contexts/UserContext";
@@ -12,6 +13,7 @@ import { Button } from "../ui/Button";
 function ImageBlock({ user, isMe }) {
     const history = useHistory();
     const [isFriend, setIsFriend] = useState(user?.isFriend === true);
+    const [sendMessageModalIsOpen, setSendMessageModalIsOpen] = useState(false);
 
     const navigateEditProfilePage = () => {
         history.push("/edit");
@@ -47,15 +49,33 @@ function ImageBlock({ user, isMe }) {
                     Edit
                 </Button>
             )}
+
             {!isMe && (
-                <Button
-                    color="secondary"
-                    size="thin"
-                    onClick={handleToggleFriend}
-                >
-                    {isFriend === true ? "Unfriend" : "Add friend"}
-                </Button>
+                <>
+                    <Button
+                        color="secondary"
+                        size="thin"
+                        onClick={() => setSendMessageModalIsOpen(true)}
+                    >
+                        Write message
+                    </Button>
+
+                    <Button
+                        color="secondary"
+                        size="thin"
+                        onClick={handleToggleFriend}
+                    >
+                        {isFriend === true ? "Unfriend" : "Add friend"}
+                    </Button>
+                </>
             )}
+
+            <SendMessageModal
+                isOpen={sendMessageModalIsOpen}
+                toUserId={user.userId}
+                onRequestClose={() => setSendMessageModalIsOpen(false)}
+                onMessageSent={() => setSendMessageModalIsOpen(false)}
+            />
         </Container>
     );
 }

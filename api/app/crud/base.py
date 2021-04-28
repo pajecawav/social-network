@@ -13,6 +13,8 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+    DISPLAY_NAME: Optional[str] = None
+
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
@@ -23,7 +25,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         item = db.query(self.model).get(id)
 
         if item is None:
-            display_name = self.model.__name__
+            display_name = self.DISPLAY_NAME or self.model.__name__
 
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -39,9 +41,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def create(self, db: Session, object_in: CreateSchemaType) -> ModelType:
         obj = self.model(**jsonable_encoder(object_in))
+
         db.add(obj)
         db.commit()
         db.refresh(obj)
+
         return obj
 
     def update(

@@ -26,7 +26,7 @@ def get_friends(
     else:
         user = crud.user.get_or_404(db, user_id)
 
-    return user.friends.all()
+    return user.friends.order_by(models.User.user_id).all()
 
 
 @router.post("", response_model=schemas.User)

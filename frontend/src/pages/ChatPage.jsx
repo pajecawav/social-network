@@ -8,6 +8,7 @@ import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { useChat } from "../hooks/useChat";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import { getChatTitle } from "../utils";
 
 function ChatHeader({ chat }) {
     return (
@@ -20,7 +21,7 @@ function ChatHeader({ chat }) {
             </Link>
 
             <div className="flex-grow text-semibold text-center">
-                {chat?.title}
+                {getChatTitle(chat)}
             </div>
 
             <div className="w-20 mr-4" />
@@ -82,6 +83,13 @@ export function ChatPage({ chatId }) {
         messagesEnd.current?.scrollIntoView({ behavior });
     };
 
+    const handleSendMessage = (event) => {
+        event.preventDefault();
+        if (text) {
+            sendMessage(text, () => setText(""));
+        }
+    };
+
     return (
         <Container>
             {chat === null ? (
@@ -109,10 +117,7 @@ export function ChatPage({ chatId }) {
 
                     <form
                         className="flex gap-4 px-4 pb-4"
-                        onSubmit={(event) => {
-                            event.preventDefault();
-                            sendMessage(text, () => setText(""));
-                        }}
+                        onSubmit={handleSendMessage}
                     >
                         <Input
                             className="flex-grow"

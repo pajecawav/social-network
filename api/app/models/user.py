@@ -37,6 +37,7 @@ class User(Base):
     )
 
     messages = relationship("Message", back_populates="user", lazy="dynamic")
+
     chats = relationship(
         "Chat",
         secondary=chat_user_association_table,

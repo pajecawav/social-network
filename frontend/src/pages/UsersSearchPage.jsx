@@ -31,11 +31,13 @@ export function UsersSearchPage() {
     useEffect(() => {
         setUsers([]);
         setLoadOnScroll(true);
+        setNextCursor(null);
     }, [search]);
 
     useEffect(() => {
         setSearch(queryParam);
         setQuery(queryParam);
+        setNextCursor(null);
     }, [queryParam]);
 
     const handleSubmit = (event) => {

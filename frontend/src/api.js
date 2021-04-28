@@ -95,3 +95,7 @@ export async function deleteChat(chatId) {
 export async function getChatMessages(chatId) {
     return axios.get(`/api/chats/${chatId}/messages`);
 }
+
+export async function sendMessage(data) {
+    return axios.post("/api/messages", data);
+}
