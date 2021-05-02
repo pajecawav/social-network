@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { getChat } from "../api";
 import { CircleAvatar } from "../components/CircleAvatar";
@@ -42,12 +43,17 @@ function ChatMessage({ message, showUser = true }) {
 
             <div className="flex flex-col">
                 {showUser && (
-                    <Link
-                        className="text-secondary-500 hover:underline"
-                        to={`/users/${message.user.userId}`}
-                    >
-                        {message.user.firstName}
-                    </Link>
+                    <div>
+                        <Link
+                            className="text-secondary-500 hover:underline"
+                            to={`/users/${message.user.userId}`}
+                        >
+                            {message.user.firstName}
+                        </Link>
+                        <span className="ml-2 text-xs text-primary-500">
+                            {dayjs(message.timeSent).format("HH:mm")}
+                        </span>
+                    </div>
                 )}
 
                 <div>{message.text}</div>
@@ -90,6 +96,37 @@ export function ChatPage({ chatId }) {
         }
     };
 
+    let previousDate = null;
+    const now = dayjs();
+    const renderedMessages = messages.map((message, index) => {
+        const sentDate = dayjs(message.timeSent);
+        const shouldDisplayDate =
+            previousDate === null || sentDate.diff(previousDate, "day") > 0;
+
+        previousDate = sentDate;
+
+        return (
+            <React.Fragment key={message.messageId}>
+                {shouldDisplayDate && (
+                    <div className="mx-auto font-sm text-primary-500">
+                        {sentDate.format(
+                            now.year() === sentDate.year()
+                                ? "MMMM D"
+                                : "D MMMM, YYYY"
+                        )}
+                    </div>
+                )}
+                <ChatMessage
+                    message={message}
+                    showUser={
+                        index === 0 ||
+                        message.user.userId !== messages[index - 1].user.userId
+                    }
+                />
+            </React.Fragment>
+        );
+    });
+
     return (
         <Container>
             {chat === null ? (
@@ -98,20 +135,10 @@ export function ChatPage({ chatId }) {
                 <div className="flex flex-col gap-4">
                     <ChatHeader chat={chat} />
 
-                    {/* TODO: implement better scrolling (scrollbar should be at the right of the page */}
+                    {/* TODO: implement better scrolling (scrollbar should be at the right of the page) */}
                     <div className="flex flex-col max-h-80 gap-2 px-4 overflow-y-auto">
                         {isLoading && <LoadingPlaceholder />}
-                        {messages.map((message, index) => (
-                            <ChatMessage
-                                key={message.messageId}
-                                message={message}
-                                showUser={
-                                    index === 0 ||
-                                    message.user.userId !==
-                                        messages[index - 1].user.userId
-                                }
-                            />
-                        ))}
+                        {renderedMessages}
                         <div ref={messagesEnd} />
                     </div>
 

@@ -13,9 +13,7 @@ class Message(Base):
     message_id = Column(Integer, primary_key=True)
     text = Column(String, nullable=True)
 
-    time_sent = Column(
-        DateTime(timezone=True), default=datetime.utcnow(), nullable=False
-    )
+    time_sent = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
 
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     user = relationship("User", back_populates="messages")
