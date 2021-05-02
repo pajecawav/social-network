@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Body, Depends, Response
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -102,6 +102,75 @@ def get_chat_users(
         )
 
     return chat.users.all()
+
+
+@router.post("/{chat_id}/users", response_model=List[schemas.User])
+def add_chat_user(
+    chat_id: int,
+    user_id: int = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    chat = crud.group_chat.get_or_404(db, chat_id)
+
+    if current_user not in chat.users:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Don't have permission to view this chat.",
+        )
+
+    new_user = crud.user.get_or_404(db, user_id)
+
+    # if new_user not in current_user.friends:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN,
+    #         detail="Can only invite friends.",
+    #     )
+
+    if new_user in chat.users:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User already in chat.",
+        )
+
+    chat = crud.group_chat.add_user(db, chat, new_user)
+
+    return Response()
+
+
+@router.delete("/{chat_id}/users", response_model=List[schemas.User])
+def remove_chat_user(
+    chat_id: int,
+    user_id: int = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    chat = crud.group_chat.get_or_404(db, chat_id)
+    user = crud.user.get_or_404(db, user_id)
+
+    if current_user != chat.admin and current_user != user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Don't have permission to remove users.",
+        )
+
+    if user not in chat.users:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User is not in the chat.",
+        )
+
+    chat = crud.group_chat.remove_user(db, chat, user)
+    if chat.admin == user:
+        if chat.users.count() == 0:
+            crud.group_chat.delete(db, id=chat.chat_id)
+        else:
+            chat.admin = chat.users.first()
+
+        db.add(chat)
+        db.commit()
+
+    return Response()
 
 
 @router.get("/{chat_id}/messages", response_model=List[schemas.Message])

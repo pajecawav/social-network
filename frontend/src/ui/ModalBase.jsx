@@ -3,7 +3,7 @@ import ReactModal from "react-modal";
 
 const modalStyles = {
     content: {
-        top: "35%",
+        top: "50%",
         left: "50%",
         right: "auto",
         bottom: "auto",
@@ -11,6 +11,7 @@ const modalStyles = {
         transform: "translate(-50%, -50%)",
         padding: "0",
         maxWidth: "90%",
+        maxHeight: "90%",
         border: "none",
         borderRadius: "0.5rem",
         backgroundColor: "transparent",

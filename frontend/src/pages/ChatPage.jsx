@@ -5,13 +5,23 @@ import { Link } from "react-router-dom";
 import { getChat } from "../api";
 import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
+import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { useChat } from "../hooks/useChat";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { getChatTitle } from "../utils";
 
-function ChatHeader({ chat }) {
+function ChatHeader({ chat, onOpenChatInfo }) {
+    const isGroupChat = chat.chatType === "group";
+
+    const handleAvatarClick = (event) => {
+        event.preventDefault();
+        onOpenChatInfo();
+    };
+
+    const avatar = <CircleAvatar className="ml-auto cursor-pointer" size={2} />;
+
     return (
         <div className="flex items-center h-12 border-b border-primary-700">
             <Link
@@ -25,7 +35,13 @@ function ChatHeader({ chat }) {
                 {getChatTitle(chat)}
             </div>
 
-            <div className="w-20 mr-4" />
+            <div className="w-20 mr-4">
+                {isGroupChat ? (
+                    <div onClick={handleAvatarClick}>{avatar}</div>
+                ) : (
+                    <Link to={`/users/${chat.peer.userId}`}>{avatar}</Link>
+                )}
+            </div>
         </div>
     );
 }
@@ -68,6 +84,7 @@ export function ChatPage({ chatId }) {
 
     const [text, setText] = useState("");
     const messagesEnd = useRef(null);
+    const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
 
     useEffect(() => {
         getChat(chatId)
@@ -94,6 +111,14 @@ export function ChatPage({ chatId }) {
         if (text) {
             sendMessage(text, () => setText(""));
         }
+    };
+
+    const handleOpenChatInfo = () => {
+        if (chat.chatType !== "group") {
+            return;
+        }
+
+        setIsChatInfoOpen(true);
     };
 
     let previousDate = null;
@@ -132,30 +157,45 @@ export function ChatPage({ chatId }) {
             {chat === null ? (
                 <LoadingPlaceholder />
             ) : (
-                <div className="flex flex-col gap-4">
-                    <ChatHeader chat={chat} />
+                <>
+                    <div className="flex flex-col">
+                        <ChatHeader
+                            chat={chat}
+                            onOpenChatInfo={handleOpenChatInfo}
+                        />
 
-                    {/* TODO: implement better scrolling (scrollbar should be at the right of the page) */}
-                    <div className="flex flex-col max-h-80 gap-2 px-4 overflow-y-auto">
-                        {isLoading && <LoadingPlaceholder />}
-                        {renderedMessages}
-                        <div ref={messagesEnd} />
+                        {/* TODO: implement better scrolling (scrollbar should be at the right of the page) */}
+                        <div className="flex flex-col max-h-80 gap-2 px-4 py-4 overflow-y-auto">
+                            {isLoading && <LoadingPlaceholder />}
+                            {renderedMessages}
+                            <div ref={messagesEnd} />
+                        </div>
+
+                        <form
+                            className="flex gap-4 px-4 py-4"
+                            onSubmit={handleSendMessage}
+                        >
+                            <Input
+                                className="flex-grow"
+                                type="text"
+                                placeholder="Write a message"
+                                value={text}
+                                onChange={(event) =>
+                                    setText(event.target.value)
+                                }
+                            />
+                            <Button>Send</Button>
+                        </form>
                     </div>
 
-                    <form
-                        className="flex gap-4 px-4 pb-4"
-                        onSubmit={handleSendMessage}
-                    >
-                        <Input
-                            className="flex-grow"
-                            type="text"
-                            placeholder="Write a message"
-                            value={text}
-                            onChange={(event) => setText(event.target.value)}
+                    {chat.chatType === "group" && (
+                        <GroupChatInfoModal
+                            chat={chat}
+                            isOpen={isChatInfoOpen}
+                            onRequestClose={() => setIsChatInfoOpen(false)}
                         />
-                        <Button>Send</Button>
-                    </form>
-                </div>
+                    )}
+                </>
             )}
         </Container>
     );

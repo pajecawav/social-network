@@ -21,5 +21,23 @@ class CRUDGroupChat(CRUDBase[GroupChat, GroupChatCreate, GroupChatUpdate]):
 
         return chat
 
+    def add_user(self, db: Session, chat: GroupChat, user: User) -> GroupChat:
+        chat.users.append(user)
+
+        db.add(chat)
+        db.commit()
+        db.refresh(chat)
+
+        return chat
+
+    def remove_user(self, db: Session, chat: GroupChat, user: User) -> GroupChat:
+        chat.users.remove(user)
+
+        db.add(chat)
+        db.commit()
+        db.refresh(chat)
+
+        return chat
+
 
 group_chat = CRUDGroupChat(GroupChat)

@@ -78,7 +78,7 @@ export function UsersSearchPage() {
                 {users.length > 0 &&
                     users.map((user) => (
                         <UserCard
-                            className="pb-4 border-b border-primary-700"
+                            className="my-4 pb-4 border-b border-primary-700"
                             key={user.userId}
                             user={user}
                         />
