@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
@@ -9,7 +8,6 @@ import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { UserCard } from "../components/UserCard";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
-import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
 import { splitLowercaseWords } from "../utils";
 
@@ -58,37 +56,34 @@ export function FriendsPage() {
     return (
         <Container className="flex flex-col">
             <HeaderWithCount title="Friends" count={matchingFriends.length} />
-            <HorizontalSeparator />
 
             {isLoading ? (
                 <LoadingPlaceholder />
             ) : (
                 <>
-                    <Input
-                        className="flex-grow py-2 m-4"
-                        type="text"
-                        placeholder="Search friends"
-                        value={query || ""}
-                        onChange={(event) => {
-                            setQuery(event.target.value);
-                            setVisibleAmount(INITIAL_VISIBLE_AMOUNT);
-                        }}
-                    />
+                    <div className="flex border-b-2 border-primary-700">
+                        <Input
+                            className="flex-grow py-2 m-4"
+                            type="text"
+                            placeholder="Search friends"
+                            value={query || ""}
+                            onChange={(event) => {
+                                setQuery(event.target.value);
+                                setVisibleAmount(INITIAL_VISIBLE_AMOUNT);
+                            }}
+                        />
+                    </div>
 
-                    <HorizontalSeparator />
-
-                    <div
-                        className={clsx(
-                            "mx-6",
-                            matchingFriends.length !== 0 && "mb-6"
-                        )}
-                    >
+                    <div className="mx-6">
                         {matchingFriends.length > 0 &&
                             matchingFriends
                                 .slice(0, visibleAmount)
                                 .map((user) => (
                                     <React.Fragment key={user.userId}>
-                                        <UserCard user={user}>
+                                        <UserCard
+                                            className="pb-4 border-b border-primary-700"
+                                            user={user}
+                                        >
                                             <Button
                                                 className="ml-auto h-full"
                                                 size="thin"
@@ -99,12 +94,11 @@ export function FriendsPage() {
                                                 Unfriend
                                             </Button>
                                         </UserCard>
-                                        <HorizontalSeparator />
                                     </React.Fragment>
                                 ))}
 
                         {!matchingFriends.length && (
-                            <div className="flex justify-center items-center m-auto my-6 h-20 text-gray-400">
+                            <div className="flex justify-center items-center m-auto my-6 h-20 text-primary-400">
                                 No friends were found
                             </div>
                         )}

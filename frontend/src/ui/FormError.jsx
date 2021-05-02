@@ -4,7 +4,7 @@ export function FormError({ className, text }) {
     return (
         <div
             className={clsx(
-                "bg-red-200 max-w-full p-2 rounded border-red-400 border",
+                "max-w-full p-2 rounded text-primary-600 bg-error border border-primary-400",
                 className
             )}
         >

@@ -8,7 +8,6 @@ import { HeaderWithCount } from "../components/HeaderWithCount";
 import { UserCard } from "../components/UserCard";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
-import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
 import { Spinner } from "../ui/Spinner";
 
@@ -60,9 +59,11 @@ export function UsersSearchPage() {
     return (
         <Container className="flex flex-col">
             <HeaderWithCount title="People" count={totalMatches} />
-            <HorizontalSeparator />
 
-            <form className="flex gap-4 p-4" onSubmit={handleSubmit}>
+            <form
+                className="flex gap-4 p-4 border-b-2 border-primary-700"
+                onSubmit={handleSubmit}
+            >
                 <Input
                     className="flex-grow"
                     type="text"
@@ -73,22 +74,21 @@ export function UsersSearchPage() {
                 <Button>Search</Button>
             </form>
 
-            <HorizontalSeparator />
-
-            <div className={clsx("mx-6", users.length !== 0 && "mb-6")}>
+            <div className="mx-6">
                 {users.length > 0 &&
                     users.map((user) => (
-                        <React.Fragment key={user.userId}>
-                            <UserCard user={user} />
-                            <HorizontalSeparator />
-                        </React.Fragment>
+                        <UserCard
+                            className="pb-4 border-b border-primary-700"
+                            key={user.userId}
+                            user={user}
+                        />
                     ))}
 
                 {loadOnScroll && (
                     <Waypoint onEnter={fetchMoreUsers}>
                         <div
                             className={clsx(
-                                "flex mt-6",
+                                "flex mt-6 mb-2",
                                 users.length === 0 && "h-20"
                             )}
                         >
@@ -98,7 +98,7 @@ export function UsersSearchPage() {
                 )}
 
                 {noResults && (
-                    <div className="flex justify-center items-center h-24 text-gray-400">
+                    <div className="flex justify-center items-center h-24 text-primary-400">
                         Your search returned no results
                     </div>
                 )}

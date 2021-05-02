@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    @apply bg-primary-900;
+}
+
 html {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -19,13 +23,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 0.02em;
 
-    @apply bg-gray-100;
+    @apply bg-primary-100;
 }
 
 /* firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #d4d4d8 rgba(0, 0, 0, 0);
+    scrollbar-color: #222222 transparent;
 }
 
 /* non-firefox */
@@ -39,7 +43,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #d4d4d8;
+    background-color: #222222;
     border-radius: 9px;
 }
 

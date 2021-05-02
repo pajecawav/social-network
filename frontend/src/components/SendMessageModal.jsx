@@ -52,7 +52,7 @@ export function SendMessageModal({
                     autoFocus={autofocus}
                     onChange={(event) => setText(event.target.value)}
                 />
-                <Button>Create</Button>
+                <Button>Send</Button>
             </form>
         </ModalBase>
     );

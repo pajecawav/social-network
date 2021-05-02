@@ -2,7 +2,12 @@ import clsx from "clsx";
 
 export function Container({ className, children }) {
     return (
-        <div className={clsx("bg-white rounded shadow-sm border", className)}>
+        <div
+            className={clsx(
+                "bg-primary-800 rounded shadow-sm border border-primary-800",
+                className
+            )}
+        >
             {children}
         </div>
     );

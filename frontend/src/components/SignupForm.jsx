@@ -47,7 +47,7 @@ export function SignupForm({ username: usernameProp }) {
                     <div className="font-semibold text-center">
                         First time here?
                     </div>
-                    <div className="text-xs text-center text-gray-500">
+                    <div className="text-xs text-center text-primary-500">
                         Sign up for SN
                     </div>
                 </div>

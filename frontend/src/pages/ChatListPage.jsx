@@ -10,7 +10,6 @@ import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
-import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { Input } from "../ui/Input";
 import { getChatTitle, splitLowercaseWords } from "../utils";
 
@@ -22,7 +21,7 @@ function ChatBlock({ chat, onDelete }) {
 
     return (
         <Link
-            className="flex relative group gap-6 px-4 py-3 border-b transition-colors duration-200 hover:bg-gray-100 "
+            className="flex relative group gap-6 px-4 py-3 border-b border-primary-700 transition-colors duration-200 hover:bg-primary-700 "
             to={`/chats/${chat.chatId}`}
         >
             <CircleAvatar size={3} />
@@ -31,7 +30,7 @@ function ChatBlock({ chat, onDelete }) {
 
             <div title="Delete">
                 <XIcon
-                    className="h-4 w-4 absolute top-3 right-3 hidden group-hover:block cursor-pointer text-gray-600 hover:text-purple-500"
+                    className="h-4 w-4 absolute top-3 right-3 hidden group-hover:block cursor-pointer text-primary-400 hover:text-primary-300 transition-colors duration-200"
                     size="thin"
                     onClick={handleDelete}
                 />
@@ -100,10 +99,9 @@ export function ChatListPage() {
                             Create
                         </Button>
                     </HeaderWithCount>
-                    <HorizontalSeparator />
 
                     <div className="flex flex-col py-4">
-                        <div className="flex pb-4 px-4 border-b">
+                        <div className="flex pb-4 px-4 border-b border-primary-700">
                             <Input
                                 className="flex-grow"
                                 value={search}

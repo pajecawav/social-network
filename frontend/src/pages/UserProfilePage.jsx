@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
-import { addFriend, getUser, sendMessage, unfriend } from "../api";
+import { Link, useHistory } from "react-router-dom";
+import { addFriend, getUser, unfriend } from "../api";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { SendMessageModal } from "../components/SendMessageModal";
@@ -41,11 +41,7 @@ function ImageBlock({ user, isMe }) {
         <Container className="flex flex-col gap-4 p-4">
             <SquareAvatar className="object-cover w-full" scale={13} />
             {isMe && (
-                <Button
-                    size="thin"
-                    color="secondary"
-                    onClick={navigateEditProfilePage}
-                >
+                <Button size="thin" onClick={navigateEditProfilePage}>
                     Edit
                 </Button>
             )}
@@ -53,18 +49,13 @@ function ImageBlock({ user, isMe }) {
             {!isMe && (
                 <>
                     <Button
-                        color="secondary"
                         size="thin"
                         onClick={() => setSendMessageModalIsOpen(true)}
                     >
                         Write message
                     </Button>
 
-                    <Button
-                        color="secondary"
-                        size="thin"
-                        onClick={handleToggleFriend}
-                    >
+                    <Button size="thin" onClick={handleToggleFriend}>
                         {isFriend === true ? "Unfriend" : "Add friend"}
                     </Button>
                 </>

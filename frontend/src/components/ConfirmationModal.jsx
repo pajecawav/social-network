@@ -1,5 +1,4 @@
 import { Button } from "../ui/Button";
-import { HorizontalSeparator } from "../ui/HorizontalSeparator";
 import { ModalBase } from "../ui/ModalBase";
 
 export function ConfirmationModal({
@@ -12,16 +11,12 @@ export function ConfirmationModal({
 }) {
     return (
         <ModalBase title={title} {...props}>
-            <div className="w-96 mb-4">{children}</div>
-
-            <HorizontalSeparator />
+            <div className="w-96 pb-4 border-b-2 border-primary-700">
+                {children}
+            </div>
 
             <div className="mt-4 ml-auto w-max flex gap-4">
-                <Button
-                    size="thin"
-                    color="transparent"
-                    onClick={() => props?.onRequestClose()}
-                >
+                <Button size="thin" onClick={() => props?.onRequestClose()}>
                     {cancelText}
                 </Button>
                 <Button size="thin" onClick={onConfirm}>

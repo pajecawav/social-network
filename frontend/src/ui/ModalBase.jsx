@@ -29,15 +29,17 @@ export function ModalBase({ title, children, ...props }) {
             closeTimeoutMS={50}
             ariaHideApp={false}
         >
-            <div className="flex items-center px-5 py-2 border-b-2 text-gray-200 bg-purple-500">
+            <div className="flex items-center px-5 py-2 text-primary-200 bg-primary-800 border-b-2 border-primary-700">
                 <div className="text-lg font-medium">{title}</div>
                 <XIcon
-                    className="h-6 w-6 ml-auto cursor-pointer duration-200 text-gray-300 hover:text-gray-100"
+                    className="h-6 w-6 ml-auto cursor-pointer duration-200 text-primary-300 hover:text-primary-100"
                     onClick={() => props?.onRequestClose?.()}
                 />
             </div>
 
-            <div className="p-5 bg-white">{children}</div>
+            <div className="p-5 bg-primary-800 text-primary-200">
+                {children}
+            </div>
         </ReactModal>
     );
 }

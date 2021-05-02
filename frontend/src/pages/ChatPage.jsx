@@ -12,9 +12,9 @@ import { getChatTitle } from "../utils";
 
 function ChatHeader({ chat }) {
     return (
-        <div className="flex items-center h-12 border-b">
+        <div className="flex items-center h-12 border-b border-primary-700">
             <Link
-                className="flex w-20 items-center px-4 h-full py-2 text-gray-400 text-center transition-all duration-200 hover:bg-gray-200 hover:bg-opacity-40"
+                className="flex w-20 items-center px-4 h-full py-2 text-primary-200 text-center transition-all duration-200 hover:bg-primary-700"
                 to="/chats"
             >
                 Back
@@ -43,7 +43,7 @@ function ChatMessage({ message, showUser = true }) {
             <div className="flex flex-col">
                 {showUser && (
                     <Link
-                        className="text-purple-600 hover:underline"
+                        className="text-secondary-500 hover:underline"
                         to={`/users/${message.user.userId}`}
                     >
                         {message.user.firstName}

@@ -6,7 +6,7 @@ export function App() {
     return (
         <Router>
             <UserProvider>
-                <div className="flex min-h-screen min-w-screen">
+                <div className="flex min-h-screen min-w-screen bg-primary-900 text-primary-200">
                     <Root />
                 </div>
             </UserProvider>

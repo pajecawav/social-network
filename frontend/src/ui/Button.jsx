@@ -5,25 +5,12 @@ const sizeClassnames = {
     thin: "py-1",
 };
 
-const colorClassnames = {
-    primary: "text-white bg-purple-500",
-    secondary: "text-gray-600 bg-purple-200",
-    transparent: "text-gray-600 hover:bg-purple-200",
-};
-
-export function Button({
-    className,
-    size = "normal",
-    color = "primary",
-    children,
-    ...props
-}) {
+export function Button({ className, size = "normal", children, ...props }) {
     return (
         <button
             className={clsx(
-                "base-button",
+                "base-button bg-secondary",
                 sizeClassnames[size],
-                colorClassnames[color],
                 className
             )}
             {...props}
