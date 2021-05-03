@@ -9,7 +9,9 @@ export function Chat({ messages = [] }) {
     return messages.map((message, index) => {
         const sentDate = dayjs(message.timeSent);
         const shouldDisplayDate =
-            previousDate === null || sentDate.diff(previousDate, "day") > 0;
+            previousDate === null ||
+            sentDate.startOf("day").diff(previousDate.startOf("day"), "day") >
+                0;
 
         previousDate = sentDate;
 
@@ -28,6 +30,7 @@ export function Chat({ messages = [] }) {
                     message={message}
                     showUser={
                         index === 0 ||
+                        shouldDisplayDate ||
                         message.user.userId !== messages[index - 1].user.userId
                     }
                 />
