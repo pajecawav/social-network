@@ -14,7 +14,7 @@ module.exports = {
                     300: colors.trueGray[300],
                     400: colors.trueGray[400],
                     500: colors.trueGray[500],
-                    600: colors.trueGray[600],
+                    600: "#2A2A2A",
                     700: "#222222",
                     800: "#181818",
                     900: "#121212",
