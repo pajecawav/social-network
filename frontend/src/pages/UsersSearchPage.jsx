@@ -85,7 +85,7 @@ export function UsersSearchPage() {
                     ))}
 
                 {loadOnScroll && (
-                    <Waypoint onEnter={fetchMoreUsers}>
+                    <Waypoint onEnter={fetchMoreUsers} bottomOffset={-200}>
                         <div
                             className={clsx(
                                 "flex mt-6 mb-2",

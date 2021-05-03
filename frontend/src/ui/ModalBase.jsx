@@ -1,4 +1,5 @@
 import { XIcon } from "@heroicons/react/outline";
+import clsx from "clsx";
 import ReactModal from "react-modal";
 
 const modalStyles = {
@@ -22,7 +23,7 @@ const modalStyles = {
     },
 };
 
-export function ModalBase({ title, children, ...props }) {
+export function ModalBase({ title, children, bodyClassName, ...props }) {
     return (
         <ReactModal
             {...props}
@@ -38,7 +39,12 @@ export function ModalBase({ title, children, ...props }) {
                 />
             </div>
 
-            <div className="p-5 bg-primary-800 text-primary-200">
+            <div
+                className={clsx(
+                    "p-5 bg-primary-800 text-primary-200",
+                    bodyClassName
+                )}
+            >
                 {children}
             </div>
         </ReactModal>

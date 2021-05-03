@@ -92,6 +92,10 @@ export async function deleteChat(chatId) {
     return axios.delete(`/api/chats/${chatId}`);
 }
 
+export async function addChatUser(chatId, userId) {
+    return axios.post(`/api/chats/${chatId}/users`, { userId });
+}
+
 export async function removeChatUser(chatId, userId) {
     return axios.delete(`/api/chats/${chatId}/users`, { data: { userId } });
 }
