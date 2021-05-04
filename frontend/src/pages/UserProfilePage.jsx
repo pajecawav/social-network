@@ -100,7 +100,10 @@ export function UserProfilePage({ userId }) {
                 </Container>
             </div>
             <div className="flex-grow">
-                <UserProfileInfo user={user} />
+                <UserProfileInfo
+                    user={user}
+                    onStatusUpdated={(status) => setUser({ ...user, status })}
+                />
             </div>
         </div>
     );
