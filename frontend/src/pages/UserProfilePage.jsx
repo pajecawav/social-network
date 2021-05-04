@@ -93,7 +93,7 @@ export function UserProfilePage({ userId }) {
         <LoadingPlaceholder className="h-full min-h-96" />
     ) : (
         <div className="flex flex-grow gap-4">
-            <div className="w-60 flex flex-col gap-4">
+            <div className="w-60 flex flex-shrink-0 flex-col gap-4">
                 <ImageBlock user={user} isMe={isMe} />
                 <Container className="p-4">
                     <Link to={`/friends?id=${user.userId}`}>Friends</Link>
