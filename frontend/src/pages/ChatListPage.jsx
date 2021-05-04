@@ -26,7 +26,19 @@ function ChatBlock({ chat, onDelete }) {
         >
             <CircleAvatar size={3} />
 
-            <div className="font-medium">{getChatTitle(chat)}</div>
+            <div className="min-w-0">
+                <div className="mb-2 text-primary-300 font-medium">
+                    {getChatTitle(chat)}
+                </div>
+                {chat.lastMessage && (
+                    <div className="flex gap-2 items-center">
+                        <CircleAvatar size={1.5} />
+                        <div className="h-6 text-sm text-primary-300 whitespace-nowrap overflow-ellipsis overflow-hidden">
+                            {chat.lastMessage.text}
+                        </div>
+                    </div>
+                )}
+            </div>
 
             <div title="Delete">
                 <XIcon

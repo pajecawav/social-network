@@ -40,7 +40,9 @@
         "start": "craco start",
         "build": "craco build",
         "test": "craco test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "lint": "eslint src",
+        "format": "prettier src --write"
     },
     "proxy": "http://localhost:3000/",
     "eslintConfig": {

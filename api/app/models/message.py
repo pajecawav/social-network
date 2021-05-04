@@ -19,4 +19,4 @@ class Message(Base):
     user = relationship("User", back_populates="messages")
 
     chat_id = Column(Integer, ForeignKey("chats.chat_id"), nullable=False)
-    chat = relationship("Chat", back_populates="messages")
+    chat = relationship("Chat", back_populates="messages", foreign_keys=[chat_id])

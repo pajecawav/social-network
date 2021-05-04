@@ -1,7 +1,9 @@
 from enum import Enum
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from .message import Message
 from .user import User
 
 
@@ -13,6 +15,10 @@ class ChatTypeEnum(str, Enum):
 class Chat(BaseModel):
     chat_id: int
     chat_type: ChatTypeEnum
+    last_message: Optional[Message]
+
+    class Config:
+        orm_mode = True
 
 
 class DirectChatCreate(BaseModel):
@@ -37,9 +43,6 @@ class GroupChatCreate(BaseModel):
 class GroupChat(Chat):
     title: str
     admin: User
-
-    class Config:
-        orm_mode = True
 
 
 class GroupChatUpdate(BaseModel):

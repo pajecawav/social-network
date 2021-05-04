@@ -36,13 +36,17 @@ class ChatNamespace(AsyncNamespace):
         except ValidationError:
             return False
 
-        assert sid is not None
         session = await self.get_session(sid)
 
         with get_db() as db:
+            chat = crud.chat.get(db, data["chat_id"])
+            if chat is None:
+                return False
+
             message = crud.message.create(
-                db, message_in, user_id=session["user_id"], chat_id=data["chat_id"]
+                db, message_in, user_id=session["user_id"], chat_id=chat.chat_id
             )
+            crud.chat.set_last_message(db, chat, message)
             response = jsonable_encoder(schemas.Message.from_orm(message))
 
         await self.emit("message", response)

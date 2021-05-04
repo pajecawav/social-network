@@ -44,5 +44,6 @@ def send_message(
     message = crud.message.create(
         db, message_in, user_id=current_user.user_id, chat_id=chat.chat_id
     )
+    crud.chat.set_last_message(db, chat, message)
 
     return message

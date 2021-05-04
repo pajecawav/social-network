@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models import Chat
+from app.models.message import Message
 
 
 class CRUDChat:
@@ -25,6 +26,15 @@ class CRUDChat:
         chat = self.get(db, id)
         db.delete(chat)
         db.commit()
+
+    def set_last_message(self, db: Session, chat: Chat, message: Message) -> Chat:
+        chat.last_message = message
+
+        db.add(chat)
+        db.commit()
+        db.refresh(chat)
+
+        return chat
 
 
 chat = CRUDChat()

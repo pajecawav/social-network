@@ -14,7 +14,17 @@ class Chat(Base):
     chat_type = Column(String, nullable=False)
 
     messages = relationship(
-        "Message", back_populates="chat", lazy="dynamic", cascade="delete"
+        "Message",
+        back_populates="chat",
+        lazy="dynamic",
+        cascade="delete",
+        foreign_keys="Message.chat_id",
+    )
+    last_message_id = Column(Integer, ForeignKey("messages.message_id"))
+    last_message = relationship(
+        "Message",
+        uselist=False,
+        foreign_keys=[last_message_id],
     )
 
     users = relationship(
