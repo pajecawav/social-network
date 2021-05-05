@@ -33,7 +33,6 @@ class User(Base):
         lazy="dynamic",
         primaryjoin=user_id == friends_association_table.c.first_user_id,
         secondaryjoin=user_id == friends_association_table.c.second_user_id,
-        order_by="User.user_id",
     )
 
     messages = relationship("Message", back_populates="user", lazy="dynamic")

@@ -57,3 +57,9 @@ class UsersPaginationOut(BaseModel):
     total_matches: int = Field(ge=0)
     users: List[User]
     next_cursor: Optional[PositiveInt] = None
+
+
+class FriendsPaginationOut(BaseModel):
+    total_matches: int = Field(ge=0)
+    friends: List[User]
+    next_cursor: Optional[PositiveInt] = None

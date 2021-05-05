@@ -1,6 +1,8 @@
-from typing import List, Optional
+from enum import Enum
+from typing import Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -9,9 +11,19 @@ from app.api.dependencies import get_current_user, get_current_user_or_none, get
 router = APIRouter()
 
 
-@router.get("", response_model=List[schemas.User])
+class FriendsOrderEnum(str, Enum):
+    ids = "ids"
+    random = "random"
+
+
+@router.get(
+    "", response_model=schemas.FriendsPaginationOut, response_model_exclude_none=True
+)
 def get_friends(
     user_id: Optional[int] = None,
+    limit: Optional[int] = None,
+    cursor: Optional[int] = None,
+    order_by: FriendsOrderEnum = FriendsOrderEnum.ids,
     db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(get_current_user_or_none),
 ):
@@ -26,7 +38,35 @@ def get_friends(
     else:
         user = crud.user.get_or_404(db, user_id)
 
-    return user.friends.order_by(models.User.user_id).all()
+    if order_by == FriendsOrderEnum.ids:
+        order_expr = models.User.user_id
+    elif order_by == FriendsOrderEnum.random:
+        order_expr = func.random()
+    else:
+        assert False
+
+    q = user.friends.order_by(order_expr)
+
+    if cursor is not None:
+        q = q.filter(models.User.user_id >= cursor)
+
+    total_matches = q.count()
+
+    if limit is not None:
+        q = q.limit(limit + 1)
+
+    friends = q.all()
+    next_cursor = (
+        friends.pop().user_id
+        if (limit is not None and len(friends) == (limit + 1))
+        else None
+    )
+
+    return {
+        "total_matches": total_matches,
+        "friends": friends,
+        "next_cursor": next_cursor,
+    }
 
 
 @router.post("", response_model=schemas.User)

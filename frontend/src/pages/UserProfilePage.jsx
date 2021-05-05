@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { addFriend, getUser, unfriend } from "../api";
+import { addFriend, getFriends, getUser, unfriend } from "../api";
+import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { SendMessageModal } from "../components/SendMessageModal";
@@ -74,6 +75,8 @@ function ImageBlock({ user, isMe }) {
 export function UserProfilePage({ userId }) {
     const { user: currentUser } = useContext(UserContext);
     const [user, setUser] = useState(null);
+    const [friends, setFriends] = useState(null);
+    const [friendsAmount, setFriendsAmount] = useState(null);
 
     const isMe = user && currentUser?.userId === user.userId;
 
@@ -83,10 +86,14 @@ export function UserProfilePage({ userId }) {
 
     useEffect(() => {
         getUser(userId)
+            .then((response) => setUser(response.data))
+            .catch(console.error);
+        getFriends({ userId, limit: 6, orderBy: "random" })
             .then((response) => {
-                setUser(response.data);
+                setFriends(response.data.friends);
+                setFriendsAmount(response.data.totalMatches);
             })
-            .catch((error) => console.error(error));
+            .catch(console.error);
     }, [userId]);
 
     return user === null ? (
@@ -96,7 +103,32 @@ export function UserProfilePage({ userId }) {
             <div className="w-60 flex flex-shrink-0 flex-col gap-4">
                 <ImageBlock user={user} isMe={isMe} />
                 <Container className="p-4">
-                    <Link to={`/friends?id=${user.userId}`}>Friends</Link>
+                    <Link className="flex" to={`/friends?id=${user.userId}`}>
+                        <div>Friends</div>
+                        <div className="ml-2 text-primary-500">
+                            {friendsAmount}
+                        </div>
+                    </Link>
+                    {friends === null ? (
+                        <LoadingPlaceholder className="w-full h-full min-h-40" />
+                    ) : (
+                        friends.length > 0 && (
+                            <div className="grid grid-cols-3 gap-2 mt-4">
+                                {friends.map((friend) => (
+                                    <Link
+                                        className="flex flex-col items-center gap-2"
+                                        to={`/users/${friend.userId}`}
+                                        key={friend.userId}
+                                    >
+                                        <CircleAvatar size={3} />
+                                        <div className="text-center hover:underline">
+                                            {friend.firstName}
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        )
+                    )}
                 </Container>
             </div>
             <div className="flex-grow">

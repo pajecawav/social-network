@@ -29,7 +29,7 @@ export function InviteToChatModal({ chat, ...props }) {
     useEffect(() => {
         getFriends(chat.chatId)
             .then((response) => {
-                setFriends(response.data);
+                setFriends(response.data.friends);
                 setIsFriendsLoading(false);
             })
             .catch(console.error);

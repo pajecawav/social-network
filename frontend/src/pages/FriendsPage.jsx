@@ -26,7 +26,7 @@ export function FriendsPage() {
     useState(() => {
         getFriends({ userId })
             .then((response) => {
-                setFriends(response.data);
+                setFriends(response.data.friends);
                 setIsLoading(false);
             })
             .catch(console.error);
