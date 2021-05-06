@@ -1,4 +1,7 @@
+import { ChevronDownIcon } from "@heroicons/react/outline";
+import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
+import { Waypoint } from "react-waypoint";
 import { getChat } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
@@ -18,6 +21,7 @@ export function ChatPage({ chatId }) {
     const messagesEnd = useRef(null);
     const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
+    const [isScrollAnchored, setIsScrollAnchored] = useState(true);
 
     useEffect(() => {
         getChat(chatId)
@@ -32,8 +36,10 @@ export function ChatPage({ chatId }) {
     }, [isLoading]);
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+        if (isScrollAnchored) {
+            scrollToBottom();
+        }
+    }, [messages, isScrollAnchored]);
 
     const scrollToBottom = (behavior = "smooth") => {
         messagesEnd.current?.scrollIntoView({ behavior });
@@ -71,7 +77,24 @@ export function ChatPage({ chatId }) {
                         <div className="flex flex-col max-h-80 gap-2 px-4 py-4 overflow-y-auto">
                             {isLoading && <LoadingPlaceholder />}
                             <Chat messages={messages} />
-                            <div ref={messagesEnd} />
+                            <Waypoint
+                                bottomOffset={-50}
+                                onEnter={() => setIsScrollAnchored(true)}
+                                onLeave={() => setIsScrollAnchored(false)}
+                            >
+                                <div className="h-px" ref={messagesEnd} />
+                            </Waypoint>
+                            <button
+                                className={clsx(
+                                    "sticky w-10 h-10 ml-auto bottom-0 p-1 rounded-full shadow-xl border text-secondary-500 bg-primary-700 border-primary-600 bg-opacity-30 transform-colors duration-200 outline-none hover:bg-primary-600",
+                                    isScrollAnchored
+                                        ? "opacity-0 pointer-events-none"
+                                        : "opacity-100 pointer-events-auto"
+                                )}
+                                onClick={() => scrollToBottom("auto")}
+                            >
+                                <ChevronDownIcon />
+                            </button>
                         </div>
 
                         <form

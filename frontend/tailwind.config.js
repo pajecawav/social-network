@@ -25,6 +25,7 @@ module.exports = {
                     600: colors.blue[600],
                     700: colors.blue[700],
                     800: colors.blue[800],
+                    900: colors.blue[900],
                 },
                 error: colors.red[200],
                 success: colors.emerald[100],
