@@ -17,14 +17,12 @@ class Chat(Base):
         "Message",
         back_populates="chat",
         lazy="dynamic",
-        cascade="delete",
+        cascade="all, delete, delete-orphan",
         foreign_keys="Message.chat_id",
     )
     last_message_id = Column(Integer, ForeignKey("messages.message_id"))
     last_message = relationship(
-        "Message",
-        uselist=False,
-        foreign_keys=[last_message_id],
+        "Message", uselist=False, foreign_keys=[last_message_id], post_update=True
     )
 
     users = relationship(
