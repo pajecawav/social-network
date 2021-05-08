@@ -86,7 +86,7 @@ export function ChatPage({ chatId }) {
                             </Waypoint>
                             <button
                                 className={clsx(
-                                    "absolute w-10 h-10 ml-auto bottom-20 right-5 p-1 rounded-full shadow-xl border text-secondary-500 bg-primary-700 border-primary-600 bg-opacity-30 transform-colors duration-200 outline-none hover:bg-primary-600",
+                                    "absolute w-10 h-10 ml-auto bottom-20 right-5 p-1 rounded-full shadow-xl border text-secondary-500 bg-primary-700 border-primary-600 bg-opacity-30 transform-colors duration-200 outline-none focus:outline-none hover:bg-primary-600",
                                     isScrollAnchored
                                         ? "opacity-0 pointer-events-none"
                                         : "opacity-100 pointer-events-auto"
