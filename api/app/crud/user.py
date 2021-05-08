@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from sqlalchemy.orm import Session
@@ -63,6 +64,11 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             .first()
         )
         return friendship is not None
+
+    def update_last_seen(self, db: Session, user: User) -> None:
+        user.last_seen = datetime.utcnow()
+        db.add(user)
+        db.commit()
 
 
 user = CRUDUser(User)

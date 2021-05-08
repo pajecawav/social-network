@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 from typing import List, Optional
 
@@ -25,9 +25,12 @@ class User(BaseModel):
     username: str
     first_name: str
     last_name: str
+    is_online: bool
+    last_seen: datetime
+
+    status: Optional[str]
     gender: Optional[GenderEnum]
     birthdate: Optional[date]
-    status: Optional[str]
 
     is_friend: Optional[bool]
 

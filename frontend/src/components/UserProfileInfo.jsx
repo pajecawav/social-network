@@ -2,6 +2,7 @@ import clsx from "clsx";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
 import { updateUser } from "../api";
+import { formatLastSeen } from "../utils";
 import { UserContext } from "../contexts/UserContext";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -27,8 +28,15 @@ export function UserProfileInfo({ user, onStatusUpdated }) {
     return (
         <Container className="p-4">
             <div className="mb-2 pb-2 border-b-2 border-primary-700">
-                <div className="text-lg font-medium">
-                    {user.firstName} {user.lastName}
+                <div className="flex items-center gap-2">
+                    <div className="text-lg font-medium">
+                        {user.firstName} {user.lastName}
+                    </div>
+                    <div className="ml-auto text-sm text-primary-500">
+                        {user.isOnline
+                            ? "online"
+                            : `last seen ${formatLastSeen(user.lastSeen)}`}
+                    </div>
                 </div>
                 <div>
                     <div
@@ -56,7 +64,10 @@ export function UserProfileInfo({ user, onStatusUpdated }) {
                         <Dropdown
                             isOpen={isEditStatusOpen}
                             className="p-3 shadow-md rounded-md border border-primary-800 bg-primary-600"
-                            onRequestClose={() => setIsEditStatusOpen(false)}
+                            onRequestClose={() => {
+                                setNewStatus("");
+                                setIsEditStatusOpen(false);
+                            }}
                         >
                             <form
                                 className="flex gap-2"

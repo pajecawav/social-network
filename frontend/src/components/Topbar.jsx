@@ -21,7 +21,7 @@ export function Topbar() {
 
     return (
         <div className="sticky h-12 top-0 z-50 bg-primary-900 shadow-md border-b-2 border-primary-700">
-            <div className="flex relative h-full items-center px-3 mx-auto w-full max-w-4xl">
+            <div className="flex relative h-full items-center px-3 mx-auto w-full max-w-5xl">
                 <div className="w-48">
                     <Link className="flex w-max" to="/">
                         <Logo />

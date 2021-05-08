@@ -73,7 +73,7 @@ def get_user(
 ):
     user = crud.user.get_or_404(db, user_id)
 
-    response = jsonable_encoder(user)
+    response = jsonable_encoder(schemas.User.from_orm(user))
 
     if current_user is not None and current_user.user_id != user_id:
         response["is_friend"] = crud.user.are_friends(db, user_id, current_user.user_id)

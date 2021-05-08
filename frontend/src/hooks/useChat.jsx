@@ -1,8 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from "humps";
 import { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
 import { getChatMessages } from "../api";
-import { getLocalToken } from "../utils";
+import { getSocket } from "../sockets";
 
 export function useChat(chatId) {
     const [isLoading, setIsLoading] = useState(true);
@@ -19,16 +18,7 @@ export function useChat(chatId) {
     }, [chatId]);
 
     useEffect(() => {
-        const sio = io("/chat", {
-            path: "/api/ws/socket.io",
-            auth: {
-                token: getLocalToken(),
-            },
-            query: {
-                chat_id: chatId,
-            },
-        });
-
+        const sio = getSocket("/chat", { chat_id: chatId });
         socketRef.current = sio;
 
         sio.on("message", (data) => {

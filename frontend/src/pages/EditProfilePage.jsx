@@ -13,7 +13,7 @@ export function EditProfilePage() {
     const { user, setUser } = useContext(UserContext);
     const [firstName, setFirstName] = useState(user?.firstName || "");
     const [lastName, setLastName] = useState(user?.lastName || "");
-    const [birthdate, setBirthdate] = useState(user?.birthdate || new Date());
+    const [birthdate, setBirthdate] = useState(user?.birthdate);
     const [success, setSuccess] = useState(null);
 
     useTitle("Edit my profile");
@@ -91,7 +91,6 @@ export function EditProfilePage() {
                         id="birthdate"
                         type="date"
                         value={birthdate}
-                        required
                         min="1900-01-01"
                         max="2020-01-01"
                         onChange={(event) => setBirthdate(event.target.value)}

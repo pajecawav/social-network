@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Date, Integer, String
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, Date, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import relationship
 
@@ -6,6 +8,8 @@ from app.db.database import Base
 from app.schemas.user import GenderEnum
 
 from .association_tables import chat_user_association_table, friends_association_table
+
+USER_IS_OFFLINE_TIMEOUT_SECONDS = 5 * 60  # 5 minutes
 
 
 class User(Base):
@@ -16,6 +20,8 @@ class User(Base):
     password_hashed = Column(String, nullable=False)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
+    last_seen = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+
     gender = Column(
         ENUM(
             GenderEnum,
@@ -44,3 +50,9 @@ class User(Base):
         lazy="dynamic",
         order_by="Chat.chat_id",
     )
+
+    @property
+    def is_online(self) -> bool:
+        now = datetime.now(timezone.utc)
+        diff = now - self.last_seen
+        return diff.total_seconds() < USER_IS_OFFLINE_TIMEOUT_SECONDS

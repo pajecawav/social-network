@@ -9,9 +9,7 @@ export function Chat({ messages = [] }) {
     return messages.map((message, index) => {
         const sentDate = dayjs(message.timeSent);
         const shouldDisplayDate =
-            previousDate === null ||
-            sentDate.startOf("day").diff(previousDate.startOf("day"), "day") >
-                0;
+            previousDate === null || !sentDate.isSame(previousDate, "day");
 
         previousDate = sentDate;
 

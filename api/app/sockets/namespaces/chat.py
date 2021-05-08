@@ -3,28 +3,14 @@ from pydantic import ValidationError
 from socketio import AsyncNamespace
 
 from app import crud, schemas
-from app.security import TokenDecodingError, decode_token
-from app.sockets.utils import get_db
+from app.sockets.utils import get_db, get_user
 
 
 class ChatNamespace(AsyncNamespace):
     async def on_connect(self, sid, environ, auth):
         if "token" not in auth:
             return False
-
-        try:
-            payload = decode_token(auth["token"])
-            token_data = schemas.TokenPayload(**payload)
-        except (TokenDecodingError, ValidationError):
-            return False
-
-        with get_db() as db:
-            user = crud.user.get(db, id=token_data.sub)
-
-        if user is None:
-            return False
-
-        assert sid is not None
+        user = get_user(auth["token"])
         await self.save_session(sid, {"user_id": user.user_id})
 
     async def on_message(self, sid, data):

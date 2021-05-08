@@ -113,7 +113,7 @@ export function UserProfilePage({ userId }) {
                         <LoadingPlaceholder className="w-full h-full min-h-40" />
                     ) : (
                         friends.length > 0 && (
-                            <div className="grid grid-cols-3 gap-2 mt-4">
+                            <div className="grid grid-cols-3 gap-y-2 gap-x-6 mt-4">
                                 {friends.map((friend) => (
                                     <Link
                                         className="flex flex-col items-center gap-2"
