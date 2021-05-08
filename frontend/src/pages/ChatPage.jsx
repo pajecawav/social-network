@@ -66,7 +66,7 @@ export function ChatPage({ chatId }) {
                 <LoadingPlaceholder />
             ) : (
                 <>
-                    <div className="flex flex-col">
+                    <div className="relative flex flex-col">
                         <ChatHeader
                             chat={chat}
                             onOpenChatInfo={handleOpenChatInfo}
@@ -74,7 +74,7 @@ export function ChatPage({ chatId }) {
                         />
 
                         {/* TODO: implement better scrolling (scrollbar should be at the right of the page) */}
-                        <div className="flex flex-col max-h-80 gap-2 px-4 py-4 overflow-y-auto">
+                        <div className="flex flex-col max-h-80 gap-2 px-4 pt-4 overflow-y-auto">
                             {isLoading && <LoadingPlaceholder />}
                             <Chat messages={messages} />
                             <Waypoint
@@ -86,7 +86,7 @@ export function ChatPage({ chatId }) {
                             </Waypoint>
                             <button
                                 className={clsx(
-                                    "sticky w-10 h-10 ml-auto bottom-0 p-1 rounded-full shadow-xl border text-secondary-500 bg-primary-700 border-primary-600 bg-opacity-30 transform-colors duration-200 outline-none hover:bg-primary-600",
+                                    "absolute w-10 h-10 ml-auto bottom-20 right-5 p-1 rounded-full shadow-xl border text-secondary-500 bg-primary-700 border-primary-600 bg-opacity-30 transform-colors duration-200 outline-none hover:bg-primary-600",
                                     isScrollAnchored
                                         ? "opacity-0 pointer-events-none"
                                         : "opacity-100 pointer-events-auto"
