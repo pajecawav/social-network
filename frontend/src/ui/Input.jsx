@@ -8,6 +8,7 @@ export function Input({ className, flat = false, ...props }) {
                 !flat && "border-2",
                 className
             )}
+            size={1}
             {...props}
         />
     );

@@ -56,6 +56,7 @@ export function EditProfilePage() {
                         First name:
                     </label>
                     <Input
+                        className="max-w-60 flex-grow"
                         id="firstName"
                         type="text"
                         placeholder="First Name"
@@ -72,6 +73,7 @@ export function EditProfilePage() {
                         Last name:
                     </label>
                     <Input
+                        className="max-w-60 flex-grow"
                         id="lastName"
                         type="text"
                         placeholder="Last Name"

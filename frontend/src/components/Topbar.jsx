@@ -30,7 +30,7 @@ export function Topbar() {
 
                 <form className="hidden sm:block" onSubmit={handleSearch}>
                     <Input
-                        className="px-3 rounded-xl"
+                        className="px-3 w-60 rounded-xl"
                         flat={true}
                         type="text"
                         placeholder="Search"
