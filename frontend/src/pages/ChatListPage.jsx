@@ -35,7 +35,7 @@ function ChatBlock({ chat, onDelete }) {
                 {lastMessage &&
                     (lastMessage.action ? (
                         // TODO render message based on action type
-                        <div className="text-primary-500">
+                        <div className="text-sm text-primary-500">
                             {`${lastMessage.user.firstName} ${lastMessage.user.lastName} created chat`}
                         </div>
                     ) : (

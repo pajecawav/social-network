@@ -14,6 +14,8 @@ export function Chat({ messages = [] }) {
 
         previousDate = sentDate;
 
+        const previousMessage = messages[index - 1] || null;
+
         return (
             <React.Fragment key={message.messageId}>
                 {shouldDisplayDate && (
@@ -29,8 +31,8 @@ export function Chat({ messages = [] }) {
                         showUser={
                             index === 0 ||
                             shouldDisplayDate ||
-                            message.user.userId !==
-                                messages[index - 1].user.userId
+                            previousMessage.action !== null ||
+                            message.user.userId !== previousMessage?.user.userId
                         }
                     />
                 )}

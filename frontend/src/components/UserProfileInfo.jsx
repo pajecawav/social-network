@@ -33,7 +33,7 @@ export function UserProfileInfo({ user, onStatusUpdated }) {
                         {user.firstName} {user.lastName}
                     </div>
                     <div className="ml-auto text-sm text-primary-500">
-                        {user.isOnline
+                        {user.isOnline || isMe
                             ? "online"
                             : `last seen ${formatLastSeen(user.lastSeen)}`}
                     </div>
