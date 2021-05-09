@@ -192,9 +192,9 @@ def remove_chat_user(
     if chat.admin == user:
         if chat.users.count() == 0:
             crud.group_chat.delete(db, id=chat.chat_id)
-        else:
-            chat.admin = chat.users.first()
+            return Response()
 
+        chat.admin = chat.users.first()
         db.add(chat)
         db.commit()
 
