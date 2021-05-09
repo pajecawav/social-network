@@ -88,10 +88,6 @@ export async function createChat(data) {
     return axios.post("/api/chats", data);
 }
 
-export async function deleteChat(chatId) {
-    return axios.delete(`/api/chats/${chatId}`);
-}
-
 export async function addChatUser(chatId, userId) {
     return axios.post(`/api/chats/${chatId}/users`, { userId });
 }

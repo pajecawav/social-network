@@ -1,9 +1,7 @@
-import { XIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { deleteChat, getChats } from "../api";
+import { getChats } from "../api";
 import { CircleAvatar } from "../components/CircleAvatar";
-import { ConfirmationModal } from "../components/ConfirmationModal";
 import { Container } from "../components/Container";
 import { CreateChatModal } from "../components/CreateChatModal";
 import { HeaderWithCount } from "../components/HeaderWithCount";
@@ -13,12 +11,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { formatDateOrTime, getChatTitle, splitLowercaseWords } from "../utils";
 
-function ChatBlock({ chat, onDelete }) {
-    const handleDelete = (event) => {
-        event.preventDefault();
-        onDelete?.(chat.chatId);
-    };
-
+function ChatBlock({ chat }) {
     const lastMessage = chat.lastMessage;
 
     return (
@@ -49,17 +42,17 @@ function ChatBlock({ chat, onDelete }) {
             </div>
 
             {lastMessage && (
-                <div className="absolute top-3 right-10 text-sm text-primary-500">
+                <div className="absolute top-3 right-4 text-sm text-primary-500">
                     {formatDateOrTime(lastMessage.timeSent)}
                 </div>
             )}
-            <div title="Delete">
-                <XIcon
-                    className="h-4 w-4 absolute top-3 right-3 hidden group-hover:block cursor-pointer text-primary-400 hover:text-primary-300 transition-colors duration-200"
-                    size="thin"
-                    onClick={handleDelete}
-                />
-            </div>
+            {/* <div title="Delete"> */}
+            {/*     <XIcon */}
+            {/*         className="h-4 w-4 absolute top-3 right-3 hidden group-hover:block cursor-pointer text-primary-400 hover:text-primary-300 transition-colors duration-200" */}
+            {/*         size="thin" */}
+            {/*         onClick={handleDelete} */}
+            {/*     /> */}
+            {/* </div> */}
         </Link>
     );
 }
@@ -69,7 +62,6 @@ export function ChatListPage() {
     const [search, setSearch] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [createChatModalIsOpen, setCreateChatModalIsOpen] = useState(false);
-    const [deletingChatId, setDeletingChatId] = useState(null);
 
     useTitle("Chats");
 
@@ -84,17 +76,6 @@ export function ChatListPage() {
 
     const handleChatCreated = (chat) => {
         setChats([chat, ...chats]);
-    };
-
-    const handleConfirmDeleteChat = (chatId) => {
-        setDeletingChatId(chatId);
-    };
-
-    const handleDeleteChat = () => {
-        deleteChat(deletingChatId).then(() => {
-            setChats(chats.filter((chat) => chat.chatId !== deletingChatId));
-            setDeletingChatId(null);
-        });
     };
 
     const searchWords = splitLowercaseWords(search);
@@ -140,11 +121,7 @@ export function ChatListPage() {
                         {matchingChats && (
                             <div className="flex flex-col">
                                 {matchingChats.map((chat) => (
-                                    <ChatBlock
-                                        key={chat.chatId}
-                                        chat={chat}
-                                        onDelete={handleConfirmDeleteChat}
-                                    />
+                                    <ChatBlock key={chat.chatId} chat={chat} />
                                 ))}
                             </div>
                         )}
@@ -155,25 +132,6 @@ export function ChatListPage() {
                         onRequestClose={() => setCreateChatModalIsOpen(false)}
                         onChatCreated={handleChatCreated}
                     />
-
-                    <ConfirmationModal
-                        isOpen={deletingChatId !== null}
-                        title="Delete chat"
-                        confirmText="Delete"
-                        onRequestClose={() => setDeletingChatId(null)}
-                        onConfirm={handleDeleteChat}
-                    >
-                        <div className="flex flex-col gap-2">
-                            <p>
-                                Are you sure you want to delete the{" "}
-                                <b className="font-semibold">entire</b> chat?
-                            </p>
-                            <p>
-                                This <b className="font-semibold">can't</b> be
-                                undone.
-                            </p>
-                        </div>
-                    </ConfirmationModal>
                 </>
             )}
         </Container>

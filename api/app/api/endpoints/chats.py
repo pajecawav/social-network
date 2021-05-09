@@ -83,22 +83,24 @@ def get_chat(
 #     return chat
 
 
-@router.delete("/{chat_id}")
-def delete_chat(
-    chat_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    chat = crud.chat.get_or_404(db, chat_id)
+# TODO: should chat be deletable? Probably it should be automatically deleted
+# when there are no more users left in chat
+# @router.delete("/{chat_id}")
+# def delete_chat(
+#     chat_id: int,
+#     db: Session = Depends(get_db),
+#     current_user: models.User = Depends(get_current_user),
+# ):
+#     chat = crud.chat.get_or_404(db, chat_id)
 
-    if chat.chat_type == schemas.ChatTypeEnum.group and chat.admin != current_user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Don't have permission to delete this chat.",
-        )
+#     if chat.chat_type == schemas.ChatTypeEnum.group and chat.admin != current_user:
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="Don't have permission to delete this chat.",
+#         )
 
-    crud.chat.delete(db, id=chat_id)
-    return Response()
+#     crud.chat.delete(db, id=chat_id)
+#     return Response()
 
 
 @router.get("/{chat_id}/users", response_model=List[schemas.User])
