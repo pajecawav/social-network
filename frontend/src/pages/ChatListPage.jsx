@@ -11,13 +11,15 @@ import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
-import { getChatTitle, splitLowercaseWords } from "../utils";
+import { formatDateOrTime, getChatTitle, splitLowercaseWords } from "../utils";
 
 function ChatBlock({ chat, onDelete }) {
     const handleDelete = (event) => {
         event.preventDefault();
         onDelete?.(chat.chatId);
     };
+
+    const lastMessage = chat.lastMessage;
 
     return (
         <Link
@@ -30,16 +32,27 @@ function ChatBlock({ chat, onDelete }) {
                 <div className="mb-2 text-primary-300 font-medium">
                     {getChatTitle(chat)}
                 </div>
-                {chat.lastMessage && (
-                    <div className="flex gap-2 items-center">
-                        <CircleAvatar size={1.5} />
-                        <div className="h-6 text-sm text-primary-300 whitespace-nowrap overflow-ellipsis overflow-hidden">
-                            {chat.lastMessage.text}
+                {lastMessage &&
+                    (lastMessage.action ? (
+                        // TODO render message based on action type
+                        <div className="text-primary-500">
+                            {`${lastMessage.user.firstName} ${lastMessage.user.lastName} created chat`}
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        <div className="flex gap-2 items-center">
+                            <CircleAvatar size={1.5} />
+                            <div className="h-6 text-sm text-primary-300 whitespace-nowrap overflow-ellipsis overflow-hidden">
+                                {lastMessage.text}
+                            </div>
+                        </div>
+                    ))}
             </div>
 
+            {lastMessage && (
+                <div className="absolute top-3 right-10 text-sm text-primary-500">
+                    {formatDateOrTime(lastMessage.timeSent)}
+                </div>
+            )}
             <div title="Delete">
                 <XIcon
                     className="h-4 w-4 absolute top-3 right-3 hidden group-hover:block cursor-pointer text-primary-400 hover:text-primary-300 transition-colors duration-200"
@@ -70,7 +83,7 @@ export function ChatListPage() {
     }, []);
 
     const handleChatCreated = (chat) => {
-        setChats([...chats, chat]);
+        setChats([chat, ...chats]);
     };
 
     const handleConfirmDeleteChat = (chatId) => {

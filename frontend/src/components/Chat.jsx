@@ -1,9 +1,10 @@
 import dayjs from "dayjs";
 import React from "react";
+import { formatDate } from "../utils";
 import { ChatMessage } from "./ChatMessage";
+import { ChatAction } from "./ChatAction";
 
 export function Chat({ messages = [] }) {
-    const now = dayjs();
     let previousDate = null;
 
     return messages.map((message, index) => {
@@ -17,21 +18,22 @@ export function Chat({ messages = [] }) {
             <React.Fragment key={message.messageId}>
                 {shouldDisplayDate && (
                     <div className="mx-auto font-sm text-primary-500">
-                        {sentDate.format(
-                            now.year() === sentDate.year()
-                                ? "MMMM D"
-                                : "D MMMM, YYYY"
-                        )}
+                        {formatDate(sentDate)}
                     </div>
                 )}
-                <ChatMessage
-                    message={message}
-                    showUser={
-                        index === 0 ||
-                        shouldDisplayDate ||
-                        message.user.userId !== messages[index - 1].user.userId
-                    }
-                />
+                {message.action ? (
+                    <ChatAction action={message.action} user={message.user} />
+                ) : (
+                    <ChatMessage
+                        message={message}
+                        showUser={
+                            index === 0 ||
+                            shouldDisplayDate ||
+                            message.user.userId !==
+                                messages[index - 1].user.userId
+                        }
+                    />
+                )}
             </React.Fragment>
         );
     });

@@ -19,6 +19,18 @@ def create_chat(
     current_user: models.User = Depends(get_current_user),
 ):
     chat = crud.group_chat.create(db, chat_in, admin=current_user)
+
+    # TODO: move to a separate function
+    message = crud.message.create(
+        db, schemas.MessageCreate(), user_id=current_user.user_id, chat_id=chat.chat_id
+    )
+    action = models.ChatAction(chat_action_type=schemas.ChatActionTypeEnum.create)
+    message.action = action
+    db.add(message)
+    db.commit()
+
+    crud.chat.set_last_message(db, chat, message)
+
     return chat
 
 
@@ -27,7 +39,9 @@ def get_chats(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    chats = current_user.chats.order_by(models.Chat.chat_id).all()
+    chats = current_user.chats.order_by(
+        models.Chat.last_message_id.desc(), models.Chat.chat_id.desc()
+    ).all()
 
     # TODO: figure out a better way to return peers
     for chat in chats:

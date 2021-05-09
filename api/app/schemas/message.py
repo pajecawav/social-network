@@ -4,11 +4,12 @@ from typing import Optional
 from pydantic import BaseModel, PositiveInt
 from pydantic.fields import Field
 
+from .chat_action import ChatAction
 from .user import User
 
 
 class MessageCreate(BaseModel):
-    text: Optional[str] = Field(..., min_length=1)
+    text: Optional[str] = Field(None, min_length=1)
 
 
 class Message(BaseModel):
@@ -17,6 +18,7 @@ class Message(BaseModel):
     time_sent: datetime
 
     user: User
+    action: Optional[ChatAction]
 
     class Config:
         orm_mode = True

@@ -20,3 +20,8 @@ class Message(Base):
 
     chat_id = Column(Integer, ForeignKey("chats.chat_id"), nullable=False)
     chat = relationship("Chat", back_populates="messages", foreign_keys=[chat_id])
+
+    action_id = Column(
+        Integer, ForeignKey("chat_actions.chat_action_id"), nullable=True
+    )
+    action = relationship("ChatAction", back_populates="message")

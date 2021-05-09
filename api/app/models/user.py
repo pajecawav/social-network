@@ -48,7 +48,6 @@ class User(Base):
         secondary=chat_user_association_table,
         back_populates="users",
         lazy="dynamic",
-        order_by="Chat.chat_id",
     )
 
     @property
