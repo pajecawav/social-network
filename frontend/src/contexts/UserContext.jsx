@@ -26,7 +26,10 @@ export function UserProvider({ children }) {
         }
 
         const sio = getSocket("/online");
-        const interval = setInterval(() => sio.emit("online"), 4 * 60 * 1000); // ping server every 4 minutes
+        const pingOnlineStatus = () => sio.emit("online");
+
+        pingOnlineStatus();
+        const interval = setInterval(pingOnlineStatus, 4 * 60 * 1000); // ping server every 4 minutes
         return () => {
             clearInterval(interval);
             sio.disconnect();
