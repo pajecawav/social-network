@@ -20,14 +20,14 @@ def create_chat(
 ):
     chat = crud.group_chat.create(db, chat_in, admin=current_user)
 
-    # TODO: move to a separate function
-    message = crud.message.create(
-        db, schemas.MessageCreate(), user_id=current_user.user_id, chat_id=chat.chat_id
-    )
     action = models.ChatAction(chat_action_type=schemas.ChatActionTypeEnum.create)
-    message.action = action
-    db.add(message)
-    db.commit()
+    message = crud.message.create(
+        db,
+        schemas.MessageCreate(),
+        user_id=current_user.user_id,
+        chat_id=chat.chat_id,
+        action=action,
+    )
 
     crud.chat.set_last_message(db, chat, message)
 
@@ -120,7 +120,7 @@ def get_chat_users(
     return chat.users.all()
 
 
-@router.post("/{chat_id}/users", response_model=List[schemas.User])
+@router.post("/{chat_id}/users")
 def add_chat_user(
     chat_id: int,
     user_id: int = Body(..., embed=True),
@@ -137,11 +137,11 @@ def add_chat_user(
 
     new_user = crud.user.get_or_404(db, user_id)
 
-    # if new_user not in current_user.friends:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_403_FORBIDDEN,
-    #         detail="Can only invite friends.",
-    #     )
+    if new_user not in current_user.friends:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can only invite friends.",
+        )
 
     if new_user in chat.users:
         raise HTTPException(
@@ -150,6 +150,18 @@ def add_chat_user(
         )
 
     chat = crud.group_chat.add_user(db, chat, new_user)
+
+    # add chat notification that new user has been added
+    action = models.ChatAction(
+        chat_action_type=schemas.ChatActionTypeEnum.invite, towards_user=new_user
+    )
+    crud.message.create(
+        db,
+        schemas.MessageCreate(),
+        user_id=current_user.user_id,
+        chat_id=chat.chat_id,
+        action=action,
+    )
 
     return Response()
 
@@ -186,6 +198,21 @@ def remove_chat_user(
         db.add(chat)
         db.commit()
 
+    if user == chat.admin:
+        # add chat notification that user left
+        action = models.ChatAction(
+            chat_action_type=schemas.ChatActionTypeEnum.kick, towards_user=user
+        )
+    else:
+        action = models.ChatAction(chat_action_type=schemas.ChatActionTypeEnum.leave)
+    crud.message.create(
+        db,
+        schemas.MessageCreate(),
+        user_id=current_user.user_id,
+        chat_id=chat.chat_id,
+        action=action,
+    )
+
     return Response()
 
 
@@ -203,4 +230,4 @@ def get_chat_messages(
             detail="Don't have permission to view this chat.",
         )
 
-    return chat.messages.all()
+    return chat.messages.order_by(models.Message.message_id).all()

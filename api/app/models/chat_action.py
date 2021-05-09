@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import relationship
 
@@ -18,5 +18,7 @@ class ChatAction(Base):
         ),
         nullable=True,
     )
+    towards_user_id = Column(Integer, ForeignKey("users.user_id"), nullable=True)
+    towards_user = relationship("User", uselist=False)
 
     message = relationship("Message", back_populates="action", uselist=False)

@@ -6,7 +6,7 @@ import { CircleAvatar } from "./CircleAvatar";
 export function ChatMessage({ message, showUser = true }) {
     return (
         <div className="flex gap-2">
-            <div className={clsx("w-10", showUser && "h-10")}>
+            <div className={clsx("w-10 flex-shrink-0", showUser && "h-10")}>
                 {showUser && (
                     <Link to={`/users/${message.user.userId}`}>
                         <CircleAvatar className="object-contain" size={2} />

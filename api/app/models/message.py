@@ -24,4 +24,4 @@ class Message(Base):
     action_id = Column(
         Integer, ForeignKey("chat_actions.chat_action_id"), nullable=True
     )
-    action = relationship("ChatAction", back_populates="message")
+    action = relationship("ChatAction", back_populates="message", cascade="all, delete")
