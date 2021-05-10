@@ -1,9 +1,8 @@
 from socketio import AsyncServer
 
-from .chat import ChatNamespace
-from .online import OnlineNamespace
+from . import chat, online
 
 
 def register_namespaces(server: AsyncServer) -> None:
-    server.register_namespace(ChatNamespace("/chat"))
-    server.register_namespace(OnlineNamespace("/online"))
+    server.register_namespace(chat.namespace)
+    server.register_namespace(online.namespace)

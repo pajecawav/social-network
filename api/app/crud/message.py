@@ -1,10 +1,11 @@
 from typing import Optional
-from app.models.chat_action import ChatAction
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
 from app.models import Message
+from app.models.chat_action import ChatAction
 from app.schemas import MessageCreate, MessageUpdate
 
 

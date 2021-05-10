@@ -1,3 +1,4 @@
+import { decamelizeKeys } from "humps";
 import io from "socket.io-client";
 import { getLocalToken } from "./utils";
 
@@ -9,6 +10,6 @@ export function getSocket(namespace = "/", query) {
         auth: {
             token: getLocalToken(),
         },
-        query,
+        query: decamelizeKeys(query || {}),
     });
 }

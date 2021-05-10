@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
-from typing import Dict
 
 from jose import jwt
 from passlib.context import CryptContext
+from pydantic import ValidationError
 
+from app import schemas
 from app.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -26,14 +27,15 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-class TokenDecodingError(jwt.JWTError):
+class TokenParsingError(jwt.JWTError):
     pass
 
 
-def decode_token(token: str) -> Dict[str, str]:
+def parse_token(token: str) -> schemas.TokenPayload:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.JWTError:
-        raise TokenDecodingError
+        token_data = schemas.TokenPayload(**payload)
+    except (jwt.JWTError, ValidationError):
+        raise TokenParsingError
 
-    return payload
+    return token_data

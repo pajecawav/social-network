@@ -8,7 +8,10 @@ export function useChat(chatId) {
     const [messages, setMessages] = useState([]);
     const socketRef = useRef(null);
 
+    chatId = parseInt(chatId);
+
     useEffect(() => {
+        setIsLoading(true);
         getChatMessages(chatId)
             .then((response) => {
                 setMessages(response.data);
@@ -18,12 +21,15 @@ export function useChat(chatId) {
     }, [chatId]);
 
     useEffect(() => {
-        const sio = getSocket("/chat", { chat_id: chatId });
+        const sio = getSocket("/chat", { chatId });
         socketRef.current = sio;
 
         sio.on("message", (data) => {
-            data = camelizeKeys(data);
-            setMessages((messages) => [...messages, data]);
+            const { message, chatId: chatId_ } = camelizeKeys(data);
+            if (chatId_ !== chatId) {
+                return;
+            }
+            setMessages((messages) => [...messages, message]);
         });
 
         return () => sio.disconnect();
