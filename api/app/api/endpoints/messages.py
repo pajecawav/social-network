@@ -1,6 +1,8 @@
 from typing import Optional
 
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi.encoders import jsonable_encoder
+from app.sockets.namespaces.chat import send_message_to_chat
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -11,6 +13,7 @@ router = APIRouter()
 
 @router.post("", response_model=schemas.Message)
 def send_message(
+    background_tasks: BackgroundTasks,
     message_in: schemas.MessageCreate = Body(..., alias="message"),
     chat_id: Optional[int] = Body(None),
     user_id: Optional[int] = Body(None),
@@ -45,5 +48,11 @@ def send_message(
         db, message_in, user_id=current_user.user_id, chat_id=chat.chat_id
     )
     crud.chat.set_last_message(db, chat, message)
+
+    background_tasks.add_task(
+        send_message_to_chat,
+        chat.chat_id,
+        jsonable_encoder(schemas.Message.from_orm(message)),
+    )
 
     return message
