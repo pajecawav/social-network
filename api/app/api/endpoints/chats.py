@@ -1,6 +1,7 @@
 from typing import List, Union
 
-from fastapi import APIRouter, Body, Depends, Response
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, Response
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -8,6 +9,7 @@ from starlette import status
 from app import crud, models, schemas
 from app.api.dependencies import get_current_user, get_db
 from app.schemas.chat import ChatTypeEnum
+from app.sockets.namespaces.chat import send_message_to_chat
 
 router = APIRouter()
 
@@ -123,6 +125,7 @@ def get_chat_users(
 @router.post("/{chat_id}/users")
 def add_chat_user(
     chat_id: int,
+    background_tasks: BackgroundTasks,
     user_id: int = Body(..., embed=True),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
@@ -155,12 +158,18 @@ def add_chat_user(
     action = models.ChatAction(
         chat_action_type=schemas.ChatActionTypeEnum.invite, towards_user=new_user
     )
-    crud.message.create(
+    message = crud.message.create(
         db,
         schemas.MessageCreate(),
         user_id=current_user.user_id,
         chat_id=chat.chat_id,
         action=action,
+    )
+
+    background_tasks.add_task(
+        send_message_to_chat,
+        chat.chat_id,
+        jsonable_encoder(schemas.Message.from_orm(message)),
     )
 
     return Response()
@@ -169,6 +178,7 @@ def add_chat_user(
 @router.delete("/{chat_id}/users", response_model=List[schemas.User])
 def remove_chat_user(
     chat_id: int,
+    background_tasks: BackgroundTasks,
     user_id: int = Body(..., embed=True),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
@@ -205,12 +215,18 @@ def remove_chat_user(
         )
     else:
         action = models.ChatAction(chat_action_type=schemas.ChatActionTypeEnum.leave)
-    crud.message.create(
+    message = crud.message.create(
         db,
         schemas.MessageCreate(),
         user_id=current_user.user_id,
         chat_id=chat.chat_id,
         action=action,
+    )
+
+    background_tasks.add_task(
+        send_message_to_chat,
+        chat.chat_id,
+        jsonable_encoder(schemas.Message.from_orm(message)),
     )
 
     return Response()
