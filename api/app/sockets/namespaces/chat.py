@@ -27,6 +27,7 @@ class ChatNamespace(AsyncNamespace):
 
         await self.save_session(sid, {"user_id": user.user_id})
 
+        self.enter_room(sid, f"user_{user.user_id}")
         for chat in chats:
             self.enter_room(sid, f"chat_{chat.chat_id}")
 
@@ -67,3 +68,7 @@ async def send_message_to_chat(chat_id: int, message: Dict[str, str]) -> None:
     await namespace.emit(
         "message", data={"chat_id": chat_id, "message": message}, room=f"chat_{chat_id}"
     )
+
+
+async def notify_user_new_chat(user_id: int, chat: Dict[str, str]) -> None:
+    await namespace.emit("new_chat", data=chat, room=f"user_{user_id}")

@@ -7,6 +7,7 @@ export const ChatsContext = createContext();
 export function ChatsProvider({ children }) {
     const socket = useRef(null);
     const listeners = useRef({});
+    const newChatListeners = useRef([]);
 
     useEffect(() => {
         const sio = getSocket("/chat");
@@ -20,6 +21,11 @@ export function ChatsProvider({ children }) {
             listeners.current["*"]?.forEach((listener) =>
                 listener(message, chatId)
             );
+        });
+
+        sio.on("new_chat", (data) => {
+            const chat = camelizeKeys(data);
+            newChatListeners.current.forEach((listener) => listener(chat));
         });
 
         return () => sio.disconnect();
@@ -36,10 +42,18 @@ export function ChatsProvider({ children }) {
 
     const unsubscribeFromChat = (chatId, cb) => {
         const currentListeners = listeners.current[chatId];
-        if (!currentListeners) {
-            return;
-        }
+        if (!currentListeners) return;
         listeners.current[chatId] = currentListeners.filter(
+            (listener) => listener !== cb
+        );
+    };
+
+    const subscribeToNewChats = (cb) => {
+        newChatListeners.current.push(cb);
+    };
+
+    const unsubscribeFromNewChats = (cb) => {
+        newChatListeners.current = newChatListeners.current.filter(
             (listener) => listener !== cb
         );
     };
@@ -59,7 +73,13 @@ export function ChatsProvider({ children }) {
 
     return (
         <ChatsContext.Provider
-            value={{ subscribeToChat, unsubscribeFromChat, sendSocketMessage }}
+            value={{
+                subscribeToChat,
+                unsubscribeFromChat,
+                sendSocketMessage,
+                subscribeToNewChats,
+                unsubscribeFromNewChats,
+            }}
         >
             {children}
         </ChatsContext.Provider>

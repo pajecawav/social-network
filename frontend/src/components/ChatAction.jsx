@@ -1,4 +1,6 @@
-export function ChatAction({ user, action }) {
+import clsx from "clsx";
+
+export function ChatAction({ user, action, className }) {
     let text;
     switch (action.chatActionType) {
         case "create":
@@ -17,5 +19,7 @@ export function ChatAction({ user, action }) {
             throw Error(action.chatActionType);
     }
 
-    return <div className="m-auto text-primary-500">{text}</div>;
+    return (
+        <div className={clsx("m-auto text-primary-500", className)}>{text}</div>
+    );
 }

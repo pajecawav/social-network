@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getChats } from "../api";
+import { ChatAction } from "../components/ChatAction";
 import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { CreateChatModal } from "../components/CreateChatModal";
@@ -29,9 +30,11 @@ function ChatBlock({ chat }) {
                 {lastMessage &&
                     (lastMessage.action ? (
                         // TODO render message based on action type
-                        <div className="text-sm text-primary-500">
-                            {`${lastMessage.user.firstName} ${lastMessage.user.lastName} created chat`}
-                        </div>
+                        <ChatAction
+                            className="text-sm"
+                            user={lastMessage.user}
+                            action={lastMessage.action}
+                        />
                     ) : (
                         <div className="flex gap-2 items-center">
                             <CircleAvatar size={1.5} />
@@ -60,7 +63,12 @@ function ChatBlock({ chat }) {
 
 export function ChatListPage() {
     const [chats, setChats] = useState([]);
-    const { subscribeToChat, unsubscribeFromChat } = useContext(ChatsContext);
+    const {
+        subscribeToChat,
+        unsubscribeFromChat,
+        subscribeToNewChats,
+        unsubscribeFromNewChats,
+    } = useContext(ChatsContext);
     const [search, setSearch] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [createChatModalIsOpen, setCreateChatModalIsOpen] = useState(false);
@@ -76,17 +84,27 @@ export function ChatListPage() {
             .catch(console.error);
 
         const handleNewMessage = (message, chatId) => {
-            setChats((currentChats) =>
-                currentChats.map((chat) =>
-                    chat.chatId === chatId
-                        ? { ...chat, lastMessage: message }
-                        : chat
-                )
-            );
+            setChats((currentChats_) => {
+                const currentChats = [...currentChats_];
+                const index = currentChats.findIndex(
+                    (chat) => chat.chatId === chatId
+                );
+                if (index === -1) return currentChats;
+                const chat = currentChats.splice(index, 1)[0];
+                return [{ ...chat, lastMessage: message }, ...currentChats];
+            });
         };
         subscribeToChat("*", handleNewMessage);
-        return () => unsubscribeFromChat(handleNewMessage);
+
+        return () => unsubscribeFromChat("*", handleNewMessage);
     }, [subscribeToChat, unsubscribeFromChat]);
+
+    useEffect(() => {
+        const handleNewChat = (chat) =>
+            setChats((currentChats) => [chat, ...currentChats]);
+        subscribeToNewChats(handleNewChat);
+        return () => unsubscribeFromNewChats(handleNewChat);
+    }, [subscribeToNewChats, unsubscribeFromNewChats]);
 
     const handleChatCreated = (chat) => {
         setChats([chat, ...chats]);
