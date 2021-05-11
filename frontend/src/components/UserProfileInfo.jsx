@@ -74,6 +74,7 @@ export function UserProfileInfo({ user, onStatusUpdated }) {
                                 onSubmit={handleUpdateStatus}
                             >
                                 <Input
+                                    className="w-72"
                                     autoFocus={true}
                                     value={newStatus}
                                     onChange={(event) =>

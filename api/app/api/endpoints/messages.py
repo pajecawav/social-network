@@ -1,12 +1,12 @@
 from typing import Optional
 
-from fastapi.encoders import jsonable_encoder
-from app.sockets.namespaces.chat import send_message_to_chat
 from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, status
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
 from app.api.dependencies import get_current_user, get_db
+from app.sockets.namespaces.chat import send_message_to_chat
 
 router = APIRouter()
 

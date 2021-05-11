@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getChats } from "../api";
 import { CircleAvatar } from "../components/CircleAvatar";
@@ -6,6 +6,7 @@ import { Container } from "../components/Container";
 import { CreateChatModal } from "../components/CreateChatModal";
 import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
+import { ChatsContext } from "../contexts/ChatsContext";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -59,6 +60,7 @@ function ChatBlock({ chat }) {
 
 export function ChatListPage() {
     const [chats, setChats] = useState([]);
+    const { subscribeToChat, unsubscribeFromChat } = useContext(ChatsContext);
     const [search, setSearch] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [createChatModalIsOpen, setCreateChatModalIsOpen] = useState(false);
@@ -72,7 +74,19 @@ export function ChatListPage() {
                 setIsLoading(false);
             })
             .catch(console.error);
-    }, []);
+
+        const handleNewMessage = (message, chatId) => {
+            setChats((currentChats) =>
+                currentChats.map((chat) =>
+                    chat.chatId === chatId
+                        ? { ...chat, lastMessage: message }
+                        : chat
+                )
+            );
+        };
+        subscribeToChat("*", handleNewMessage);
+        return () => unsubscribeFromChat(handleNewMessage);
+    }, [subscribeToChat, unsubscribeFromChat]);
 
     const handleChatCreated = (chat) => {
         setChats([chat, ...chats]);

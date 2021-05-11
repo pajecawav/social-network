@@ -1,21 +1,27 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Waypoint } from "react-waypoint";
-import { getChat } from "../api";
+import { getChat, getChatMessages } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
 import { Container } from "../components/Container";
 import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
 import { InviteToChatModal } from "../components/InviteToChatModal";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
-import { useChat } from "../hooks/useChat";
+import { ChatsContext } from "../contexts/ChatsContext";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
 export function ChatPage({ chatId }) {
     const [chat, setChat] = useState(null);
-    const { isLoading, messages, sendMessage } = useChat(chatId);
+    const [messages, setMessages] = useState(null);
+    const {
+        subscribeToChat,
+        unsubscribeFromChat,
+        sendSocketMessage,
+    } = useContext(ChatsContext);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [text, setText] = useState("");
     const messagesEnd = useRef(null);
@@ -24,10 +30,23 @@ export function ChatPage({ chatId }) {
     const [isScrollAnchored, setIsScrollAnchored] = useState(true);
 
     useEffect(() => {
+        setIsLoading(true);
         getChat(chatId)
             .then((response) => setChat(response.data))
             .catch(console.error);
-    }, [chatId]);
+        getChatMessages(chatId)
+            .then((response) => {
+                setMessages(response.data);
+                setIsLoading(false);
+            })
+            .catch(console.error);
+
+        const handleNewMessage = (message) => {
+            setMessages((oldMessages) => [...oldMessages, message]);
+        };
+        subscribeToChat(chatId, handleNewMessage);
+        return () => unsubscribeFromChat(chatId, handleNewMessage);
+    }, [chatId, subscribeToChat, unsubscribeFromChat]);
 
     useEffect(() => {
         if (!isLoading) {
@@ -48,7 +67,7 @@ export function ChatPage({ chatId }) {
     const handleSendMessage = (event) => {
         event.preventDefault();
         if (text) {
-            sendMessage(text, () => setText(""));
+            sendSocketMessage(chatId, { text }, () => setText(""));
         }
     };
 
@@ -62,7 +81,7 @@ export function ChatPage({ chatId }) {
 
     return (
         <Container>
-            {chat === null ? (
+            {chat === null || isLoading ? (
                 <LoadingPlaceholder />
             ) : (
                 <>
