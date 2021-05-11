@@ -60,6 +60,11 @@ class ChatNamespace(AsyncNamespace):
 
         await send_message_to_chat(chat_id, message_out)
 
+    async def on_join_chat(self, sid, data):
+        if "chat_id" in data:
+            chat_id = data["chat_id"]
+            self.enter_room(sid, f"chat_{chat_id}")
+
 
 namespace = ChatNamespace("/chat")
 

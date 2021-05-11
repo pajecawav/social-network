@@ -25,6 +25,7 @@ export function ChatsProvider({ children }) {
 
         sio.on("new_chat", (data) => {
             const chat = camelizeKeys(data);
+            socket.current?.emit("join_chat", { chat_id: chat.chatId });
             newChatListeners.current.forEach((listener) => listener(chat));
         });
 
