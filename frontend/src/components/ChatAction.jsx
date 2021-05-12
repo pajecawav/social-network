@@ -1,25 +1,49 @@
 import clsx from "clsx";
+import { Link } from "react-router-dom";
+
+function UserProfileLink({ user }) {
+    return (
+        <Link className="hover:underline" to={`/users/${user.userId}`}>
+            {user.firstName} {user.lastName}
+        </Link>
+    );
+}
 
 export function ChatAction({ user, action, className }) {
-    let text;
+    let content;
+    const fromUser = <UserProfileLink user={user} />;
+    const towardsUser = action.towardsUser ? (
+        <UserProfileLink user={user} />
+    ) : null;
+
     switch (action.chatActionType) {
         case "create":
-            text = `${user.firstName} ${user.lastName} created chat`;
+            content = <>{fromUser} created chat</>;
             break;
         case "invite":
-            text = `${user.firstName} ${user.lastName} invited ${action.towardsUser.firstName} ${action.towardsUser.lastName}`;
+            content = (
+                <>
+                    {fromUser} invited {towardsUser}
+                </>
+            );
             break;
         case "leave":
-            text = `${user.firstName} ${user.lastName} left`;
+            content = <>{fromUser} left</>;
             break;
         case "kick":
-            text = `${user.firstName} ${user.lastName} kicked ${action.towardsUser.firstName} ${action.towardsUser.lastName}`;
+            content = (
+                <>
+                    {fromUser} kicked {towardsUser}
+                </>
+            );
             break;
         default:
             throw Error(action.chatActionType);
     }
 
     return (
-        <div className={clsx("m-auto text-primary-500", className)}>{text}</div>
+        <div className={clsx("m-auto text-primary-500", className)}>
+            {content}
+        </div>
     );
 }

@@ -11,7 +11,12 @@ import { ChatsContext } from "../contexts/ChatsContext";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
-import { formatDateOrTime, getChatTitle, splitLowercaseWords } from "../utils";
+import {
+    chatActionToText,
+    formatDateOrTime,
+    getChatTitle,
+    splitLowercaseWords,
+} from "../utils";
 
 function ChatBlock({ chat }) {
     const lastMessage = chat.lastMessage;
@@ -32,11 +37,12 @@ function ChatBlock({ chat }) {
                 {lastMessage &&
                     (lastMessage.action ? (
                         // TODO render message based on action type
-                        <ChatAction
-                            className="text-sm"
-                            user={lastMessage.user}
-                            action={lastMessage.action}
-                        />
+                        <div className="text-sm text-primary-500">
+                            {chatActionToText(
+                                lastMessage.user,
+                                lastMessage.action
+                            )}
+                        </div>
                     ) : (
                         <div className="flex gap-2 items-center">
                             <div className="w-7">

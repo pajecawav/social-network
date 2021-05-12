@@ -60,3 +60,18 @@ export const formatLastSeen = (date) => {
         return then.format("D MMMM [at] HH:mm");
     }
 };
+
+export const chatActionToText = (user, action) => {
+    switch (action.chatActionType) {
+        case "create":
+            return `${user.firstName} ${user.lastName} created chat`;
+        case "invite":
+            return `${user.firstName} ${user.lastName} invited ${action.towardsUser.firstName} ${action.towardsUser.lastName}`;
+        case "leave":
+            return `${user.firstName} ${user.lastName} left`;
+        case "kick":
+            return `${user.firstName} ${user.lastName} kicked ${action.towardsUser.firstName} ${action.towardsUser.lastName}`;
+        default:
+            throw Error(`Unknown chat action type "${action.chatActionType}"`);
+    }
+};
