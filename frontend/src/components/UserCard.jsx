@@ -3,13 +3,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CircleAvatar } from "./CircleAvatar";
 
-export function UserCard({ user, avatarSize, className, children }) {
+export function UserCard({ user, className, avatarClassName, children }) {
     return (
         <div className={clsx("flex", className)}>
-            <Link to={`/users/${user.userId}`}>
-                <CircleAvatar size={avatarSize} />
+            <Link
+                className={clsx(avatarClassName || "w-16")}
+                to={`/users/${user.userId}`}
+            >
+                <CircleAvatar />
             </Link>
-            <div className="ml-6 h-auto">
+            <div className="ml-4 h-auto">
                 <Link
                     className="text-primary-200 hover:underline"
                     to={`/users/${user.userId}`}

@@ -75,8 +75,8 @@ export function InviteToChatModal({ chat, ...props }) {
                         <div className="max-h-80 flex flex-col -mr-4 gap-3 overflow-y-scroll">
                             {matchingUsers.map((user) => (
                                 <UserCard
+                                    avatarClassName="w-12"
                                     user={user}
-                                    avatarSize={2.5}
                                     key={user.userId}
                                 >
                                     <Button

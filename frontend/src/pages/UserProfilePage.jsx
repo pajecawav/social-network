@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { addFriend, getFriends, getUser, unfriend } from "../api";
+import { Avatar } from "../components/Avatar";
 import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
@@ -40,7 +41,7 @@ function ImageBlock({ user, isMe }) {
 
     return (
         <Container className="flex flex-col gap-4 p-4">
-            <SquareAvatar className="object-cover w-full" scale={13} />
+            <Avatar />
             {isMe && (
                 <Button size="thin" onClick={navigateEditProfilePage}>
                     Edit
@@ -120,7 +121,9 @@ export function UserProfilePage({ userId }) {
                                         to={`/users/${friend.userId}`}
                                         key={friend.userId}
                                     >
-                                        <CircleAvatar size={3} />
+                                        <div className="w-12">
+                                            <CircleAvatar />
+                                        </div>
                                         <div className="text-center hover:underline">
                                             {friend.firstName}
                                         </div>

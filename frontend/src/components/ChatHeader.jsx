@@ -14,7 +14,11 @@ export function ChatHeader({ chat, onOpenChatInfo, onInviteToChat }) {
         onOpenChatInfo();
     };
 
-    const avatar = <CircleAvatar className="ml-auto cursor-pointer" size={2} />;
+    const avatar = (
+        <div className="cursor-pointer w-8">
+            <CircleAvatar />
+        </div>
+    );
 
     return (
         <div className="flex items-center h-12 border-b border-primary-700">

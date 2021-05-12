@@ -8,8 +8,8 @@ export function ChatMessage({ message, showUser = true }) {
         <div className="flex gap-2">
             <div className={clsx("w-10 flex-shrink-0", showUser && "h-10")}>
                 {showUser && (
-                    <Link to={`/users/${message.user.userId}`}>
-                        <CircleAvatar className="object-contain" size={2} />
+                    <Link className="w-8" to={`/users/${message.user.userId}`}>
+                        <CircleAvatar />
                     </Link>
                 )}
             </div>

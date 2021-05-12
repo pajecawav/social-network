@@ -18,10 +18,12 @@ function ChatBlock({ chat }) {
 
     return (
         <Link
-            className="flex relative group gap-6 px-4 py-3 border-b border-primary-700 transition-colors duration-200 hover:bg-primary-700 "
+            className="flex relative group gap-4 px-4 py-3 border-b border-primary-700 transition-colors duration-200 hover:bg-primary-700 "
             to={`/chats/${chat.chatId}`}
         >
-            <CircleAvatar size={3} />
+            <div className="w-14">
+                <CircleAvatar />
+            </div>
 
             <div className="min-w-0">
                 <div className="mb-2 text-primary-300 font-medium">
@@ -37,7 +39,9 @@ function ChatBlock({ chat }) {
                         />
                     ) : (
                         <div className="flex gap-2 items-center">
-                            <CircleAvatar size={1.5} />
+                            <div className="w-7">
+                                <CircleAvatar />
+                            </div>
                             <div className="h-6 text-sm text-primary-300 whitespace-nowrap overflow-ellipsis overflow-hidden">
                                 {lastMessage.text}
                             </div>

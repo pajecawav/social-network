@@ -40,7 +40,9 @@ export function GroupChatInfoModal({ chat, ...props }) {
                 ) : (
                     <>
                         <div className="flex gap-4 pb-4 border-b-2 border-primary-700">
-                            <CircleAvatar />
+                            <div className="w-16">
+                                <CircleAvatar />
+                            </div>
                             <div>
                                 <div className="font-medium">{chat.title}</div>
                                 <div className="text-primary-500">
@@ -54,7 +56,10 @@ export function GroupChatInfoModal({ chat, ...props }) {
                             <div className="h-60 flex flex-col -mr-4 gap-4 overflow-y-scroll">
                                 {users.map((user) => (
                                     <div className="flex" key={user.userId}>
-                                        <UserCard user={user} avatarSize={2} />
+                                        <UserCard
+                                            avatarClassName="w-8"
+                                            user={user}
+                                        />
                                         {user.userId === chat.admin.userId && (
                                             <div className="ml-auto mr-1 text-primary-500">
                                                 Admin

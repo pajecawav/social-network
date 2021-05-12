@@ -38,5 +38,5 @@ module.exports = {
             display: ["group-hover"],
         },
     },
-    plugins: [],
+    plugins: [require("@tailwindcss/aspect-ratio")],
 };

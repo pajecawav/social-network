@@ -49,7 +49,9 @@ export function Topbar() {
                         }}
                     >
                         <div>{user.firstName}</div>
-                        <CircleAvatar size={2} />
+                        <div className="w-8">
+                            <CircleAvatar />
+                        </div>
                     </div>
                 )}
 
@@ -64,7 +66,9 @@ export function Topbar() {
                                 className="flex gap-4 p-2 cursor-pointer hover:bg-primary-600"
                                 to={`/users/${user.userId}`}
                             >
-                                <CircleAvatar size={2} />
+                                <div className="w-8">
+                                    <CircleAvatar />
+                                </div>
                                 {user.firstName} {user.lastName}
                             </Link>
 
