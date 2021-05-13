@@ -10,6 +10,8 @@ import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
 import { InviteToChatModal } from "../components/InviteToChatModal";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { ChatsContext } from "../contexts/ChatsContext";
+import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
+import { ReactComponent as SendIcon } from "../icons/send.svg";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
@@ -28,6 +30,7 @@ export function ChatPage({ chatId }) {
     const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
     const [isScrollAnchored, setIsScrollAnchored] = useState(true);
+    const isSmallScreen = useIsSmallScreen();
 
     useEffect(() => {
         setIsLoading(true);
@@ -129,7 +132,13 @@ export function ChatPage({ chatId }) {
                                     setText(event.target.value)
                                 }
                             />
-                            <Button>Send</Button>
+                            {isSmallScreen ? (
+                                <button>
+                                    <SendIcon className="text-secondary-600" />
+                                </button>
+                            ) : (
+                                <Button>Send</Button>
+                            )}
                         </form>
                     </div>
 

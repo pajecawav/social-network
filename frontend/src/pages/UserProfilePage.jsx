@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { addFriend, getFriends, getUser, unfriend } from "../api";
@@ -6,13 +7,13 @@ import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { SendMessageModal } from "../components/SendMessageModal";
-import { SquareAvatar } from "../components/SquareAvatar";
 import { UserProfileInfo } from "../components/UserProfileInfo";
 import { UserContext } from "../contexts/UserContext";
+import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 
-function ImageBlock({ user, isMe }) {
+function ImageBlock({ user, isMe, className }) {
     const history = useHistory();
     const [isFriend, setIsFriend] = useState(user?.isFriend === true);
     const [sendMessageModalIsOpen, setSendMessageModalIsOpen] = useState(false);
@@ -40,7 +41,7 @@ function ImageBlock({ user, isMe }) {
     };
 
     return (
-        <Container className="flex flex-col gap-4 p-4">
+        <Container className={clsx("flex flex-col gap-4 p-4", className)}>
             <Avatar />
             {isMe && (
                 <Button size="thin" onClick={navigateEditProfilePage}>
@@ -78,6 +79,7 @@ export function UserProfilePage({ userId }) {
     const [user, setUser] = useState(null);
     const [friends, setFriends] = useState(null);
     const [friendsAmount, setFriendsAmount] = useState(null);
+    const isSmallScreen = useIsSmallScreen();
 
     const isMe = user && currentUser?.userId === user.userId;
 
@@ -100,8 +102,18 @@ export function UserProfilePage({ userId }) {
     return user === null ? (
         <LoadingPlaceholder className="h-full min-h-96" />
     ) : (
-        <div className="flex flex-grow gap-4">
-            <div className="w-60 flex flex-shrink-0 flex-col gap-4">
+        <div
+            className={clsx(
+                "flex flex-grow gap-4",
+                isSmallScreen && "flex-col"
+            )}
+        >
+            <div
+                className={clsx(
+                    "flex flex-col flex-shrink-0 gap-4",
+                    isSmallScreen ? "order-2 w-full" : "w-60"
+                )}
+            >
                 <ImageBlock user={user} isMe={isMe} />
                 <Container className="p-4">
                     <Link className="flex" to={`/friends?id=${user.userId}`}>
@@ -121,7 +133,7 @@ export function UserProfilePage({ userId }) {
                                         to={`/users/${friend.userId}`}
                                         key={friend.userId}
                                     >
-                                        <div className="w-12">
+                                        <div className="flex-shrink-0 w-full">
                                             <CircleAvatar />
                                         </div>
                                         <div className="text-center hover:underline">
@@ -134,7 +146,7 @@ export function UserProfilePage({ userId }) {
                     )}
                 </Container>
             </div>
-            <div className="flex-grow">
+            <div className={clsx("flex-grow", isSmallScreen && "order-1")}>
                 <UserProfileInfo
                     user={user}
                     onStatusUpdated={(status) => setUser({ ...user, status })}

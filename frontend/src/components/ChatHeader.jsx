@@ -15,7 +15,7 @@ export function ChatHeader({ chat, onOpenChatInfo, onInviteToChat }) {
     };
 
     const avatar = (
-        <div className="cursor-pointer w-8">
+        <div className="cursor-pointer flex-shrink-0 w-8">
             <CircleAvatar />
         </div>
     );

@@ -7,7 +7,7 @@ export function UserCard({ user, className, avatarClassName, children }) {
     return (
         <div className={clsx("flex", className)}>
             <Link
-                className={clsx(avatarClassName || "w-16")}
+                className={clsx(avatarClassName || "flex-shrink-0 w-16")}
                 to={`/users/${user.userId}`}
             >
                 <CircleAvatar />

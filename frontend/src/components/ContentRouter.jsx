@@ -1,15 +1,18 @@
 import { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import { UserContext } from "../contexts/UserContext";
+import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { ChatListPage } from "../pages/ChatListPage";
 import { ChatPage } from "../pages/ChatPage";
 import { EditProfilePage } from "../pages/EditProfilePage";
 import { FriendsPage } from "../pages/FriendsPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
 import { UsersSearchPage } from "../pages/UsersSearchPage";
+import { NavigationBar } from "./NavigationBar";
 
 export function ContentRouter() {
     const { loggedIn, user } = useContext(UserContext);
+    const isSmallScreen = useIsSmallScreen();
 
     return (
         <Switch>
@@ -37,6 +40,17 @@ export function ContentRouter() {
                     )}
                     key="/chats/id"
                 />,
+                // routes only present on devices with small screen
+                ...(isSmallScreen
+                    ? [
+                          <Route
+                              exact
+                              path="/menu"
+                              render={() => <NavigationBar isFullPage={true} />}
+                              key="/menu"
+                          />,
+                      ]
+                    : []),
             ]}
             <Route path="/users/search" component={UsersSearchPage} />
             <Route

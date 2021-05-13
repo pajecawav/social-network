@@ -49,7 +49,7 @@ export function Topbar() {
                         }}
                     >
                         <div>{user.firstName}</div>
-                        <div className="w-8">
+                        <div className="flex-shrink-0 w-8">
                             <CircleAvatar />
                         </div>
                     </div>
@@ -66,7 +66,7 @@ export function Topbar() {
                                 className="flex gap-4 p-2 cursor-pointer hover:bg-primary-600"
                                 to={`/users/${user.userId}`}
                             >
-                                <div className="w-8">
+                                <div className="flex-shrink-0 w-8">
                                     <CircleAvatar />
                                 </div>
                                 {user.firstName} {user.lastName}

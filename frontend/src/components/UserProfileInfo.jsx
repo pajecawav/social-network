@@ -2,10 +2,10 @@ import clsx from "clsx";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
 import { updateUser } from "../api";
-import { formatLastSeen } from "../utils";
 import { UserContext } from "../contexts/UserContext";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import { formatLastSeen } from "../utils";
 import { Container } from "./Container";
 import { Dropdown } from "./Dropdown";
 

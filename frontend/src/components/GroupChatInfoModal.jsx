@@ -40,7 +40,7 @@ export function GroupChatInfoModal({ chat, ...props }) {
                 ) : (
                     <>
                         <div className="flex gap-4 pb-4 border-b-2 border-primary-700">
-                            <div className="w-16">
+                            <div className="flex-shrink-0 w-16">
                                 <CircleAvatar />
                             </div>
                             <div>

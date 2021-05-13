@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getChats } from "../api";
-import { ChatAction } from "../components/ChatAction";
 import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
 import { CreateChatModal } from "../components/CreateChatModal";
@@ -26,7 +25,7 @@ function ChatBlock({ chat }) {
             className="flex relative group gap-4 px-4 py-3 border-b border-primary-700 transition-colors duration-200 hover:bg-primary-700 "
             to={`/chats/${chat.chatId}`}
         >
-            <div className="w-14">
+            <div className="flex-shrink-0 w-14">
                 <CircleAvatar />
             </div>
 
@@ -45,7 +44,7 @@ function ChatBlock({ chat }) {
                         </div>
                     ) : (
                         <div className="flex gap-2 items-center">
-                            <div className="w-7">
+                            <div className="flex-shrink-0 w-7">
                                 <CircleAvatar />
                             </div>
                             <div className="h-6 text-sm text-primary-300 whitespace-nowrap overflow-ellipsis overflow-hidden">
