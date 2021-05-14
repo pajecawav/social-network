@@ -9,6 +9,7 @@
 html {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    /* position: fixed; */
 }
 
 * {
@@ -22,6 +23,18 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 0.02em;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+#root {
+    overflow-y: auto;
+    @apply text-primary-200;
 }
 
 /* firefox */

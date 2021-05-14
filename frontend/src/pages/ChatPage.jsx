@@ -33,7 +33,8 @@ export function ChatPage({ chatId }) {
         if (isScrollAnchored) {
             scrollToBottom();
         }
-    }, [messages, isScrollAnchored]);
+        // eslint-disable-next-line
+    }, [messages]);
 
     const scrollToBottom = () => {
         messagesEnd.current?.scrollIntoView();

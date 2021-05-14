@@ -11,7 +11,7 @@ export function Layout() {
         <div
             className={clsx(
                 "flex m-auto px-3 mt-4 max-w-5xl mb-4",
-                isSmallScreen && "flex-col pb-14"
+                isSmallScreen && "flex-col pb-12"
             )}
         >
             {!isSmallScreen && <NavigationBar />}

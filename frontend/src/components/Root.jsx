@@ -17,15 +17,7 @@ export function Root() {
             <LoadingPlaceholder className="sm:w-32 sm:h-32" scale={6} />
         </div>
     ) : (
-        <div
-            className={clsx(
-                "min-w-screen bg-primary-900 text-primary-200",
-                // TODO looks like a hack, figure out a proper solution
-                isSmallScreen
-                    ? "h-screen max-h-screen overflow-y-auto"
-                    : "min-h-screen"
-            )}
-        >
+        <>
             {!isSmallScreen && <Topbar />}
             <Switch>
                 <Route exact path="/">
@@ -36,6 +28,6 @@ export function Root() {
                 </Route>
                 <Route component={Layout} />
             </Switch>
-        </div>
+        </>
     );
 }
