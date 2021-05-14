@@ -8,9 +8,7 @@ export function App() {
         <Router>
             <UserProvider>
                 <ChatsProvider>
-                    <div className="flex max-h-screen min-w-screen overflow-y-auto bg-primary-900 text-primary-200">
-                        <Root />
-                    </div>
+                    <Root />
                 </ChatsProvider>
             </UserProvider>
         </Router>

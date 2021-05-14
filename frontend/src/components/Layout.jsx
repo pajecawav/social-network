@@ -10,8 +10,8 @@ export function Layout() {
     return (
         <div
             className={clsx(
-                "flex m-auto px-3 py-4 max-w-5xl",
-                isSmallScreen && "flex-col pb-14 height-full"
+                "flex m-auto px-3 mt-4 max-w-5xl mb-4",
+                isSmallScreen && "flex-col pb-14"
             )}
         >
             {!isSmallScreen && <NavigationBar />}

@@ -13,7 +13,7 @@ export function Dropdown({ isOpen, onRequestClose, className, children }) {
         }
 
         const handler = (event) => {
-            if (ref.current.contains(event.target)) {
+            if (ref.current?.contains(event.target)) {
                 return;
             }
 
