@@ -3,7 +3,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from app.models import User, friends_association_table
+from app.models import User, UserInfo, friends_association_table
 from app.schemas import UserCreate, UserUpdate
 from app.security import get_password_hash, verify_password
 
@@ -17,6 +17,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             password_hashed=get_password_hash(object_in.password),
             first_name=object_in.first_name,
             last_name=object_in.last_name,
+            user_info=UserInfo(),
         )
         db.add(obj)
         db.commit()

@@ -17,3 +17,4 @@ from .user import (  # noqa: F401
     UsersPaginationOut,
     UserUpdate,
 )
+from .user_info import GenderEnum, UserInfo, UserInfoUpdate  # noqa: F401

@@ -1,16 +1,7 @@
-from datetime import date, datetime
-from enum import Enum
+from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field, PositiveInt, validator
-
-MIN_BIRTHDATE = date(year=1900, month=1, day=1)
-MAX_BIRTHDATE = date(year=2020, month=1, day=1)
-
-
-class GenderEnum(str, Enum):
-    male: str = "male"
-    female: str = "female"
+from pydantic import BaseModel, Field, PositiveInt
 
 
 class UserCreate(BaseModel):
@@ -25,12 +16,9 @@ class User(BaseModel):
     username: str
     first_name: str
     last_name: str
+
     is_online: bool
     last_seen: datetime
-
-    status: Optional[str]
-    gender: Optional[GenderEnum]
-    birthdate: Optional[date]
 
     is_friend: Optional[bool]
 
@@ -41,19 +29,6 @@ class User(BaseModel):
 class UserUpdate(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
-    gender: Optional[GenderEnum]
-    birthdate: Optional[date]
-    status: Optional[str]
-
-    @validator("birthdate")
-    def ensure_birthdate_in_range(cls, value: Optional[date]) -> Optional[date]:
-        if value is None:
-            return value
-
-        if not MIN_BIRTHDATE <= value < MAX_BIRTHDATE:
-            raise ValueError("Birthdate must be in range")
-
-        return value
 
 
 class UsersPaginationOut(BaseModel):

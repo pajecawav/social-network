@@ -1,11 +1,9 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, Date, DateTime, Integer, String
-from sqlalchemy.dialects.postgresql import ENUM
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import backref, relationship
 
 from app.db.database import Base
-from app.schemas.user import GenderEnum
 
 from .association_tables import chat_user_association_table, friends_association_table
 
@@ -18,20 +16,14 @@ class User(Base):
     user_id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False, unique=True)
     password_hashed = Column(String, nullable=False)
+
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
+
     last_seen = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
 
-    gender = Column(
-        ENUM(
-            GenderEnum,
-            values_callable=lambda x: [e.value for e in x],
-            name="gender_enum",
-        ),
-        nullable=True,
-    )
-    birthdate = Column(Date, nullable=True)
-    status = Column(String, nullable=True)
+    user_info_id = Column(Integer, ForeignKey("user_info.user_info_id"))
+    user_info = relationship("UserInfo", backref=backref("user", uselist=False))
 
     friends = relationship(
         "User",

@@ -54,6 +54,14 @@ export async function updateUser(userId, data) {
     return axios.patch(`/api/users/${userId}`, data);
 }
 
+export async function getUserInfo(userId) {
+    return axios.get(`/api/users/${userId}/info`);
+}
+
+export async function updateUserInfo(userId, data) {
+    return axios.patch(`/api/users/${userId}/info`, data);
+}
+
 export async function getUsers({ cursor, query, limit }) {
     return axios.get("/api/users", {
         params: { cursor, query, limit },

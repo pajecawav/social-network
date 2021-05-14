@@ -81,6 +81,17 @@ def get_user(
     return response
 
 
+@router.get(
+    "/{user_id}/info", response_model=schemas.UserInfo, response_model_exclude_none=True
+)
+def get_user_info(
+    user_id: int,
+    db: Session = Depends(get_db),
+):
+    user = crud.user.get_or_404(db, user_id)
+    return user.user_info
+
+
 @router.patch(
     "/{user_id}", response_model=schemas.User, response_model_exclude_none=True
 )
@@ -88,7 +99,34 @@ def update_user(
     user_id: int,
     user_update: schemas.UserUpdate,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
 ):
     user = crud.user.get_or_404(db, user_id)
-    user = crud.user.update(db, object_db=user, object_update=user_update)
-    return user
+    if current_user != user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can only update your profile.",
+        )
+    updated_user = crud.user.update(db, object_db=user, object_update=user_update)
+    return updated_user
+
+
+@router.patch(
+    "/{user_id}/info", response_model=schemas.UserInfo, response_model_exclude_none=True
+)
+def update_user_info(
+    user_id: int,
+    user_info_update: schemas.UserInfoUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    user = crud.user.get_or_404(db, user_id)
+    if current_user != user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can only update your profile.",
+        )
+    updated_user_info = crud.user_info.update(
+        db, user_info_db=user.user_info, user_info_update=user_info_update
+    )
+    return updated_user_info

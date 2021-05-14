@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";

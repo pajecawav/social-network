@@ -69,7 +69,7 @@ export function ChatPage({ chatId }) {
                         />
 
                         {/* TODO: implement better scrolling (scrollbar should be at the right of the page) */}
-                        <div className="flex flex-col max-h-80 gap-2 px-4 pt-4 overflow-y-auto">
+                        <div className="flex flex-col gap-2 px-4 pt-4 overflow-y-auto max-h-80">
                             {isLoading && <LoadingPlaceholder />}
                             <Chat messages={messages} />
                             <Waypoint

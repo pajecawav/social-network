@@ -26,6 +26,11 @@ body {
 }
 
 html,
+body {
+    position: fixed;
+}
+
+html,
 body,
 #root {
     width: 100%;
