@@ -126,10 +126,10 @@ export function UserProfileInfo({ user, onStatusUpdated }) {
                                 )}
                             />
                         )}
-                        {userInfo.relationship && (
+                        {userInfo.relationshipStatus && (
                             <InfoField
                                 label="Relationship:"
-                                text={userInfo.relationship}
+                                text={userInfo.relationshipStatus}
                             />
                         )}
                         {userInfo.country && (
