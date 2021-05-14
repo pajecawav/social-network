@@ -13,7 +13,7 @@ export function ChatAction({ user, action, className }) {
     let content;
     const fromUser = <UserProfileLink user={user} />;
     const towardsUser = action.towardsUser ? (
-        <UserProfileLink user={user} />
+        <UserProfileLink user={action.towardsUser} />
     ) : null;
 
     switch (action.chatActionType) {

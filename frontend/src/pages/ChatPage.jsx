@@ -1,55 +1,27 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Waypoint } from "react-waypoint";
-import { getChat, getChatMessages } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
 import { Container } from "../components/Container";
 import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
 import { InviteToChatModal } from "../components/InviteToChatModal";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
-import { ChatsContext } from "../contexts/ChatsContext";
+import { useChat } from "../hooks/useChat";
 import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { ReactComponent as SendIcon } from "../icons/send.svg";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
 export function ChatPage({ chatId }) {
-    const [chat, setChat] = useState(null);
-    const [messages, setMessages] = useState(null);
-    const {
-        subscribeToChat,
-        unsubscribeFromChat,
-        sendSocketMessage,
-    } = useContext(ChatsContext);
-    const [isLoading, setIsLoading] = useState(true);
-
+    const { isLoading, chat, messages, sendSocketMessage } = useChat(chatId);
     const [text, setText] = useState("");
     const messagesEnd = useRef(null);
     const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
     const [isScrollAnchored, setIsScrollAnchored] = useState(true);
     const isSmallScreen = useIsSmallScreen();
-
-    useEffect(() => {
-        setIsLoading(true);
-        getChat(chatId)
-            .then((response) => setChat(response.data))
-            .catch(console.error);
-        getChatMessages(chatId)
-            .then((response) => {
-                setMessages(response.data);
-                setIsLoading(false);
-            })
-            .catch(console.error);
-
-        const handleNewMessage = (message) => {
-            setMessages((oldMessages) => [...oldMessages, message]);
-        };
-        subscribeToChat(chatId, handleNewMessage);
-        return () => unsubscribeFromChat(chatId, handleNewMessage);
-    }, [chatId, subscribeToChat, unsubscribeFromChat]);
 
     useEffect(() => {
         if (!isLoading) {
@@ -92,7 +64,7 @@ export function ChatPage({ chatId }) {
                         <ChatHeader
                             chat={chat}
                             onOpenChatInfo={handleOpenChatInfo}
-                            onInviteToChat={handleOpenInviteToChat}
+                            onOpenInviteToChat={handleOpenInviteToChat}
                         />
 
                         {/* TODO: implement better scrolling (scrollbar should be at the right of the page) */}

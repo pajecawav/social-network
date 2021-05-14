@@ -14,6 +14,8 @@ export function GroupChatInfoModal({ chat, ...props }) {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const isAdmin = chat.admin.userId === user.userId;
+
     useEffect(() => {
         getChatUsers(chat.chatId)
             .then((response) => {
@@ -32,13 +34,22 @@ export function GroupChatInfoModal({ chat, ...props }) {
             .catch(console.error);
     };
 
+    const handleRemoveUser = (userId) => {
+        removeChatUser(chat.chatId, userId)
+            .then(() => {
+                setUsers(users.filter((user) => user.userId !== userId));
+            })
+            .catch(console.error);
+    };
+
     return (
         <ModalBase title="Information" {...props}>
-            <div className="w-72 gap-4">
+            <div className="w-96 gap-4">
                 {isLoading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <>
+                        {/* header */}
                         <div className="flex gap-4 pb-4 border-b-2 border-primary-700">
                             <div className="flex-shrink-0 w-16">
                                 <CircleAvatar />
@@ -51,21 +62,38 @@ export function GroupChatInfoModal({ chat, ...props }) {
                             </div>
                         </div>
 
+                        {/* users list */}
                         <div className="my-4">
                             <div className="mb-2">Users:</div>
-                            <div className="h-60 flex flex-col -mr-4 gap-4 overflow-y-scroll">
+                            <div className="max-h-80 flex flex-col -mr-4 gap-3 overflow-y-scroll">
                                 {users.map((user) => (
-                                    <div className="flex" key={user.userId}>
-                                        <UserCard
-                                            avatarClassName="w-8"
-                                            user={user}
-                                        />
-                                        {user.userId === chat.admin.userId && (
-                                            <div className="ml-auto mr-1 text-primary-500">
+                                    <UserCard
+                                        avatarClassName="w-12"
+                                        user={user}
+                                        key={user.userId}
+                                    >
+                                        {/* <div className="flex ml-auto mr-2 gap-2"> */}
+                                        {user.userId === chat.admin.userId ? (
+                                            <div className="ml-auto mr-2 self-center text-primary-500">
                                                 Admin
                                             </div>
+                                        ) : (
+                                            isAdmin && (
+                                                <Button
+                                                    className="ml-auto mr-2 self-center"
+                                                    size="thin"
+                                                    onClick={() =>
+                                                        handleRemoveUser(
+                                                            user.userId
+                                                        )
+                                                    }
+                                                >
+                                                    Kick
+                                                </Button>
+                                            )
                                         )}
-                                    </div>
+                                        {/* </div> */}
+                                    </UserCard>
                                 ))}
                             </div>
                         </div>

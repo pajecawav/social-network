@@ -5,7 +5,7 @@ import { getChatTitle } from "../utils";
 import { ChatActionsDropdown } from "./ChatActionsDropdown";
 import { CircleAvatar } from "./CircleAvatar";
 
-export function ChatHeader({ chat, onOpenChatInfo, onInviteToChat }) {
+export function ChatHeader({ chat, onOpenChatInfo, onOpenInviteToChat }) {
     const isGroupChat = chat.chatType === "group";
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -48,7 +48,7 @@ export function ChatHeader({ chat, onOpenChatInfo, onInviteToChat }) {
                         chat={chat}
                         isOpen={isDropdownOpen}
                         onRequestClose={() => setIsDropdownOpen(false)}
-                        onInviteToChat={onInviteToChat}
+                        onOpenInviteToChat={onOpenInviteToChat}
                     />
                 </div>
 

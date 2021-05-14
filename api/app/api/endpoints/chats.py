@@ -221,7 +221,7 @@ def remove_chat_user(
         db.add(chat)
         db.commit()
 
-    if user == chat.admin:
+    if current_user == chat.admin:
         # add chat notification that user left
         action = models.ChatAction(
             chat_action_type=schemas.ChatActionTypeEnum.kick, towards_user=user

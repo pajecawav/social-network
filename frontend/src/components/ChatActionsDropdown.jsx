@@ -7,7 +7,7 @@ import React from "react";
 import { Dropdown } from "../components/Dropdown";
 import { DropdownMenuItem } from "../ui/DropdownMenuItem";
 
-export function ChatActionsDropdown({ chat, onInviteToChat, ...props }) {
+export function ChatActionsDropdown({ chat, onOpenInviteToChat, ...props }) {
     const isGroup = chat.chatType === "group";
 
     return (
@@ -21,7 +21,7 @@ export function ChatActionsDropdown({ chat, onInviteToChat, ...props }) {
                 <DropdownMenuItem
                     icon={UserAddIcon}
                     text="Invite to chat"
-                    onClick={onInviteToChat}
+                    onClick={onOpenInviteToChat}
                 />
             )}
         </Dropdown>

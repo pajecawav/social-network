@@ -62,7 +62,7 @@ export function InviteToChatModal({ chat, ...props }) {
 
     return (
         <ModalBase title="Invite" {...props}>
-            <div className="max-w-80">
+            <div className="w-96">
                 {isLoading ? (
                     <LoadingPlaceholder />
                 ) : (
