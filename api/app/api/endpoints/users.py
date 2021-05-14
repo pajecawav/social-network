@@ -39,9 +39,6 @@ def get_users(
 ):
     q = db.query(models.User).order_by(models.User.user_id)
 
-    if cursor is not None:
-        q = q.filter(models.User.user_id >= cursor)
-
     if query:
         q = q.filter(
             or_(
@@ -51,6 +48,9 @@ def get_users(
         )
 
     total_matches = q.count()
+
+    if cursor is not None:
+        q = q.filter(models.User.user_id >= cursor)
 
     users = q.limit(limit + 1).all()
     next_cursor = users.pop().user_id if (len(users) == (limit + 1)) else None

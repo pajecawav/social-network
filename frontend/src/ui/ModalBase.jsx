@@ -23,11 +23,16 @@ const modalStyles = {
     },
 };
 
-export function ModalBase({ title, children, bodyClassName, ...props }) {
+export function ModalBase({ title, children, bodyClassName, style, ...props }) {
+    const mergedStyle = {
+        content: { ...modalStyles.content, ...(style?.content || {}) },
+        overlay: { ...modalStyles.overlay, ...(style?.overlay || {}) },
+    };
+
     return (
         <ReactModal
             {...props}
-            style={modalStyles}
+            style={mergedStyle}
             closeTimeoutMS={50}
             ariaHideApp={false}
         >

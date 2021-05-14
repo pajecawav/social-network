@@ -61,8 +61,12 @@ export function InviteToChatModal({ chat, ...props }) {
     );
 
     return (
-        <ModalBase title="Invite" {...props}>
-            <div className="w-96">
+        <ModalBase
+            title="Invite"
+            style={{ content: { width: "24rem" } }}
+            {...props}
+        >
+            <div>
                 {isLoading ? (
                     <LoadingPlaceholder />
                 ) : (

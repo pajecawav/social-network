@@ -43,8 +43,12 @@ export function GroupChatInfoModal({ chat, ...props }) {
     };
 
     return (
-        <ModalBase title="Information" {...props}>
-            <div className="w-96 gap-4">
+        <ModalBase
+            title="Information"
+            style={{ content: { width: "24rem" } }}
+            {...props}
+        >
+            <div className="gap-4">
                 {isLoading ? (
                     <LoadingPlaceholder />
                 ) : (
@@ -72,7 +76,6 @@ export function GroupChatInfoModal({ chat, ...props }) {
                                         user={user}
                                         key={user.userId}
                                     >
-                                        {/* <div className="flex ml-auto mr-2 gap-2"> */}
                                         {user.userId === chat.admin.userId ? (
                                             <div className="ml-auto mr-2 self-center text-primary-500">
                                                 Admin
@@ -92,7 +95,6 @@ export function GroupChatInfoModal({ chat, ...props }) {
                                                 </Button>
                                             )
                                         )}
-                                        {/* </div> */}
                                     </UserCard>
                                 ))}
                             </div>

@@ -47,10 +47,10 @@ def get_friends(
 
     q = user.friends.order_by(order_expr)
 
+    total_matches = q.count()
+
     if cursor is not None:
         q = q.filter(models.User.user_id >= cursor)
-
-    total_matches = q.count()
 
     if limit is not None:
         q = q.limit(limit + 1)

@@ -25,7 +25,7 @@ export function ChatPage({ chatId }) {
 
     useEffect(() => {
         if (!isLoading) {
-            scrollToBottom("auto");
+            scrollToBottom();
         }
     }, [isLoading]);
 
@@ -35,8 +35,8 @@ export function ChatPage({ chatId }) {
         }
     }, [messages, isScrollAnchored]);
 
-    const scrollToBottom = (behavior = "smooth") => {
-        messagesEnd.current?.scrollIntoView({ behavior });
+    const scrollToBottom = () => {
+        messagesEnd.current?.scrollIntoView();
     };
 
     const handleSendMessage = (event) => {
@@ -85,7 +85,7 @@ export function ChatPage({ chatId }) {
                                         ? "opacity-0 pointer-events-none"
                                         : "opacity-100 pointer-events-auto"
                                 )}
-                                onClick={() => scrollToBottom("auto")}
+                                onClick={scrollToBottom}
                             >
                                 <ChevronDownIcon />
                             </button>
