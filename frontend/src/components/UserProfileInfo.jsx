@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
-import { getUserInfo, updateUser } from "../api";
+import { getUserInfo, updateUserInfo } from "../api";
 import { UserContext } from "../contexts/UserContext";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -19,7 +19,7 @@ function InfoField({ label, text, children }) {
     );
 }
 
-export function UserProfileInfo({ user, onStatusUpdated }) {
+export function UserProfileInfo({ user }) {
     const [isEditStatusOpen, setIsEditStatusOpen] = useState(false);
     const [newStatus, setNewStatus] = useState("");
     const { user: currentUser } = useContext(UserContext);
@@ -34,10 +34,10 @@ export function UserProfileInfo({ user, onStatusUpdated }) {
 
     const handleUpdateStatus = (event) => {
         event.preventDefault();
-        updateUser(user.userId, { status: newStatus || null })
+        updateUserInfo(user.userId, { status: newStatus || null })
             .then(() => {
                 setIsEditStatusOpen(false);
-                onStatusUpdated(newStatus);
+                setUserInfo({ ...userInfo, status: newStatus });
             })
             .catch(console.error);
     };

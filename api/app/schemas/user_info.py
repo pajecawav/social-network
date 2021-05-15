@@ -14,6 +14,7 @@ class GenderEnum(str, Enum):
 
 
 class UserInfo(BaseModel):
+    status: Optional[str]
     gender: Optional[GenderEnum]
     birthdate: Optional[date]
     relationship_status: Optional[str]
@@ -27,6 +28,7 @@ class UserInfo(BaseModel):
 
 
 class UserInfoUpdate(BaseModel):
+    status: Optional[str] = Field(None, min_length=1)
     gender: Optional[GenderEnum]
     birthdate: Optional[date]
     relationship_status: Optional[str] = Field(None, min_length=1)

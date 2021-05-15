@@ -147,10 +147,7 @@ export function UserProfilePage({ userId }) {
                 </Container>
             </div>
             <div className={clsx("flex-grow", isSmallScreen && "order-1")}>
-                <UserProfileInfo
-                    user={user}
-                    onStatusUpdated={(status) => setUser({ ...user, status })}
-                />
+                <UserProfileInfo user={user} />
             </div>
         </div>
     );

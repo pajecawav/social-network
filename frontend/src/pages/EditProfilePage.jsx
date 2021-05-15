@@ -12,30 +12,42 @@ import { Button } from "../ui/Button";
 import { FormError } from "../ui/FormError";
 import { FormSuccess } from "../ui/FormSuccess";
 import { Input } from "../ui/Input";
+import { SelectInput } from "../ui/SelectInput";
+
+const GENDER_VALUES = [
+    { value: null, name: "None selected" },
+    { value: "male", name: "Male" },
+    { value: "female", name: "Female" },
+];
+
+function Label({ text, ...props }) {
+    return (
+        <label
+            className={clsx(
+                "self-center block max-w-36 text-primary-500",
+                "-mb-2 sm:mb-0 text-justify sm:text-right"
+            )}
+        >
+            {text}
+        </label>
+    );
+}
 
 function FormField({ id, label, ...props }) {
     return (
         <>
-            <label
-                className={clsx(
-                    "self-center block max-w-36 text-primary-500",
-                    "-mb-2 sm:mb-0 text-justify sm:text-right"
-                )}
-                htmlFor={id}
-            >
-                {label}
-            </label>
+            <Label text={label} htmlFor={id} />
             <Input
                 id={id}
                 {...props}
-                className={"w-full sm:w-60 sm:flex-grow invalid:border-error"}
+                className={"w-full sm:w-60 sm:flex-grow"}
             />
         </>
     );
 }
 
 export function EditProfilePage() {
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [userInfo, _setUserInfo] = useState(null);
     const [success, setSuccess] = useState(null);
     const formRef = useRef(null);
@@ -61,16 +73,16 @@ export function EditProfilePage() {
 
         event.preventDefault();
 
-        for (let key in userInfo) {
-            if (!Boolean(userInfo[key])) {
-                delete userInfo[key];
+        let userInfoCopy = { ...userInfo };
+        for (let key in userInfoCopy) {
+            if (!Boolean(userInfoCopy[key])) {
+                userInfoCopy[key] = null;
             }
         }
 
-        updateUserInfo(user.userId, userInfo)
+        updateUserInfo(user.userId, userInfoCopy)
             .then((response) => {
                 setSuccess(true);
-                setUser({ ...user, ...response.data });
             })
             .catch((error) => {
                 setSuccess(false);
@@ -101,20 +113,20 @@ export function EditProfilePage() {
                                 "px-4 sm:px-0 grid-cols-1 sm:grid-cols-[max-content,auto]"
                             )}
                         >
-                            <FormField
-                                id="gender"
-                                type="text"
-                                label="Gender:"
-                                value={userInfo.gender || ""}
-                                onChange={(event) =>
-                                    setUserInfo({ gender: event.target.value })
+                            <Label text="Gender:" />
+                            <SelectInput
+                                className="w-full sm:w-60 sm:flex-grow"
+                                selectedValue={userInfo.gender || null}
+                                options={GENDER_VALUES}
+                                onOptionSelected={(value) =>
+                                    setUserInfo({ gender: value })
                                 }
                             />
                             <FormField
                                 id="birthdate"
                                 type="date"
                                 label="Birthday:"
-                                value={userInfo.birthdate}
+                                value={userInfo.birthdate || ""}
                                 min="1900-01-01"
                                 max="2020-01-01"
                                 onChange={(event) =>
