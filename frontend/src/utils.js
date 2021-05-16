@@ -53,11 +53,26 @@ export const formatLastSeen = (date) => {
     if (diff < 60 * 60) {
         return `${Math.floor(diff / 60)} minutes ago`;
     } else if (then.isSame(now, "day")) {
-        return `today at ${then.format("HH:mm")}`;
+        return then.format("[today at] HH:mm");
     } else if (then.isSame(yesterday, "day")) {
-        return `yesterday at ${then.format("HH:mm")}`;
-    } else {
+        return then.format("[yesterday at] HH:mm");
+    } else if (then.isSame(yesterday, "year")) {
         return then.format("D MMMM [at] HH:mm");
+    } else {
+        return then.format("D MMMM YYYY");
+    }
+};
+
+export const formatLastEdited = (date) => {
+    const then = dayjs(date);
+    const now = dayjs();
+
+    if (then.isSame(now, "day")) {
+        return then.format("[today at] HH:mm");
+    } else if (then.isSame(now, "year")) {
+        return then.format("MMMM D [at] HH:mm");
+    } else {
+        return then.format("D MMMM, YYYY [at] HH:mm");
     }
 };
 

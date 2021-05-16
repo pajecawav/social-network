@@ -16,6 +16,7 @@ class Message(BaseModel):
     message_id: PositiveInt
     text: Optional[str]
     time_sent: datetime
+    time_edited: Optional[datetime]
 
     user: User
     action: Optional[ChatAction]

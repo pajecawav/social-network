@@ -14,6 +14,9 @@ class Message(Base):
     text = Column(String, nullable=True)
 
     time_sent = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+    time_edited = Column(
+        DateTime(timezone=True), onupdate=datetime.utcnow, nullable=True
+    )
 
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     user = relationship("User", back_populates="messages")

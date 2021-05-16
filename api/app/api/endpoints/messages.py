@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
 from app.api.dependencies import get_current_user, get_db
-from app.sockets.namespaces.chat import send_message_to_chat
+from app.sockets.namespaces.chat import notify_message_edited, send_message_to_chat
 
 router = APIRouter()
 
@@ -23,7 +23,7 @@ def send_message(
     if chat_id is None and user_id is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST(),
-            detail="Need to provide chat id or user id.",
+            detail="Either chat or user id is required.",
         )
 
     if chat_id is not None:
@@ -31,7 +31,7 @@ def send_message(
     else:
         if user_id == current_user.user_id:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST(),
+                status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Can't create direct chat with yourself.",
             )
 
@@ -52,6 +52,31 @@ def send_message(
     background_tasks.add_task(
         send_message_to_chat,
         chat.chat_id,
+        jsonable_encoder(schemas.Message.from_orm(message)),
+    )
+
+    return message
+
+
+@router.patch("/{message_id}", response_model=schemas.Message)
+def update_message(
+    background_tasks: BackgroundTasks,
+    message_id: int,
+    message_update: schemas.MessageUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    message = crud.message.get_or_404(db, message_id)
+    if message.user != current_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only edit your own messages.",
+        )
+    message = crud.message.update(db, object_db=message, object_update=message_update)
+
+    background_tasks.add_task(
+        notify_message_edited,
+        message.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )
 

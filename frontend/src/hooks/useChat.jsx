@@ -6,11 +6,8 @@ export function useChat(chatId) {
     const [isLoading, setIsLoading] = useState(true);
     const [chat, setChat] = useState(null);
     const [messages, setMessages] = useState(null);
-    const {
-        subscribeToChat,
-        unsubscribeFromChat,
-        sendSocketMessage,
-    } = useContext(ChatsContext);
+    const { subscribeToChat, unsubscribeFromChat, sendSocketMessage } =
+        useContext(ChatsContext);
 
     useEffect(() => {
         setIsLoading(true);
@@ -24,11 +21,30 @@ export function useChat(chatId) {
             })
             .catch(console.error);
 
-        const handleNewMessage = (message) => {
-            setMessages((oldMessages) => [...oldMessages, message]);
+        const handleChatEvent = (event, data) => {
+            switch (event) {
+                case "message":
+                    setMessages((oldMessages) => [
+                        ...oldMessages,
+                        data.message,
+                    ]);
+                    break;
+                case "message_edited": {
+                    const { message: editedMessage } = data;
+                    setMessages((oldMessages) =>
+                        oldMessages.map((message) =>
+                            message.messageId === editedMessage.messageId
+                                ? editedMessage
+                                : message
+                        )
+                    );
+                    break;
+                }
+            }
         };
-        subscribeToChat(chatId, handleNewMessage);
-        return () => unsubscribeFromChat(chatId, handleNewMessage);
+
+        subscribeToChat(chatId, handleChatEvent);
+        return () => unsubscribeFromChat(chatId, handleChatEvent);
     }, [chatId, subscribeToChat, unsubscribeFromChat]);
 
     return { isLoading, chat, messages, sendSocketMessage };

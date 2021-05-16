@@ -115,3 +115,7 @@ export async function getChatMessages(chatId) {
 export async function sendMessage(data) {
     return axios.post("/api/messages", data);
 }
+
+export async function editMessage(messageId, { text }) {
+    return axios.patch(`/api/messages/${messageId}`, { text });
+}

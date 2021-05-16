@@ -75,5 +75,13 @@ async def send_message_to_chat(chat_id: int, message: Dict[str, str]) -> None:
     )
 
 
+async def notify_message_edited(chat_id: int, message: Dict[str, str]) -> None:
+    await namespace.emit(
+        "message_edited",
+        data={"chat_id": chat_id, "message": message},
+        room=f"chat_{chat_id}",
+    )
+
+
 async def notify_user_new_chat(user_id: int, chat: Dict[str, str]) -> None:
     await namespace.emit("new_chat", data=chat, room=f"user_{user_id}")

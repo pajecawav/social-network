@@ -9,18 +9,24 @@ export function ChatsProvider({ children }) {
     const listeners = useRef({});
     const newChatListeners = useRef([]);
 
+    const notifyListeners = (chatId, event, data) => {
+        listeners.current[chatId]?.forEach((listener) => listener(event, data));
+    };
+
     useEffect(() => {
         const sio = getSocket("/chat");
         socket.current = sio;
 
         sio.on("message", (data) => {
             const { message, chatId } = camelizeKeys(data);
-            listeners.current[chatId]?.forEach((listener) =>
-                listener(message, chatId)
-            );
-            listeners.current["*"]?.forEach((listener) =>
-                listener(message, chatId)
-            );
+            notifyListeners(chatId, "message", { message, chatId });
+            notifyListeners("*", "message", { message, chatId });
+        });
+
+        sio.on("message_edited", (data) => {
+            const { message, chatId } = camelizeKeys(data);
+            notifyListeners(chatId, "message_edited", { message, chatId });
+            notifyListeners("*", "message_edited", { message, chatId });
         });
 
         sio.on("new_chat", (data) => {

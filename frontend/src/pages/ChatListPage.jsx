@@ -109,8 +109,9 @@ export function ChatListPage() {
     }, [subscribeToChat, unsubscribeFromChat]);
 
     useEffect(() => {
-        const handleNewChat = (chat) =>
+        const handleNewChat = (chat) => {
             setChats((currentChats) => [chat, ...currentChats]);
+        };
         subscribeToNewChats(handleNewChat);
         return () => unsubscribeFromNewChats(handleNewChat);
     }, [subscribeToNewChats, unsubscribeFromNewChats]);
