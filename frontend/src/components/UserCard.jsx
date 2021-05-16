@@ -11,7 +11,7 @@ export function UserCard({ user, className, avatarClassName, children }) {
             >
                 <CircleAvatar isOnline={user.isOnline} />
             </Link>
-            <div className="ml-4 h-auto">
+            <div className="mx-4 h-auto">
                 <Link
                     className="text-primary-200 hover:underline"
                     to={`/users/${user.userId}`}

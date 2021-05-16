@@ -24,6 +24,7 @@ export function UserProfileInfo({ user }) {
     const [newStatus, setNewStatus] = useState("");
     const { user: currentUser } = useContext(UserContext);
     const [userInfo, setUserInfo] = useState(null);
+    const [isUserInfoVisible, setIsUserInfoVisible] = useState(true);
     const isMe = currentUser && currentUser.userId === user.userId;
 
     useEffect(() => {
@@ -114,55 +115,77 @@ export function UserProfileInfo({ user }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-[max-content,auto] items-center gap-3 mt-2 text-sm">
-                        {userInfo.gender && (
-                            <InfoField label="Gender:" text={userInfo.gender} />
-                        )}
-                        {userInfo.birthdate && (
-                            <InfoField
-                                label="Birthday:"
-                                text={dayjs(userInfo.birthdate).format(
-                                    "MMMM D, YYYY"
-                                )}
-                            />
-                        )}
-                        {userInfo.relationshipStatus && (
-                            <InfoField
-                                label="Relationship:"
-                                text={userInfo.relationshipStatus}
-                            />
-                        )}
-                        {userInfo.country && (
-                            <InfoField
-                                label="Country:"
-                                text={userInfo.country}
-                            />
-                        )}
-                        {userInfo.city && (
-                            <InfoField label="City:" text={userInfo.city} />
-                        )}
-                        {userInfo.website && (
-                            <InfoField label="Website:">
-                                <a
-                                    className="cursor-pointer hover:underline"
-                                    href={userInfo.website}
-                                    rel="noreferrer noopener"
-                                >
-                                    {userInfo.website}
-                                </a>
-                            </InfoField>
-                        )}
-                        {userInfo.email && (
-                            <InfoField label="Email:">
-                                <a
-                                    className="cursor-pointer hover:underline"
-                                    href={`mailto:${userInfo.email}`}
-                                >
-                                    {userInfo.email}
-                                </a>
-                            </InfoField>
-                        )}
-                    </div>
+                    {Object.keys(userInfo).length > 0 && (
+                        <>
+                            <button
+                                className="w-full px-2 py-1 text-center rounded-md bg-primary-700 text-primary-500"
+                                onClick={() =>
+                                    setIsUserInfoVisible(!isUserInfoVisible)
+                                }
+                            >
+                                {isUserInfoVisible
+                                    ? "Hide user information"
+                                    : "Show user information"}
+                            </button>
+                            {isUserInfoVisible && (
+                                <div className="grid grid-cols-[max-content,auto] items-center gap-3 mt-2 text-sm">
+                                    {userInfo.gender && (
+                                        <InfoField
+                                            label="Gender:"
+                                            text={userInfo.gender}
+                                        />
+                                    )}
+                                    {userInfo.birthdate && (
+                                        <InfoField
+                                            label="Birthday:"
+                                            text={dayjs(
+                                                userInfo.birthdate
+                                            ).format("MMMM D, YYYY")}
+                                        />
+                                    )}
+                                    {userInfo.relationshipStatus && (
+                                        <InfoField
+                                            label="Relationship:"
+                                            text={userInfo.relationshipStatus}
+                                        />
+                                    )}
+                                    {userInfo.country && (
+                                        <InfoField
+                                            label="Country:"
+                                            text={userInfo.country}
+                                        />
+                                    )}
+                                    {userInfo.city && (
+                                        <InfoField
+                                            label="City:"
+                                            text={userInfo.city}
+                                        />
+                                    )}
+                                    {userInfo.website && (
+                                        <InfoField label="Website:">
+                                            <a
+                                                className="cursor-pointer hover:underline"
+                                                href={userInfo.website}
+                                                rel="noreferrer noopener"
+                                            >
+                                                {userInfo.website}
+                                            </a>
+                                        </InfoField>
+                                    )}
+                                    {userInfo.email && (
+                                        <InfoField label="Email:">
+                                            <a
+                                                className="cursor-pointer hover:underline"
+                                                href={`mailto:${userInfo.email}`}
+                                            >
+                                                {userInfo.email}
+                                            </a>
+                                        </InfoField>
+                                    )}
+                                </div>
+                            )}
+                        </>
+                    )}
                 </>
             )}
         </Container>

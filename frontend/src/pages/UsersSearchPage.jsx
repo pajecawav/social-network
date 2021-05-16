@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
 import { getUsers } from "../api";
 import { Container } from "../components/Container";

@@ -124,7 +124,7 @@ export function ChatPage({ chatId }) {
                                 <div className="flex w-full">
                                     <div>
                                         Edit{" "}
-                                        <a
+                                        <button
                                             className="text-secondary-500 cursor-pointer hover:underline"
                                             onClick={() => {
                                                 document
@@ -135,7 +135,7 @@ export function ChatPage({ chatId }) {
                                             }}
                                         >
                                             message
-                                        </a>
+                                        </button>
                                     </div>
                                     <div className="flex w-8 ml-auto items-center justify-center">
                                         <XIcon
