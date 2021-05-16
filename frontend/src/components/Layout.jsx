@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { ContentRouter } from "./ContentRouter";
 import { MobileNavigationBar } from "./MobileNavigationBar";
@@ -8,12 +7,7 @@ export function Layout() {
     const isSmallScreen = useIsSmallScreen();
 
     return (
-        <div
-            className={clsx(
-                "flex m-auto px-3 mt-4 max-w-5xl mb-4",
-                isSmallScreen && "flex-col pb-12"
-            )}
-        >
+        <div className="flex m-auto px-3 mt-4 max-w-5xl mb-4 pb-12 md:flex-row md:pb-0">
             {!isSmallScreen && <NavigationBar />}
             <div className="flex-grow min-w-0">
                 <ContentRouter />

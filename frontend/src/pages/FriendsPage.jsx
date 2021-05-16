@@ -85,7 +85,7 @@ export function FriendsPage() {
                                             user={user}
                                         >
                                             <Button
-                                                className="ml-auto h-full"
+                                                className="ml-auto h-full hidden sm:block"
                                                 size="thin"
                                                 onClick={() =>
                                                     handleUnfriend(user)

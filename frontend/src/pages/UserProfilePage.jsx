@@ -9,7 +9,6 @@ import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { SendMessageModal } from "../components/SendMessageModal";
 import { UserProfileInfo } from "../components/UserProfileInfo";
 import { UserContext } from "../contexts/UserContext";
-import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 
@@ -79,7 +78,6 @@ export function UserProfilePage({ userId }) {
     const [user, setUser] = useState(null);
     const [friends, setFriends] = useState(null);
     const [friendsAmount, setFriendsAmount] = useState(null);
-    const isSmallScreen = useIsSmallScreen();
 
     const isMe = user && currentUser?.userId === user.userId;
 
@@ -102,18 +100,8 @@ export function UserProfilePage({ userId }) {
     return user === null ? (
         <LoadingPlaceholder className="h-full min-h-96" />
     ) : (
-        <div
-            className={clsx(
-                "flex flex-grow gap-4",
-                isSmallScreen && "flex-col"
-            )}
-        >
-            <div
-                className={clsx(
-                    "flex flex-col flex-shrink-0 gap-4",
-                    isSmallScreen ? "order-2 w-full" : "w-60"
-                )}
-            >
+        <div className="flex flex-grow gap-4 flex-col md:flex-row">
+            <div className="flex flex-col flex-shrink-0 gap-4 order-2 w-full md:order-1 md:w-60">
                 <ImageBlock user={user} isMe={isMe} />
                 <Container className="p-4">
                     <Link className="flex" to={`/friends?id=${user.userId}`}>
@@ -146,7 +134,7 @@ export function UserProfilePage({ userId }) {
                     )}
                 </Container>
             </div>
-            <div className={clsx("flex-grow", isSmallScreen && "order-1")}>
+            <div className="flex-grow order-1 md:order-1">
                 <UserProfileInfo user={user} />
             </div>
         </div>

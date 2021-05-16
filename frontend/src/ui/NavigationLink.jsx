@@ -18,14 +18,9 @@ export function NavigationLink({
             {...props}
         >
             {Icon && (
-                <Icon
-                    className={clsx(
-                        "text-secondary stroke-current stroke-1",
-                        isBigIcon ? "w-7 h-7" : "w-5 h-5"
-                    )}
-                />
+                <Icon className="text-secondary stroke-current stroke-1 w-7 h-7 md:w-5 md:h-5" />
             )}
-            <div className="text-md">{text}</div>
+            <div className="text-xl md:text-base">{text}</div>
         </Link>
     );
 }

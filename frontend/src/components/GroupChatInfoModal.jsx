@@ -69,7 +69,7 @@ export function GroupChatInfoModal({ chat, ...props }) {
                         {/* users list */}
                         <div className="my-4">
                             <div className="mb-2">Users:</div>
-                            <div className="max-h-80 flex flex-col -mr-4 gap-3 overflow-y-scroll">
+                            <div className="max-h-80 flex flex-col -mr-3 gap-3 overflow-y-scroll">
                                 {users.map((user) => (
                                     <UserCard
                                         avatarClassName="w-12"

@@ -40,6 +40,8 @@ export function useChat(chatId) {
                     );
                     break;
                 }
+                default:
+                    throw new Error("Unknown chat event");
             }
         };
 

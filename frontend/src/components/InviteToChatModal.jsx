@@ -11,9 +11,8 @@ export function InviteToChatModal({ chat, ...props }) {
     const [search, setSearch] = useState("");
 
     const [alreadyInvitedIds, setAlreadyInvitedIds] = useState([]);
-    const [isAlreadyInvitedLoading, setIsAlreadyInvitedLoading] = useState(
-        true
-    );
+    const [isAlreadyInvitedLoading, setIsAlreadyInvitedLoading] =
+        useState(true);
     const [friends, setFriends] = useState([]);
     const [isFriendsLoading, setIsFriendsLoading] = useState(true);
 
@@ -76,7 +75,7 @@ export function InviteToChatModal({ chat, ...props }) {
                             placeholder="Search"
                             onChange={(event) => setSearch(event.target.value)}
                         />
-                        <div className="max-h-80 flex flex-col -mr-4 gap-3 overflow-y-scroll">
+                        <div className="max-h-80 flex flex-col -mr-3 gap-3 overflow-y-scroll">
                             {matchingUsers.map((user) => (
                                 <UserCard
                                     avatarClassName="w-12"
