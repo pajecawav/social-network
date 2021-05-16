@@ -6,16 +6,16 @@ import { getUsers } from "../api";
 import { Container } from "../components/Container";
 import { HeaderWithCount } from "../components/HeaderWithCount";
 import { UserCard } from "../components/UserCard";
+import { useSearchParams } from "../hooks/useSearchParams";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Spinner } from "../ui/Spinner";
+import { buildSearchString } from "../utils";
 
 export function UsersSearchPage() {
     const history = useHistory();
-    const location = useLocation();
-    const queryParam =
-        new URLSearchParams(location.search).get("query") || null;
+    const { query: queryParam = null } = useSearchParams();
 
     const [query, setQuery] = useState(queryParam);
     const [search, setSearch] = useState(query);
@@ -42,7 +42,10 @@ export function UsersSearchPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
         setSearch(query);
-        history.push(query ? `/users/search?query=${query}` : "/users/search");
+        history.push({
+            pathname: "/users/search",
+            search: buildSearchString({ query }),
+        });
     };
 
     const fetchMoreUsers = () => {

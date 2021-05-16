@@ -13,6 +13,17 @@ export const splitLowercaseWords = (str) => {
         .filter((word) => word);
 };
 
+export const buildSearchString = (values) => {
+    const params = new URLSearchParams();
+    for (let key in values) {
+        const value = values[key];
+        if (value !== null) {
+            params.set(key, value);
+        }
+    }
+    return params.toString();
+};
+
 export const getChatTitle = (chat) => {
     switch (chat.chatType) {
         case "direct":

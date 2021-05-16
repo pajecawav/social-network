@@ -1,27 +1,26 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
 import { getFriends, unfriend } from "../api";
 import { Container } from "../components/Container";
-import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
+import { TabsHeader } from "../components/TabsHeader";
 import { UserCard } from "../components/UserCard";
-import { useTitle } from "../hooks/useTitle";
+import { useSearchParams } from "../hooks/useSearchParams";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
-import { splitLowercaseWords } from "../utils";
+import { buildSearchString, splitLowercaseWords } from "../utils";
 
 const INITIAL_VISIBLE_AMOUNT = 10;
 
 export function FriendsPage() {
-    const location = useLocation();
-    const userId = new URLSearchParams(location.search).get("id") || null;
+    const { id: userId = null, section: selectedTab = "all" } =
+        useSearchParams();
+    const history = useHistory();
     const [query, setQuery] = useState("");
     const [friends, setFriends] = useState([]);
     const [visibleAmount, setVisibleAmount] = useState(INITIAL_VISIBLE_AMOUNT);
     const [isLoading, setIsLoading] = useState(true);
-
-    useTitle(`Friends – ${friends.length} friends`);
 
     useState(() => {
         getFriends({ userId })
@@ -42,8 +41,12 @@ export function FriendsPage() {
             .catch(console.error);
     };
 
+    const friendsOnlineCount = friends.filter(
+        (friend) => friend.isOnline
+    ).length;
+
     const queryWords = splitLowercaseWords(query);
-    const matchingFriends = query
+    const matchingQueryFriends = query
         ? friends.filter((friend) =>
               queryWords.every(
                   (word) =>
@@ -52,10 +55,33 @@ export function FriendsPage() {
               )
           )
         : friends;
+    const matchingFriends =
+        selectedTab === "all"
+            ? matchingQueryFriends
+            : matchingQueryFriends.filter((friend) => friend.isOnline);
 
     return (
         <Container className="flex flex-col">
-            <HeaderWithCount title="Friends" count={matchingFriends.length} />
+            <TabsHeader
+                tabs={[
+                    { tab: "all", title: "All friends", count: friends.length },
+                    {
+                        tab: "online",
+                        title: "Friends online",
+                        count: friendsOnlineCount,
+                    },
+                ]}
+                selectedTab={selectedTab}
+                onTabSelected={(tab) =>
+                    history.push({
+                        pathname: "/friends",
+                        search: buildSearchString({
+                            id: userId,
+                            section: tab,
+                        }),
+                    })
+                }
+            />
 
             {isLoading ? (
                 <LoadingPlaceholder />

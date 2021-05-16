@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "../components/Logo";
 import { UserContext } from "../contexts/UserContext";
 import { Input } from "../ui/Input";
+import { buildSearchString } from "../utils";
 import { CircleAvatar } from "./CircleAvatar";
 import { Dropdown } from "./Dropdown";
 
@@ -15,7 +16,10 @@ export function Topbar() {
 
     const handleSearch = (event) => {
         event.preventDefault();
-        history.push(query ? `/users/search?query=${query}` : "/users/search");
+        history.push({
+            pathname: "/users/search",
+            search: buildSearchString({ query }),
+        });
         setQuery("");
     };
 
