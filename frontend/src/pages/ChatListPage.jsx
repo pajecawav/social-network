@@ -26,7 +26,9 @@ function ChatBlock({ chat }) {
             to={`/chats/${chat.chatId}`}
         >
             <div className="flex-shrink-0 w-14">
-                <CircleAvatar />
+                <CircleAvatar
+                    isOnline={chat.chatType === "direct" && chat.peer.isOnline}
+                />
             </div>
 
             <div className="min-w-0">

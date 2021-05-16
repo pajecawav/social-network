@@ -122,7 +122,9 @@ export function UserProfilePage({ userId }) {
                                         key={friend.userId}
                                     >
                                         <div className="flex-shrink-0 w-full">
-                                            <CircleAvatar />
+                                            <CircleAvatar
+                                                isOnline={friend.isOnline}
+                                            />
                                         </div>
                                         <div className="text-center hover:underline">
                                             {friend.firstName}

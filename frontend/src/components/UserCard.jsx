@@ -9,7 +9,7 @@ export function UserCard({ user, className, avatarClassName, children }) {
                 className={clsx(avatarClassName || "flex-shrink-0 w-16")}
                 to={`/users/${user.userId}`}
             >
-                <CircleAvatar />
+                <CircleAvatar isOnline={user.isOnline} />
             </Link>
             <div className="ml-4 h-auto">
                 <Link
