@@ -1,6 +1,14 @@
 from typing import Optional
 
-from fastapi import APIRouter, BackgroundTasks, Body, Depends, HTTPException, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Body,
+    Depends,
+    HTTPException,
+    Response,
+    status,
+)
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -81,3 +89,20 @@ def update_message(
     )
 
     return message
+
+
+@router.delete("/{message_id}")
+def delete_message(
+    message_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    message = crud.message.get_or_404(db, message_id)
+    if message.user != current_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Can only delete your own messages.",
+        )
+    crud.message.delete(db, id=message_id)
+
+    return Response()

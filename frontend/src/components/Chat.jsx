@@ -1,12 +1,15 @@
 import dayjs from "dayjs";
-import React, { useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import React from "react";
 import { formatDate } from "../utils";
 import { ChatAction } from "./ChatAction";
 import { ChatMessage } from "./ChatMessage";
 
-export function Chat({ messages = [], activeMessages = [], onEditMessage }) {
-    const { user } = useContext(UserContext);
+export function Chat({
+    messages = [],
+    selectedMessages = [],
+    onSelectMessage,
+    onUnselectMessage,
+}) {
     let previousDate = null;
 
     return messages.map((message, index) => {
@@ -37,9 +40,13 @@ export function Chat({ messages = [], activeMessages = [], onEditMessage }) {
                     <ChatMessage
                         message={message}
                         showUser={shouldShowUser}
-                        onEditMessage={onEditMessage}
-                        isActive={activeMessages.includes(message.messageId)}
-                        isEditable={message.user.userId === user.userId}
+                        onSelect={onSelectMessage}
+                        onUnselect={onUnselectMessage}
+                        isSelected={selectedMessages.includes(
+                            message.messageId
+                        )}
+                        // TODO: disable selection while editing message
+                        isSelectable={true}
                     />
                 )}
             </React.Fragment>

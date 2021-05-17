@@ -31,7 +31,7 @@ class ChatNamespace(AsyncNamespace):
         for chat in chats:
             self.enter_room(sid, f"chat_{chat.chat_id}")
 
-    async def on_message(self, sid, data):
+    async def on_new_message(self, sid, data, *args):
         if "chat_id" not in data or "message" not in data:
             return False
 
@@ -71,7 +71,9 @@ namespace = ChatNamespace("/chat")
 
 async def send_message_to_chat(chat_id: int, message: Dict[str, str]) -> None:
     await namespace.emit(
-        "message", data={"chat_id": chat_id, "message": message}, room=f"chat_{chat_id}"
+        "new_message",
+        data={"chat_id": chat_id, "message": message},
+        room=f"chat_{chat_id}",
     )
 
 

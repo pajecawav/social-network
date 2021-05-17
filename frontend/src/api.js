@@ -116,6 +116,10 @@ export async function sendMessage(data) {
     return axios.post("/api/messages", data);
 }
 
+export async function deleteMessage(messageId) {
+    return axios.delete(`/api/messages/${messageId}`);
+}
+
 export async function editMessage(messageId, { text }) {
     return axios.patch(`/api/messages/${messageId}`, { text });
 }

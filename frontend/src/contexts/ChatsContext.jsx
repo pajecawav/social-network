@@ -17,10 +17,10 @@ export function ChatsProvider({ children }) {
         const sio = getSocket("/chat");
         socket.current = sio;
 
-        sio.on("message", (data) => {
+        sio.on("new_message", (data) => {
             const { message, chatId } = camelizeKeys(data);
-            notifyListeners(chatId, "message", { message, chatId });
-            notifyListeners("*", "message", { message, chatId });
+            notifyListeners(chatId, "new_message", { message, chatId });
+            notifyListeners("*", "new_message", { message, chatId });
         });
 
         sio.on("message_edited", (data) => {
@@ -75,7 +75,7 @@ export function ChatsProvider({ children }) {
             message,
         });
 
-        socket.current?.emit("message", data, cb);
+        socket.current.emit("new_message", data, cb);
     };
 
     return (

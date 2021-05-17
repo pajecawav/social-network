@@ -23,7 +23,7 @@ export function useChat(chatId) {
 
         const handleChatEvent = (event, data) => {
             switch (event) {
-                case "message":
+                case "new_message":
                     setMessages((oldMessages) => [
                         ...oldMessages,
                         data.message,
