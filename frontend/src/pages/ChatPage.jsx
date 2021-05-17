@@ -8,6 +8,7 @@ import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
 import { InviteToChatModal } from "../components/InviteToChatModal";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { MessagesActionsBlock } from "../components/MessagesActionsBlock";
+import { SendMessageBlock } from "../components/SendMessageBlock";
 import { useChat } from "../hooks/useChat";
 
 export function ChatPage({ chatId }) {
