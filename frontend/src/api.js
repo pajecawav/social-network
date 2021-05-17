@@ -120,6 +120,10 @@ export async function deleteMessage(messageId) {
     return axios.delete(`/api/messages/${messageId}`);
 }
 
+export async function deleteMessages(messageIds) {
+    return axios.delete("/api/messages", { data: { messageIds } });
+}
+
 export async function editMessage(messageId, { text }) {
     return axios.patch(`/api/messages/${messageId}`, { text });
 }

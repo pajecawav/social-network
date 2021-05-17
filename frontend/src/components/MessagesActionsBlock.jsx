@@ -39,8 +39,6 @@ export function MessagesActionsBlock({
                 <Button
                     className="w-max disabled:bg-primary-700"
                     size="thin"
-                    // TODO: remove this after adding an API endpoint for deleting multiple messages
-                    disabled={selectedMessages.length > 1}
                     onClick={onDeleteSelectedMessages}
                 >
                     Delete

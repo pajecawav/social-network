@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Set
 
 from fastapi import (
     APIRouter,
@@ -104,5 +104,38 @@ def delete_message(
             detail="Can only delete your own messages.",
         )
     crud.message.delete(db, id=message_id)
+
+    return Response()
+
+
+@router.delete("")
+def delete_messages(
+    message_ids: Set[int] = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    messages = (
+        db.query(models.Message)
+        .filter(models.Message.message_id.in_(message_ids))
+        .all()
+    )
+    if len(messages) != len(message_ids):
+        # TODO: better error message
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Some messages were not found.",
+        )
+
+    for message in messages:
+        if message.user != current_user:
+            # TODO: better error message
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Can only delete your own messages.",
+            )
+
+    for message in messages:
+        db.delete(message)
+    db.commit()
 
     return Response()

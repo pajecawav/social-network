@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { deleteMessage, editMessage } from "../api";
+import { deleteMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
 import { Container } from "../components/Container";
@@ -32,10 +32,7 @@ export function ChatPage({ chatId }) {
 
     const handleDeleteSelectedMessages = () => {
         if (selectedMessages.length === 0) return;
-        // TODO: remove the for loop
-        for (let messageId of selectedMessages) {
-            deleteMessage(messageId);
-        }
+        deleteMessages(selectedMessages);
     };
 
     return (
