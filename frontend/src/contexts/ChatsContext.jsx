@@ -35,6 +35,12 @@ export function ChatsProvider({ children }) {
             newChatListeners.current.forEach((listener) => listener(chat));
         });
 
+        sio.on("messages_deleted", (data) => {
+            const { chatId, messageIds } = camelizeKeys(data);
+            notifyListeners(chatId, "messages_deleted", messageIds);
+            notifyListeners("*", "messages_deleted", messageIds);
+        });
+
         return () => sio.disconnect();
     }, []);
 

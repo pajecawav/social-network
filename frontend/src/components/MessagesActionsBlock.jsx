@@ -1,5 +1,6 @@
 import { XIcon } from "@heroicons/react/outline";
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 import { Button } from "../ui/Button";
 
 export function MessagesActionsBlock({
@@ -8,6 +9,12 @@ export function MessagesActionsBlock({
     onEditMessage,
     onDeleteSelectedMessages,
 }) {
+    const { user } = useContext(UserContext);
+
+    const onlyMyMessagesSelected =
+        selectedMessages.findIndex((msg) => msg.user.userId !== user.userId) ===
+        -1;
+
     return (
         <div className="flex flex-col gap-2">
             <div className="flex text-primary-400">
@@ -23,7 +30,9 @@ export function MessagesActionsBlock({
                 <Button
                     className="w-max disabled:bg-primary-700"
                     size="thin"
-                    disabled={selectedMessages.length > 1}
+                    disabled={
+                        selectedMessages.length > 1 || !onlyMyMessagesSelected
+                    }
                     onClick={() => onEditMessage(selectedMessages[0])}
                 >
                     Edit
@@ -39,6 +48,7 @@ export function MessagesActionsBlock({
                 <Button
                     className="w-max disabled:bg-primary-700"
                     size="thin"
+                    disabled={!onlyMyMessagesSelected}
                     onClick={onDeleteSelectedMessages}
                 >
                     Delete

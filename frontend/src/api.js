@@ -112,16 +112,18 @@ export async function getChatMessages(chatId) {
     return axios.get(`/api/chats/${chatId}/messages`);
 }
 
+export async function deleteChatMessages(chatId, data) {
+    return axios.delete(`/api/chats/${chatId}/messages`, {
+        data: data,
+    });
+}
+
 export async function sendMessage(data) {
     return axios.post("/api/messages", data);
 }
 
 export async function deleteMessage(messageId) {
     return axios.delete(`/api/messages/${messageId}`);
-}
-
-export async function deleteMessages(messageIds) {
-    return axios.delete("/api/messages", { data: { messageIds } });
 }
 
 export async function editMessage(messageId, { text }) {

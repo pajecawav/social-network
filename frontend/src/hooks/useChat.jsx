@@ -40,6 +40,15 @@ export function useChat(chatId) {
                     );
                     break;
                 }
+                case "messages_deleted": {
+                    const messageIds = data;
+                    setMessages((oldMessages) =>
+                        oldMessages.filter(
+                            (message) => !messageIds.includes(message.messageId)
+                        )
+                    );
+                    break;
+                }
                 default:
                     throw new Error("Unknown chat event");
             }

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Set, Union
 
 from fastapi import APIRouter, BackgroundTasks, Body, Depends, Response
 from fastapi.encoders import jsonable_encoder
@@ -9,7 +9,11 @@ from starlette import status
 from app import crud, models, schemas
 from app.api.dependencies import get_current_user, get_db
 from app.schemas.chat import ChatTypeEnum
-from app.sockets.namespaces.chat import notify_user_new_chat, send_message_to_chat
+from app.sockets.namespaces.chat import (
+    notify_messages_deleted,
+    notify_user_new_chat,
+    send_message_to_chat,
+)
 
 router = APIRouter()
 
@@ -261,3 +265,47 @@ def get_chat_messages(
         )
 
     return chat.messages.order_by(models.Message.message_id).all()
+
+
+@router.delete("/{chat_id}/messages")
+def delete_chat_messages(
+    background_tasks: BackgroundTasks,
+    chat_id: int,
+    message_ids: Set[int] = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    chat = crud.chat.get_or_404(db, chat_id)
+    messages = chat.messages.filter(models.Message.message_id.in_(message_ids)).all()
+    if len(messages) != len(message_ids):
+        # TODO: better error message
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Some messages were not found.",
+        )
+
+    for message in messages:
+        if message.user != current_user:
+            # TODO: better error message
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Can only delete your own messages.",
+            )
+
+    if chat.last_message in messages:
+        new_last_message = (
+            chat.messages.filter(~models.Message.message_id.in_(message_ids))
+            .order_by(models.Message.message_id.desc())
+            .first()
+        )
+        chat.last_message = new_last_message
+        db.add(chat)
+
+    # TODO: there is a problem when deleting the last message
+    for message in messages:
+        db.delete(message)
+    db.commit()
+
+    background_tasks.add_task(notify_messages_deleted, chat.chat_id, list(message_ids))
+
+    return Response()

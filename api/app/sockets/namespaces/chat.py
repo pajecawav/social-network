@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
@@ -81,6 +81,14 @@ async def notify_message_edited(chat_id: int, message: Dict[str, str]) -> None:
     await namespace.emit(
         "message_edited",
         data={"chat_id": chat_id, "message": message},
+        room=f"chat_{chat_id}",
+    )
+
+
+async def notify_messages_deleted(chat_id: int, message_ids: List[int]) -> None:
+    await namespace.emit(
+        "messages_deleted",
+        data={"chat_id": chat_id, "message_ids": message_ids},
         room=f"chat_{chat_id}",
     )
 

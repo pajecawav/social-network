@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { deleteMessages, editMessage } from "../api";
+import { deleteChatMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
 import { Container } from "../components/Container";
@@ -32,7 +32,11 @@ export function ChatPage({ chatId }) {
 
     const handleDeleteSelectedMessages = () => {
         if (selectedMessages.length === 0) return;
-        deleteMessages(selectedMessages);
+        deleteChatMessages(chatId, {
+            messageIds: selectedMessages.map((msg) => msg.messageId),
+        })
+            .then(() => setSelectedMessages([]))
+            .catch(console.error);
     };
 
     return (
@@ -54,43 +58,47 @@ export function ChatPage({ chatId }) {
                             messages={messages}
                             selectedMessages={
                                 editingMessage
-                                    ? [editingMessage.messageId]
+                                    ? [editingMessage]
                                     : selectedMessages
                             }
                             onSelectMessage={(message) => {
                                 if (
-                                    selectedMessages.includes(message.messageId)
+                                    selectedMessages.findIndex(
+                                        (msg) =>
+                                            msg.messageId === message.messageId
+                                    ) !== -1
                                 ) {
                                     return;
                                 }
                                 setSelectedMessages([
                                     ...selectedMessages,
-                                    message.messageId,
+                                    message,
                                 ]);
                             }}
                             onUnselectMessage={(message) => {
                                 setSelectedMessages(
                                     selectedMessages.filter(
-                                        (messageId) =>
-                                            messageId !== message.messageId
+                                        (msg) =>
+                                            msg.messageId !== message.messageId
                                     )
                                 );
                             }}
                         />
 
-                        <div className="flex flex-col px-4 py-4 gap-2 border-t border-primary-600">
+                        <div className="flex flex-col gap-2 px-4 py-4 border-t border-primary-600">
                             {selectedMessages.length > 0 ? (
                                 <MessagesActionsBlock
                                     selectedMessages={selectedMessages}
                                     onUnselectAll={() =>
                                         setSelectedMessages([])
                                     }
-                                    onEditMessage={(messageId) => {
+                                    onEditMessage={(message) => {
                                         setSelectedMessages([]);
                                         setEditingMessage(
                                             messages.find(
                                                 (msg) =>
-                                                    msg.messageId === messageId
+                                                    msg.messageId ===
+                                                    message.messageId
                                             )
                                         );
                                     }}

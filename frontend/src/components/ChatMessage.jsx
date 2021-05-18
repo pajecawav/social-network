@@ -1,4 +1,3 @@
-import { PencilIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
@@ -60,7 +59,7 @@ export function ChatMessage({
                     <span>{message.text}</span>
                     {message.timeEdited && (
                         <span
-                            className="text-primary-500 ml-1"
+                            className="ml-1 text-primary-500"
                             title={`edited ${formatLastEdited(
                                 message.timeEdited
                             )}`}
@@ -71,10 +70,10 @@ export function ChatMessage({
                 </div>
             </div>
 
-            {/* <div className="flex w-6 h-8 items-center justify-items-center self-start float-right transition-opacity duration-200 opacity-0 group-hover:opacity-100"> */}
+            {/* <div className="flex items-center self-start float-right w-6 h-8 transition-opacity duration-200 opacity-0 justify-items-center group-hover:opacity-100"> */}
             {/*     {isEditable && ( */}
             {/*         <button */}
-            {/*             className="w-4 cursor-pointer text-primary-500 hover:text-primary-400 transition-colors duration-100" */}
+            {/*             className="w-4 transition-colors duration-100 cursor-pointer text-primary-500 hover:text-primary-400" */}
             {/*             title="Edit" */}
             {/*             onClick={() => onSelectMessage(message)} */}
             {/*         > */}

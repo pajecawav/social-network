@@ -77,9 +77,13 @@ export function Chat({
                                     showUser={shouldShowUser}
                                     onSelect={onSelectMessage}
                                     onUnselect={onUnselectMessage}
-                                    isSelected={selectedMessages.includes(
-                                        message.messageId
-                                    )}
+                                    isSelected={
+                                        selectedMessages.findIndex(
+                                            (msg) =>
+                                                msg.messageId ===
+                                                message.messageId
+                                        ) !== -1
+                                    }
                                     // TODO: disable selection while editing message
                                     isSelectable={true}
                                 />
