@@ -1,8 +1,9 @@
 from typing import List, Set, Union
 
-from fastapi import APIRouter, BackgroundTasks, Body, Depends, Response
+from fastapi import APIRouter, BackgroundTasks, Body, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -112,7 +113,7 @@ def get_chat(
 #         )
 
 #     crud.chat.delete(db, id=chat_id)
-#     return Response()
+#     return JSONResponse()
 
 
 @router.get("/{chat_id}/users", response_model=List[schemas.User])
@@ -189,7 +190,7 @@ def add_chat_user(
         jsonable_encoder(schemas.GroupChat.from_orm(chat)),
     )
 
-    return Response()
+    return JSONResponse()
 
 
 @router.delete("/{chat_id}/users", response_model=List[schemas.User])
@@ -219,7 +220,7 @@ def remove_chat_user(
     if chat.admin == user:
         if chat.users.count() == 0:
             crud.group_chat.delete(db, id=chat.chat_id)
-            return Response()
+            return JSONResponse()
 
         chat.admin = chat.users.first()
         db.add(chat)
@@ -247,7 +248,7 @@ def remove_chat_user(
         jsonable_encoder(schemas.Message.from_orm(message)),
     )
 
-    return Response()
+    return JSONResponse()
 
 
 @router.get("/{chat_id}/messages", response_model=List[schemas.Message])
@@ -308,4 +309,4 @@ def delete_chat_messages(
 
     background_tasks.add_task(notify_messages_deleted, chat.chat_id, list(message_ids))
 
-    return Response()
+    return JSONResponse()

@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Optional
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -117,4 +118,4 @@ def delete_friend(
 
     crud.user.remove_friend(db, user=other_user, friend=current_user)
 
-    return Response(status_code=status.HTTP_200_OK)
+    return JSONResponse()
