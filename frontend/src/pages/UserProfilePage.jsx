@@ -41,7 +41,21 @@ function ImageBlock({ user, isMe, className }) {
 
     return (
         <Container className={clsx("flex flex-col gap-4 p-4", className)}>
-            <Avatar />
+            <div className="relative">
+                <Avatar />
+                {/* TODO: hide controls if user already has profile picture */}
+                <div className="absolute text-primary-400 text-center w-full bottom-[7%]">
+                    Upload a profile image
+                </div>
+                <input
+                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    onChange={(event) =>
+                        console.log("Selected", event.target.value)
+                    }
+                />
+            </div>
             {isMe && (
                 <Button size="thin" onClick={navigateEditProfilePage}>
                     Edit
@@ -100,8 +114,8 @@ export function UserProfilePage({ userId }) {
     return user === null ? (
         <LoadingPlaceholder className="h-full min-h-96" />
     ) : (
-        <div className="flex flex-grow gap-4 flex-col md:flex-row">
-            <div className="flex flex-col flex-shrink-0 gap-4 order-2 w-full md:order-1 md:w-60">
+        <div className="flex flex-col flex-grow gap-4 md:flex-row">
+            <div className="flex flex-col flex-shrink-0 order-2 w-full gap-4 md:order-1 md:w-60">
                 <ImageBlock user={user} isMe={isMe} />
                 <Container className="p-4">
                     <Link className="flex" to={`/friends?id=${user.userId}`}>
@@ -114,7 +128,7 @@ export function UserProfilePage({ userId }) {
                         <LoadingPlaceholder className="w-full h-full min-h-40" />
                     ) : (
                         friends.length > 0 && (
-                            <div className="grid grid-cols-3 gap-y-2 gap-x-6 mt-4">
+                            <div className="grid grid-cols-3 mt-4 gap-y-2 gap-x-6">
                                 {friends.map((friend) => (
                                     <Link
                                         className="flex flex-col items-center gap-2"
