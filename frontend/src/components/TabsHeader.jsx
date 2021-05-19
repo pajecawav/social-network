@@ -54,7 +54,7 @@ function DropdownTabs({ tabs, selectedTab: selectedTabId, onTabSelected }) {
                 <ChevronDownIcon className="w-4 text-secondary-500" />
             </div>
             <Dropdown
-                className="py-2 mt-1 text-xl border-2 rounded-md shadow-md bg-primary-700 border-primary-600"
+                className="py-2 mt-1 text-xl border-2 rounded-md shadow-md w-max bg-primary-700 border-primary-600"
                 isOpen={isOpen}
                 onRequestClose={() => setIsOpen(false)}
             >
