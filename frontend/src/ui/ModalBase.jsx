@@ -36,10 +36,10 @@ export function ModalBase({ title, children, bodyClassName, style, ...props }) {
             closeTimeoutMS={50}
             ariaHideApp={false}
         >
-            <div className="flex items-center px-5 py-2 text-primary-200 bg-primary-800 border-b-2 border-primary-700">
+            <div className="flex items-center px-5 py-2 border-b-2 text-primary-200 bg-primary-800 border-primary-700">
                 <div className="text-lg font-medium">{title}</div>
                 <XIcon
-                    className="h-6 w-6 ml-auto cursor-pointer duration-200 text-primary-300 hover:text-primary-100"
+                    className="w-6 h-6 ml-auto duration-200 cursor-pointer text-primary-300 hover:text-secondary-500"
                     onClick={() => props?.onRequestClose?.()}
                 />
             </div>

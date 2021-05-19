@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { deleteChatMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
 import { Container } from "../components/Container";
 import { EditMessageBlock } from "../components/EditMessageBlock";
 import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
+import { InviteLinkModal } from "../components/InviteLinkModal";
 import { InviteToChatModal } from "../components/InviteToChatModal";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { MessagesActionsBlock } from "../components/MessagesActionsBlock";
 import { SendMessageBlock } from "../components/SendMessageBlock";
+import { UserContext } from "../contexts/UserContext";
 import { useChat } from "../hooks/useChat";
 
 export function ChatPage({ chatId }) {
+    const { user } = useContext(UserContext);
     const { isLoading, chat, messages, sendSocketMessage } = useChat(chatId);
     const [selectedMessages, setSelectedMessages] = useState([]);
     const [editingMessage, setEditingMessage] = useState(null);
     const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
+    const [isInviteLinkOpen, setIsInviteLinkOpen] = useState(false);
+
+    const isAdmin = !isLoading && user.userId === chat.admin.userId;
 
     const handleSendMessage = (text) => {
         if (text) {
@@ -52,6 +58,7 @@ export function ChatPage({ chatId }) {
                             onOpenInviteToChat={() =>
                                 setIsInviteToChatOpen(true)
                             }
+                            onOpenInviteLink={() => setIsInviteLinkOpen(true)}
                         />
                         <Chat
                             isLoading={isLoading}
@@ -135,6 +142,15 @@ export function ChatPage({ chatId }) {
                                     setIsInviteToChatOpen(false)
                                 }
                             />
+                            {isAdmin && (
+                                <InviteLinkModal
+                                    chat={chat}
+                                    isOpen={isInviteLinkOpen}
+                                    onRequestClose={() =>
+                                        setIsInviteLinkOpen(false)
+                                    }
+                                />
+                            )}
                         </>
                     )}
                 </>

@@ -5,7 +5,12 @@ import { getChatTitle } from "../utils";
 import { ChatActionsDropdown } from "./ChatActionsDropdown";
 import { CircleAvatar } from "./CircleAvatar";
 
-export function ChatHeader({ chat, onOpenChatInfo, onOpenInviteToChat }) {
+export function ChatHeader({
+    chat,
+    onOpenChatInfo,
+    onOpenInviteToChat,
+    onOpenInviteLink,
+}) {
     const isGroupChat = chat.chatType === "group";
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -15,7 +20,7 @@ export function ChatHeader({ chat, onOpenChatInfo, onOpenInviteToChat }) {
     };
 
     const avatar = (
-        <div className="cursor-pointer flex-shrink-0 w-8">
+        <div className="flex-shrink-0 w-8 cursor-pointer">
             <CircleAvatar />
         </div>
     );
@@ -23,20 +28,20 @@ export function ChatHeader({ chat, onOpenChatInfo, onOpenInviteToChat }) {
     return (
         <div className="flex items-center h-12 border-b border-primary-700">
             <Link
-                className="flex w-20 items-center px-4 h-full py-2 text-primary-200 text-center transition-all duration-200 hover:bg-primary-700"
+                className="flex items-center w-20 h-full px-4 py-2 text-center transition-all duration-200 text-primary-200 hover:bg-primary-700"
                 to="/chats"
             >
                 Back
             </Link>
 
-            <div className="flex-grow text-semibold text-center">
+            <div className="flex-grow text-center text-semibold">
                 {getChatTitle(chat)}
             </div>
 
             <div className="flex items-center gap-3 mr-4">
                 <div className="relative">
                     <DotsHorizontalIcon
-                        className="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-secondary-500"
+                        className="w-6 h-6 transition-colors duration-200 cursor-pointer hover:text-secondary-500"
                         onClick={() => {
                             if (!isDropdownOpen) {
                                 setIsDropdownOpen(true);
@@ -49,6 +54,7 @@ export function ChatHeader({ chat, onOpenChatInfo, onOpenInviteToChat }) {
                         isOpen={isDropdownOpen}
                         onRequestClose={() => setIsDropdownOpen(false)}
                         onOpenInviteToChat={onOpenInviteToChat}
+                        onOpenInviteLink={onOpenInviteLink}
                     />
                 </div>
 

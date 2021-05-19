@@ -57,6 +57,7 @@ class GroupChat(Chat):
     chat_id = Column(Integer, ForeignKey("chats.chat_id"), primary_key=True)
 
     title = Column(String, nullable=False)
+    invite_code = Column(String, nullable=True)
 
     admin_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     admin = relationship("User", foreign_keys=[admin_id])

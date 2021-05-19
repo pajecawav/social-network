@@ -3,21 +3,26 @@ import { getChat, getChatMessages } from "../api";
 import { ChatsContext } from "../contexts/ChatsContext";
 
 export function useChat(chatId) {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isChatLoading, setIsChatLoading] = useState(true);
+    const [isMessagesLoading, setIsMessagesLoading] = useState(true);
     const [chat, setChat] = useState(null);
     const [messages, setMessages] = useState(null);
     const { subscribeToChat, unsubscribeFromChat, sendSocketMessage } =
         useContext(ChatsContext);
 
     useEffect(() => {
-        setIsLoading(true);
+        setIsChatLoading(true);
+        setIsMessagesLoading(true);
         getChat(chatId)
-            .then((response) => setChat(response.data))
+            .then((response) => {
+                setChat(response.data);
+                setIsChatLoading(false);
+            })
             .catch(console.error);
         getChatMessages(chatId)
             .then((response) => {
                 setMessages(response.data);
-                setIsLoading(false);
+                setIsMessagesLoading(false);
             })
             .catch(console.error);
 
@@ -58,5 +63,10 @@ export function useChat(chatId) {
         return () => unsubscribeFromChat(chatId, handleChatEvent);
     }, [chatId, subscribeToChat, unsubscribeFromChat]);
 
-    return { isLoading, chat, messages, sendSocketMessage };
+    return {
+        isLoading: isChatLoading || isMessagesLoading,
+        chat,
+        messages,
+        sendSocketMessage,
+    };
 }

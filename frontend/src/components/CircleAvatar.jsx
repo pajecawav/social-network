@@ -20,7 +20,7 @@ export function CircleAvatar({ src, isOnline = null, ...props }) {
                 </div>
             </div>
             {isOnline && (
-                <div className="absolute bottom-[5%] right-[5%] flex w-1/5 rounded-full h-1/5 bg-primary-800">
+                <div className="absolute bottom-[2%] right-[2%] flex w-1/4 rounded-full h-1/4 bg-primary-800">
                     <div className="w-2/3 m-auto bg-green-500 rounded-full h-2/3" />
                 </div>
             )}

@@ -9,8 +9,7 @@ function UserProfileLink({ user }) {
     );
 }
 
-export function ChatAction({ user, action, className }) {
-    let content;
+function renderActionText(user, action) {
     const fromUser = <UserProfileLink user={user} />;
     const towardsUser = action.towardsUser ? (
         <UserProfileLink user={action.towardsUser} />
@@ -18,32 +17,32 @@ export function ChatAction({ user, action, className }) {
 
     switch (action.chatActionType) {
         case "create":
-            content = <>{fromUser} created chat</>;
-            break;
+            return <>{fromUser} created chat</>;
         case "invite":
-            content = (
+            return (
                 <>
                     {fromUser} invited {towardsUser}
                 </>
             );
-            break;
         case "leave":
-            content = <>{fromUser} left</>;
-            break;
+            return <>{fromUser} left</>;
         case "kick":
-            content = (
+            return (
                 <>
                     {fromUser} kicked {towardsUser}
                 </>
             );
-            break;
+        case "join":
+            return <>{fromUser} joined</>;
         default:
-            throw Error(action.chatActionType);
+            throw new Error(`Unknown action type ${action.chatActionType}`);
     }
+}
 
+export function ChatAction({ user, action, className }) {
     return (
         <div className={clsx("m-auto text-primary-500", className)}>
-            {content}
+            {renderActionText(user, action)}
         </div>
     );
 }

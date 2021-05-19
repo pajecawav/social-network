@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-export function Input({ className, flat = false, ...props }) {
+export function Input({ className, flat = false, children, ...props }) {
     return (
         <input
             className={clsx(

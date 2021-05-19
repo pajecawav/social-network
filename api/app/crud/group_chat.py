@@ -1,3 +1,6 @@
+import random
+import string
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -38,6 +41,12 @@ class CRUDGroupChat(CRUDBase[GroupChat, GroupChatCreate, GroupChatUpdate]):
         db.refresh(chat)
 
         return chat
+
+    @staticmethod
+    def generate_invite_code() -> str:
+        chars = string.ascii_letters + string.digits
+        invite_code = "".join(random.choice(chars) for _ in range(24))
+        return invite_code
 
 
 group_chat = CRUDGroupChat(GroupChat)

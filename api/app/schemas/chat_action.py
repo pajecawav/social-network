@@ -11,6 +11,7 @@ class ChatActionTypeEnum(str, Enum):
     invite = "invite"
     leave = "leave"
     kick = "kick"
+    join = "join"
 
 
 class ChatAction(BaseModel):

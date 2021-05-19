@@ -5,7 +5,9 @@ from .chat import (  # noqa: F401
     DirectChatUpdate,
     GroupChat,
     GroupChatCreate,
+    GroupChatInviteCode,
     GroupChatUpdate,
+    JoinGroupChatOut,
 )
 from .chat_action import ChatAction, ChatActionTypeEnum  # noqa: F401
 from .message import Message, MessageCreate, MessageUpdate  # noqa: F401

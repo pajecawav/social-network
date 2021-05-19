@@ -47,3 +47,11 @@ class GroupChat(Chat):
 
 class GroupChatUpdate(BaseModel):
     title: str = Field(..., min_length=1)
+
+
+class GroupChatInviteCode(BaseModel):
+    invite_code: Optional[str]
+
+
+class JoinGroupChatOut(BaseModel):
+    chat_id: int

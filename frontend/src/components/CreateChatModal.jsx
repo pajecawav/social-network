@@ -20,11 +20,12 @@ export function CreateChatModal(props) {
     };
 
     return (
-        <ModalBase title="Create chat" {...props}>
-            <form
-                className="flex flex-col w-72 gap-4"
-                onSubmit={handleCreateChat}
-            >
+        <ModalBase
+            title="Create chat"
+            {...props}
+            style={{ content: { width: "18rem" } }}
+        >
+            <form className="flex flex-col gap-4" onSubmit={handleCreateChat}>
                 <Input
                     type="text"
                     value={title}

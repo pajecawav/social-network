@@ -112,6 +112,14 @@ export async function getChatMessages(chatId) {
     return axios.get(`/api/chats/${chatId}/messages`);
 }
 
+export async function getChatInviteCode(chatId, params) {
+    return axios.get(`/api/chats/${chatId}/invite_code`, { params });
+}
+
+export async function joinChatByCode(inviteCode) {
+    return axios.post("/api/chats/join", { inviteCode });
+}
+
 export async function deleteChatMessages(chatId, data) {
     return axios.delete(`/api/chats/${chatId}/messages`, {
         data: data,

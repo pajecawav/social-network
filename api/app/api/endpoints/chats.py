@@ -1,6 +1,6 @@
 from typing import List, Set, Union
 
-from fastapi import APIRouter, BackgroundTasks, Body, Depends
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
@@ -268,6 +268,29 @@ def get_chat_messages(
     return chat.messages.order_by(models.Message.message_id).all()
 
 
+@router.get("/{chat_id}/invite_code", response_model=schemas.GroupChatInviteCode)
+def get_group_chat_invite_code(
+    chat_id: int,
+    reset: bool = Query(False),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    chat = crud.group_chat.get_or_404(db, chat_id)
+
+    if current_user != chat.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Don't have permission to view this chat.",
+        )
+
+    if reset:
+        chat.invite_code = crud.group_chat.generate_invite_code()
+        db.add(chat)
+        db.commit()
+
+    return {"invite_code": chat.invite_code}
+
+
 @router.delete("/{chat_id}/messages")
 def delete_chat_messages(
     background_tasks: BackgroundTasks,
@@ -302,7 +325,6 @@ def delete_chat_messages(
         chat.last_message = new_last_message
         db.add(chat)
 
-    # TODO: there is a problem when deleting the last message
     for message in messages:
         db.delete(message)
     db.commit()
@@ -310,3 +332,45 @@ def delete_chat_messages(
     background_tasks.add_task(notify_messages_deleted, chat.chat_id, list(message_ids))
 
     return JSONResponse()
+
+
+@router.post("/join", response_model=schemas.JoinGroupChatOut)
+def join_chat_by_code(
+    background_tasks: BackgroundTasks,
+    invite: schemas.GroupChatInviteCode,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    chat = (
+        db.query(models.GroupChat)
+        .filter(models.GroupChat.invite_code == invite.invite_code)
+        .first()
+    )
+
+    if chat is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invite code doesn't match any chat.",
+        )
+
+    if current_user not in chat.users:
+        crud.group_chat.add_user(db, chat, current_user)
+
+    # TODO: add message with new user and send socket message
+    action = models.ChatAction(chat_action_type=schemas.ChatActionTypeEnum.join)
+    message = crud.message.create(
+        db,
+        schemas.MessageCreate(),
+        user_id=current_user.user_id,
+        chat_id=chat.chat_id,
+        action=action,
+    )
+    crud.chat.set_last_message(db, chat, message)
+
+    background_tasks.add_task(
+        send_message_to_chat,
+        chat.chat_id,
+        jsonable_encoder(schemas.Message.from_orm(message)),
+    )
+
+    return {"chat_id": chat.chat_id}

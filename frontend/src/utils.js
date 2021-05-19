@@ -88,15 +88,22 @@ export const formatLastEdited = (date) => {
 };
 
 export const chatActionToText = (user, action) => {
+    const fromUser = `${user.firstName} ${user.lastName}`;
+    const towardsUser = action.towardsUser
+        ? `${action.towardsUser.firstName} ${action.towardsUser.lastName}`
+        : null;
+
     switch (action.chatActionType) {
         case "create":
-            return `${user.firstName} ${user.lastName} created chat`;
+            return `${fromUser} created chat`;
         case "invite":
-            return `${user.firstName} ${user.lastName} invited ${action.towardsUser.firstName} ${action.towardsUser.lastName}`;
+            return `${fromUser} invited ${towardsUser}`;
         case "leave":
-            return `${user.firstName} ${user.lastName} left`;
+            return `${fromUser} left`;
         case "kick":
-            return `${user.firstName} ${user.lastName} kicked ${action.towardsUser.firstName} ${action.towardsUser.lastName}`;
+            return `${fromUser} kicked ${towardsUser}`;
+        case "join":
+            return `${fromUser} joined`;
         default:
             throw Error(`Unknown chat action type "${action.chatActionType}"`);
     }

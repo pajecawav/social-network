@@ -6,6 +6,7 @@ import { ChatListPage } from "../pages/ChatListPage";
 import { ChatPage } from "../pages/ChatPage";
 import { EditProfilePage } from "../pages/EditProfilePage";
 import { FriendsPage } from "../pages/FriendsPage";
+import { JoinChatPage } from "../pages/JoinChatPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
 import { UsersSearchPage } from "../pages/UsersSearchPage";
 import { NavigationBar } from "./NavigationBar";
@@ -32,6 +33,11 @@ export function ContentRouter() {
                     path="/chats"
                     component={ChatListPage}
                     key="/chats"
+                />,
+                <Route
+                    path="/join/:inviteCode"
+                    component={JoinChatPage}
+                    key="/chats/join"
                 />,
                 <Route
                     path="/chats/:id"
