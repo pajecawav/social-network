@@ -35,7 +35,9 @@ export function ChatMessage({
                         className="flex-shrink-0 w-8"
                         to={`/users/${message.user.userId}`}
                     >
-                        <CircleAvatar />
+                        <CircleAvatar
+                            fileName={message.user.avatar?.fullName}
+                        />
                     </Link>
                 )}
             </div>

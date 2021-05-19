@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, File, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from sqlalchemy import or_
@@ -130,3 +130,25 @@ def update_user_info(
         db, user_info_db=user.user_info, user_info_update=user_info_update
     )
     return updated_user_info
+
+
+@router.post("/{user_id}/avatar", response_model=schemas.Image)
+def upload_user_avatar(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    # TODO: support more image types
+    image = models.Image(ext="jpg")
+    current_user.avatar = image
+
+    db.add(current_user)
+    db.add(image)
+    db.commit()
+    db.refresh(image)
+
+    # TODO: save file in the background
+    with open(f"/storage/{image.full_name}", "wb") as out_file:
+        out_file.write(file.file.read())
+
+    return image

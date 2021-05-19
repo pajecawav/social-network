@@ -22,7 +22,8 @@ export function ChatPage({ chatId }) {
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
     const [isInviteLinkOpen, setIsInviteLinkOpen] = useState(false);
 
-    const isAdmin = !isLoading && user.userId === chat.admin.userId;
+    const isAdmin =
+        !isLoading && chat.admin && user.userId === chat.admin.userId;
 
     const handleSendMessage = (text) => {
         if (text) {

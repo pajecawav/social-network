@@ -17,7 +17,7 @@ export function ChatActionsDropdown({
 }) {
     const { user } = useContext(UserContext);
     const isGroup = chat.chatType === "group";
-    const isAdmin = user.userId === chat.admin.userId;
+    const isAdmin = chat.admin && user.userId === chat.admin.userId;
 
     return (
         <Dropdown

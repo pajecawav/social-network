@@ -32,11 +32,13 @@ export function NavigationBar({ isFullPage = false }) {
                 <>
                     {isFullPage ? (
                         <Link
-                            className="flex p-4 mb-2 gap-4 rounded-lg bg-primary-700"
+                            className="flex gap-4 p-4 mb-2 rounded-lg bg-primary-700"
                             to="/me"
                         >
                             <div className="flex-shrink-0 w-12">
-                                <CircleAvatar />
+                                <CircleAvatar
+                                    fileName={user.avatar?.fullName}
+                                />
                             </div>
                             <div>
                                 <div>
@@ -100,7 +102,7 @@ export function NavigationBar({ isFullPage = false }) {
                     />
                     {isFullPage && (
                         <>
-                            <div className="border-t-2 my-2 border-primary-600" />
+                            <div className="my-2 border-t-2 border-primary-600" />
                             <NavigationLink
                                 to="#"
                                 icon={LogoutIcon}

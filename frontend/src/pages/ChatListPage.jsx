@@ -22,17 +22,18 @@ function ChatBlock({ chat }) {
 
     return (
         <Link
-            className="flex relative group gap-4 px-4 py-3 border-b border-primary-700 transition-colors duration-200 hover:bg-primary-700 "
+            className="relative flex gap-4 px-4 py-3 transition-colors duration-200 border-b group border-primary-700 hover:bg-primary-700 "
             to={`/chats/${chat.chatId}`}
         >
             <div className="flex-shrink-0 w-14">
                 <CircleAvatar
                     isOnline={chat.chatType === "direct" && chat.peer.isOnline}
+                    fileName={chat.peer?.avatar?.fullName}
                 />
             </div>
 
             <div className="min-w-0">
-                <div className="mb-2 text-primary-300 font-medium">
+                <div className="mb-2 font-medium text-primary-300">
                     {getChatTitle(chat)}
                 </div>
                 {lastMessage &&
@@ -45,11 +46,13 @@ function ChatBlock({ chat }) {
                             )}
                         </div>
                     ) : (
-                        <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-2">
                             <div className="flex-shrink-0 w-7">
-                                <CircleAvatar />
+                                <CircleAvatar
+                                    fileName={lastMessage.user.avatar?.fullName}
+                                />
                             </div>
-                            <div className="h-6 text-sm text-primary-300 whitespace-nowrap overflow-ellipsis overflow-hidden">
+                            <div className="h-6 overflow-hidden text-sm text-primary-300 whitespace-nowrap overflow-ellipsis">
                                 {lastMessage.text}
                             </div>
                         </div>
@@ -57,13 +60,13 @@ function ChatBlock({ chat }) {
             </div>
 
             {lastMessage && (
-                <div className="absolute top-3 right-4 text-sm text-primary-500">
+                <div className="absolute text-sm top-3 right-4 text-primary-500">
                     {formatDateOrTime(lastMessage.timeSent)}
                 </div>
             )}
             {/* <div title="Delete"> */}
             {/*     <XIcon */}
-            {/*         className="h-4 w-4 absolute top-3 right-3 hidden group-hover:block cursor-pointer text-primary-400 hover:text-primary-300 transition-colors duration-200" */}
+            {/*         className="absolute hidden w-4 h-4 transition-colors duration-200 cursor-pointer top-3 right-3 group-hover:block text-primary-400 hover:text-primary-300" */}
             {/*         size="thin" */}
             {/*         onClick={handleDelete} */}
             {/*     /> */}
@@ -151,7 +154,7 @@ export function ChatListPage() {
                     </HeaderWithCount>
 
                     <div className="flex flex-col py-4">
-                        <div className="flex pb-4 px-4 border-b border-primary-700">
+                        <div className="flex px-4 pb-4 border-b border-primary-700">
                             <Input
                                 className="flex-grow"
                                 value={search}

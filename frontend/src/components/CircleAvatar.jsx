@@ -1,16 +1,14 @@
 import { AvatarPlaceholder } from "./AvatarPlaceholder";
 
-export function CircleAvatar({ src, isOnline = null, ...props }) {
-    // TODO: use an actual image
+export function CircleAvatar({ fileName, isOnline = null, ...props }) {
     return (
         <div className="relative">
             <div className="overflow-hidden rounded-full aspect-w-1 aspect-h-1">
                 <div>
-                    {src ? (
+                    {fileName ? (
                         <img
                             className="object-cover"
-                            // src="https://upload.wikimedia.org/wikipedia/commons/0/01/LinuxCon_Europe_Linus_Torvalds_03_%28cropped%29.jpg"
-                            src={src}
+                            src={`/storage/${fileName}`}
                             alt={"user avatar"}
                             {...props}
                         />

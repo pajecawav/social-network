@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import backref, relationship
 
 from app.db.database import Base
@@ -19,6 +20,9 @@ class User(Base):
 
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
+    # avatar = relationship("Image"
+    avatar_id = Column(UUID, ForeignKey("images.file_id"), nullable=True)
+    avatar = relationship("Image")
 
     last_seen = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
 

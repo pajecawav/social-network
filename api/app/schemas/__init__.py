@@ -10,6 +10,7 @@ from .chat import (  # noqa: F401
     JoinGroupChatOut,
 )
 from .chat_action import ChatAction, ChatActionTypeEnum  # noqa: F401
+from .file import File, FileTypeEnum, Image  # noqa: F401
 from .message import Message, MessageCreate, MessageUpdate  # noqa: F401
 from .token import Token, TokenPayload  # noqa: F401
 from .user import (  # noqa: F401

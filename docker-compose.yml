@@ -19,6 +19,8 @@ services:
             - db
         env_file:
             - ./.env
+        volumes:
+            - storage:/storage
         environment:
             WAIT_HOSTS: db:5432
 
@@ -26,8 +28,11 @@ services:
         build: ./frontend
         depends_on:
             - api
+        volumes:
+            - storage:/storage
         ports:
             - ${PORT-3000}:80
 
 volumes:
     app-db-data:
+    storage:

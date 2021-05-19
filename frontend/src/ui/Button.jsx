@@ -9,7 +9,7 @@ export function Button({ className, size = "normal", children, ...props }) {
     return (
         <button
             className={clsx(
-                "base-button bg-secondary",
+                "base-button bg-secondary disabled:bg-primary-600",
                 sizeClassnames[size],
                 className
             )}

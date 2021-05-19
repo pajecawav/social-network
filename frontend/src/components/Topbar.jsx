@@ -24,8 +24,8 @@ export function Topbar() {
     };
 
     return (
-        <div className="sticky h-12 top-0 z-50 bg-primary-900 shadow-md border-b-2 border-primary-700">
-            <div className="flex relative h-full items-center px-3 mx-auto w-full max-w-5xl">
+        <div className="sticky top-0 z-50 h-12 border-b-2 shadow-md bg-primary-900 border-primary-700">
+            <div className="relative flex items-center w-full h-full max-w-5xl px-3 mx-auto">
                 <div className="w-48">
                     <Link className="flex w-max" to="/">
                         <Logo />
@@ -45,7 +45,7 @@ export function Topbar() {
 
                 {loggedIn && (
                     <div
-                        className="h-auto flex self-stretch gap-3 items-center px-2 ml-auto transition-colors duration-200 cursor-pointer hover:bg-primary-700"
+                        className="flex items-center self-stretch h-auto gap-3 px-2 ml-auto transition-colors duration-200 cursor-pointer hover:bg-primary-700"
                         onClick={() => {
                             if (!isDropdownOpen) {
                                 setIsDropdownOpen(true);
@@ -54,14 +54,14 @@ export function Topbar() {
                     >
                         <div>{user.firstName}</div>
                         <div className="flex-shrink-0 w-8">
-                            <CircleAvatar />
+                            <CircleAvatar fileName={user.avatar?.fullName} />
                         </div>
                     </div>
                 )}
 
                 {loggedIn && (
                     <Dropdown
-                        className="right-3 top-12 min-w-40 py-2 bg-primary-700 border border-primary-600 shadow-md"
+                        className="py-2 border shadow-md right-3 top-12 min-w-40 bg-primary-700 border-primary-600"
                         isOpen={isDropdownOpen}
                         onRequestClose={() => setIsDropdownOpen(false)}
                     >
@@ -71,7 +71,9 @@ export function Topbar() {
                                 to={`/users/${user.userId}`}
                             >
                                 <div className="flex-shrink-0 w-8">
-                                    <CircleAvatar />
+                                    <CircleAvatar
+                                        fileName={user.avatar?.fullName}
+                                    />
                                 </div>
                                 {user.firstName} {user.lastName}
                             </Link>
@@ -79,7 +81,7 @@ export function Topbar() {
                             <div className="h-px bg-primary-600" />
 
                             <div
-                                className="py-1 px-2 cursor-pointer hover:bg-primary-600"
+                                className="px-2 py-1 cursor-pointer hover:bg-primary-600"
                                 onClick={() => {
                                     setIsDropdownOpen(false);
                                     logout();

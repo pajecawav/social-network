@@ -9,7 +9,11 @@ export function configureAxios() {
     });
 
     axios.interceptors.request.use((config) => {
-        if (!(config.data instanceof URLSearchParams) && config.data) {
+        if (
+            !(config.data instanceof URLSearchParams) &&
+            !(config.data instanceof FormData) &&
+            config.data
+        ) {
             config.data = decamelizeKeys(config.data);
         }
 
@@ -60,6 +64,16 @@ export async function getUserInfo(userId) {
 
 export async function updateUserInfo(userId, data) {
     return axios.patch(`/api/users/${userId}/info`, data);
+}
+
+export async function updateUserAvatar(userId, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    return axios.post(`/api/users/${userId}/avatar`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
 }
 
 export async function getUsers({ cursor, query, limit }) {

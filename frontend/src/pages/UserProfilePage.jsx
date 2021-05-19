@@ -11,6 +11,7 @@ import { UserProfileInfo } from "../components/UserProfileInfo";
 import { UserContext } from "../contexts/UserContext";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
+import { buildSearchString } from "../utils";
 
 function ImageBlock({ user, isMe, className }) {
     const history = useHistory();
@@ -42,19 +43,18 @@ function ImageBlock({ user, isMe, className }) {
     return (
         <Container className={clsx("flex flex-col gap-4 p-4", className)}>
             <div className="relative">
-                <Avatar />
-                {/* TODO: hide controls if user already has profile picture */}
-                <div className="absolute text-primary-400 text-center w-full bottom-[7%]">
-                    Upload a profile image
-                </div>
-                <input
-                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                    type="file"
-                    accept="image/jpeg,image/png"
-                    onChange={(event) =>
-                        console.log("Selected", event.target.value)
-                    }
-                />
+                <Avatar fileName={user.avatar?.fullName} />
+                {!user.avatar && (
+                    <Link
+                        className="absolute text-primary-400 text-center w-full bottom-[7%] hover:underline "
+                        to={{
+                            pathname: "/edit",
+                            search: buildSearchString({ section: "avatar" }),
+                        }}
+                    >
+                        Upload a profile image
+                    </Link>
+                )}
             </div>
             {isMe && (
                 <Button size="thin" onClick={navigateEditProfilePage}>
@@ -137,6 +137,9 @@ export function UserProfilePage({ userId }) {
                                     >
                                         <div className="flex-shrink-0 w-full">
                                             <CircleAvatar
+                                                fileName={
+                                                    friend.avatar?.fullName
+                                                }
                                                 isOnline={friend.isOnline}
                                             />
                                         </div>

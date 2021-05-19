@@ -3,6 +3,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field, PositiveInt
 
+from .file import Image
+
 
 class UserCreate(BaseModel):
     username: str
@@ -16,6 +18,7 @@ class User(BaseModel):
     username: str
     first_name: str
     last_name: str
+    avatar: Optional[Image]
 
     is_online: bool
     last_seen: datetime
