@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { addChatUser, getChatUsers, getFriends } from "../api";
+import { useContext, useEffect, useState } from "react";
+import { addChatUser, getFriends } from "../api";
+import { ChatContext } from "../contexts/ChatContext";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { splitLowercaseWords } from "../utils";
@@ -7,26 +8,20 @@ import { ModalBase } from "./../ui/ModalBase";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 import { UserCard } from "./UserCard";
 
-export function InviteToChatModal({ chat, ...props }) {
+export function InviteToChatModal({ ...props }) {
+    const { chat, users } = useContext(ChatContext);
     const [search, setSearch] = useState("");
 
     const [alreadyInvitedIds, setAlreadyInvitedIds] = useState([]);
-    const [isAlreadyInvitedLoading, setIsAlreadyInvitedLoading] =
-        useState(true);
     const [friends, setFriends] = useState([]);
     const [isFriendsLoading, setIsFriendsLoading] = useState(true);
 
     useEffect(() => {
-        getChatUsers(chat.chatId)
-            .then((response) => {
-                setAlreadyInvitedIds(response.data.map((user) => user.userId));
-                setIsAlreadyInvitedLoading(false);
-            })
-            .catch(console.error);
-    }, [chat.chatId]);
+        setAlreadyInvitedIds(users.map((user) => user.userId));
+    }, [users]);
 
     useEffect(() => {
-        getFriends(chat.chatId)
+        getFriends()
             .then((response) => {
                 setFriends(response.data.friends);
                 setIsFriendsLoading(false);
@@ -48,7 +43,7 @@ export function InviteToChatModal({ chat, ...props }) {
     const canInviteUsers = friends.filter(
         (friend) => !alreadyInvitedIds.includes(friend.userId)
     );
-    const isLoading = isAlreadyInvitedLoading && isFriendsLoading;
+    const isLoading = isFriendsLoading;
 
     const searchWords = splitLowercaseWords(search);
     const matchingUsers = canInviteUsers.filter((user) =>
@@ -75,7 +70,7 @@ export function InviteToChatModal({ chat, ...props }) {
                             placeholder="Search"
                             onChange={(event) => setSearch(event.target.value)}
                         />
-                        <div className="max-h-80 flex flex-col -mr-3 gap-3 overflow-y-scroll">
+                        <div className="flex flex-col gap-3 -mr-3 overflow-y-scroll max-h-80">
                             {matchingUsers.map((user) => (
                                 <UserCard
                                     avatarClassName="w-12"
@@ -83,7 +78,7 @@ export function InviteToChatModal({ chat, ...props }) {
                                     key={user.userId}
                                 >
                                     <Button
-                                        className="ml-auto mr-2 self-center"
+                                        className="self-center ml-auto mr-2"
                                         size="thin"
                                         onClick={() =>
                                             handleInviteUser(user.userId)

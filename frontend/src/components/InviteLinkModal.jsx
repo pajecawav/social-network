@@ -1,11 +1,13 @@
 import { ClipboardCopyIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getChatInviteCode } from "../api";
+import { ChatContext } from "../contexts/ChatContext";
 import { Input } from "../ui/Input";
 import { ModalBase } from "../ui/ModalBase";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
-export function InviteLinkModal({ chat, ...props }) {
+export function InviteLinkModal({ ...props }) {
+    const { chat } = useContext(ChatContext);
     const [isLoading, setIsLoading] = useState(true);
     const [inviteCode, setInviteCode] = useState(null);
 

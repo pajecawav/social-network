@@ -1,18 +1,24 @@
 import { useContext, useEffect, useState } from "react";
-import { getChat, getChatMessages } from "../api";
+import { getChat, getChatMessages, getChatUsers } from "../api";
 import { ChatsContext } from "../contexts/ChatsContext";
 
 export function useChat(chatId) {
     const [isChatLoading, setIsChatLoading] = useState(true);
     const [isMessagesLoading, setIsMessagesLoading] = useState(true);
+    const [isUsersLoading, setIsUsersLoading] = useState(true);
+
     const [chat, setChat] = useState(null);
     const [messages, setMessages] = useState(null);
+    const [users, setUsers] = useState(null);
     const { subscribeToChat, unsubscribeFromChat, sendSocketMessage } =
         useContext(ChatsContext);
 
     useEffect(() => {
         setIsChatLoading(true);
+        setIsUsersLoading(true);
         setIsMessagesLoading(true);
+
+        // TODO: this probably should be a single request
         getChat(chatId)
             .then((response) => {
                 setChat(response.data);
@@ -23,6 +29,12 @@ export function useChat(chatId) {
             .then((response) => {
                 setMessages(response.data);
                 setIsMessagesLoading(false);
+            })
+            .catch(console.error);
+        getChatUsers(chatId)
+            .then((response) => {
+                setUsers(response.data);
+                setIsUsersLoading(false);
             })
             .catch(console.error);
 
@@ -63,10 +75,19 @@ export function useChat(chatId) {
         return () => unsubscribeFromChat(chatId, handleChatEvent);
     }, [chatId, subscribeToChat, unsubscribeFromChat]);
 
+    // TODO: should this function also make an API request?
+    const removeUser = (userId) => {
+        setUsers((oldUsers) =>
+            oldUsers.filter((user) => user.userId !== userId)
+        );
+    };
+
     return {
-        isLoading: isChatLoading || isMessagesLoading,
+        isLoading: isChatLoading || isMessagesLoading || isUsersLoading,
         chat,
         messages,
+        users,
         sendSocketMessage,
+        removeUser,
     };
 }

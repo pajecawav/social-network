@@ -1,16 +1,17 @@
 import { DotsHorizontalIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { ChatContext } from "../contexts/ChatContext";
 import { getChatTitle } from "../utils";
 import { ChatActionsDropdown } from "./ChatActionsDropdown";
 import { CircleAvatar } from "./CircleAvatar";
 
 export function ChatHeader({
-    chat,
     onOpenChatInfo,
     onOpenInviteToChat,
     onOpenInviteLink,
 }) {
+    const { chat } = useContext(ChatContext);
     const isGroupChat = chat.chatType === "group";
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
