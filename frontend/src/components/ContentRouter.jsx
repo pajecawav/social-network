@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Redirect, Route, Switch } from "react-router";
+import { Redirect, Route, Switch, useLocation } from "react-router";
 import { UserContext } from "../contexts/UserContext";
 import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { ChatListPage } from "../pages/ChatListPage";
@@ -14,6 +14,7 @@ import { NavigationBar } from "./NavigationBar";
 export function ContentRouter() {
     const { loggedIn, user } = useContext(UserContext);
     const isSmallScreen = useIsSmallScreen();
+    const location = useLocation();
 
     return (
         <Switch>
@@ -65,7 +66,16 @@ export function ContentRouter() {
                     <UserProfilePage userId={props.match.params.id} />
                 )}
             />
-            <Redirect to="/login" />
+            {loggedIn ? (
+                <Redirect to="/me" />
+            ) : (
+                <Redirect
+                    to={{
+                        pathname: "/login",
+                        state: { next: location.pathname + location.search },
+                    }}
+                />
+            )}
         </Switch>
     );
 }

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { LandingPage } from "../pages/LandingPage";
@@ -10,6 +10,7 @@ import { Topbar } from "./Topbar";
 export function Root() {
     const { loggedIn } = useContext(UserContext);
     const isSmallScreen = useIsSmallScreen();
+    const location = useLocation();
 
     return loggedIn === null ? (
         <div className="flex items-center justify-center w-screen h-screen">
@@ -23,7 +24,11 @@ export function Root() {
                     <Redirect push to={loggedIn ? "/me" : "/login"} />
                 </Route>
                 <Route exact path="/login">
-                    {loggedIn ? <Redirect to="/me" /> : <LandingPage />}
+                    {loggedIn ? (
+                        <Redirect to={location.state?.next || "/me"} />
+                    ) : (
+                        <LandingPage />
+                    )}
                 </Route>
                 <Route component={Layout} />
             </Switch>

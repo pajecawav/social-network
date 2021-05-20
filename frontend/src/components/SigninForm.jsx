@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { useHistory } from "react-router";
 import { logInGetToken } from "../api";
 import { UserContext } from "../contexts/UserContext";
 import { Button } from "../ui/Button";
@@ -11,7 +10,6 @@ export function SigninForm({ username: usernameProp, error: errorProp }) {
     const [username, setUsername] = useState(usernameProp || "");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(errorProp || null);
-    const history = useHistory();
     const { login } = useContext(UserContext);
 
     const handleSubmit = (event) => {
@@ -20,8 +18,7 @@ export function SigninForm({ username: usernameProp, error: errorProp }) {
 
         logInGetToken({ username, password })
             .then((response) => {
-                login(response.data.accessToken, username);
-                history.push("/");
+                login(response.data.accessToken);
             })
             .catch((error) => {
                 setError(error.response.data.detail);
