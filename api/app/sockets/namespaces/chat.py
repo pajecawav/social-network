@@ -11,7 +11,7 @@ from app.sockets.utils import get_db
 
 class ChatNamespace(AsyncNamespace):
     async def on_connect(self, sid, environ, auth):
-        if "token" not in auth:
+        if auth.get("token", None) is None:
             return False
 
         try:
