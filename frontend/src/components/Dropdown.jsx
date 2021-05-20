@@ -1,9 +1,15 @@
 import clsx from "clsx";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const closeTimeoutMS = 100;
 
-export function Dropdown({ isOpen, onRequestClose, className, children }) {
+export function Dropdown({
+    isOpen,
+    onRequestClose,
+    closeOnClick = false,
+    className,
+    children,
+}) {
     const [isClosing, setIsClosing] = useState(false);
     const ref = useRef(null);
 
@@ -13,14 +19,12 @@ export function Dropdown({ isOpen, onRequestClose, className, children }) {
         }
 
         const handler = (event) => {
-            if (ref.current?.contains(event.target)) {
+            if (!closeOnClick && ref.current?.contains(event.target)) {
                 return;
             }
 
             const close = () => {
-                if (onRequestClose) {
-                    onRequestClose();
-                }
+                onRequestClose?.();
                 setIsClosing(false);
             };
             setIsClosing(true);
@@ -29,7 +33,7 @@ export function Dropdown({ isOpen, onRequestClose, className, children }) {
 
         document.body.addEventListener("click", handler);
         return () => document.body.removeEventListener("click", handler);
-    }, [isOpen, onRequestClose]);
+    }, [isOpen, onRequestClose, closeOnClick]);
 
     return (
         <div

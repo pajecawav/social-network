@@ -22,6 +22,7 @@ export function ChatActionsDropdown({
     return (
         <Dropdown
             className="right-0 py-2 border shadow-md w-max top-10 bg-primary-700 border-primary-600"
+            closeOnClick={true}
             {...props}
         >
             <DropdownMenuItem icon={SearchIcon} text="Search messages" />
