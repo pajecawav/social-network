@@ -221,12 +221,10 @@ def remove_chat_user(
         if chat.users.count() == 0:
             crud.group_chat.delete(db, id=chat.chat_id)
             return JSONResponse()
+        else:
+            chat.admin = chat.users.first()
 
-        chat.admin = chat.users.first()
-        db.add(chat)
-        db.commit()
-
-    if current_user == chat.admin:
+    if current_user != user:
         # add chat notification that user left
         action = models.ChatAction(
             chat_action_type=schemas.ChatActionTypeEnum.kick, towards_user=user
@@ -240,7 +238,9 @@ def remove_chat_user(
         chat_id=chat.chat_id,
         action=action,
     )
-    crud.chat.set_last_message(db, chat, message)
+
+    db.add(chat)
+    db.commit()
 
     background_tasks.add_task(
         send_message_to_chat,
