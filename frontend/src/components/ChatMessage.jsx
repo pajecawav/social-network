@@ -8,6 +8,8 @@ export function ChatMessage({
     message,
     showUser = true,
     isSelected = false,
+    isFirstSelected = false,
+    isLastSelected = false,
     isSelectable = true,
     onSelect,
     onUnselect,
@@ -15,9 +17,12 @@ export function ChatMessage({
     return (
         <div
             className={clsx(
-                "flex gap-2 mr-2 px-2 py-1 group",
+                "flex gap-2 mr-2 px-2 py-1 group transition-colors duration-100",
                 isSelectable && "cursor-pointer",
-                isSelected && "bg-primary-600"
+                isSelected && "bg-primary-600",
+                // TODO: probably not the best solution
+                isFirstSelected && "rounded-t-md",
+                isLastSelected && "rounded-b-md"
             )}
             id={`message_${message.messageId}`}
             onClick={() => {
