@@ -15,8 +15,8 @@ export function useChat(chatId) {
 
     useEffect(() => {
         setIsChatLoading(true);
-        setIsUsersLoading(true);
         setIsMessagesLoading(true);
+        setIsUsersLoading(true);
 
         // TODO: this probably should be a single request
         getChat(chatId)
@@ -31,12 +31,17 @@ export function useChat(chatId) {
                 setIsMessagesLoading(false);
             })
             .catch(console.error);
-        getChatUsers(chatId)
-            .then((response) => {
-                setUsers(response.data);
-                setIsUsersLoading(false);
-            })
-            .catch(console.error);
+
+        if (chat.chatType === "group") {
+            getChatUsers(chatId)
+                .then((response) => {
+                    setUsers(response.data);
+                    setIsUsersLoading(false);
+                })
+                .catch(console.error);
+        } else {
+            setIsUsersLoading(false);
+        }
 
         const handleChatEvent = (event, data) => {
             switch (event) {
