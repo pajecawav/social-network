@@ -12,8 +12,8 @@ export function Root() {
     const isSmallScreen = useIsSmallScreen();
 
     return loggedIn === null ? (
-        <div className="flex h-screen w-screen items-center justify-center">
-            <LoadingPlaceholder className="sm:w-32 sm:h-32" scale={6} />
+        <div className="flex items-center justify-center w-screen h-screen">
+            <LoadingPlaceholder className="w-24 h-24 sm:w-32 sm:h-32" />
         </div>
     ) : (
         <>

@@ -15,6 +15,7 @@ import { FormError } from "../ui/FormError";
 import { FormSuccess } from "../ui/FormSuccess";
 import { Input } from "../ui/Input";
 import { SelectInput } from "../ui/SelectInput";
+import { Spinner } from "../ui/Spinner";
 import { buildSearchString } from "../utils";
 
 const GENDER_VALUES = [
@@ -213,16 +214,24 @@ function ProfilePictureTab() {
     const { user } = useContext(UserContext);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
     const history = useHistory();
 
     const handleUpload = () => {
         if (!file) return;
 
         setError(null);
+        setIsUploading(true);
         updateUserAvatar(user.userId, file)
-            .then(() => history.push("/me"))
+            .then(() => {
+                setIsUploading(false);
+                history.push("/me");
+            })
             // TODO: better error handling
-            .catch(console.error);
+            .catch((error) => {
+                setIsUploading(false);
+                console.error(error);
+            });
     };
 
     return (
@@ -234,10 +243,10 @@ function ProfilePictureTab() {
                 <div className="flex flex-col gap-3 px-12 m-auto text-xl text-primary-400">
                     {file ? (
                         <div className="max-w-full text-center">
-                            Selected file{" "}
-                            <span className="text-secondary-500">
+                            <div>Selected file </div>
+                            <div className="break-all text-secondary-500">
                                 {file.name}
-                            </span>
+                            </div>
                         </div>
                     ) : (
                         <>
@@ -266,11 +275,18 @@ function ProfilePictureTab() {
             <div className="flex flex-col items-center gap-4 m-auto">
                 {error && <FormError text={error} />}
                 <Button
-                    className="w-max"
+                    className="relative flex w-max"
                     disabled={file === null || error !== null}
                     onClick={handleUpload}
                 >
-                    Upload
+                    <div className={clsx(isUploading && "text-transparent")}>
+                        Upload
+                    </div>
+                    {isUploading && (
+                        <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full">
+                            <Spinner className="stroke-current h-4/5 text-primary-800" />
+                        </div>
+                    )}
                 </Button>
             </div>
         </div>
