@@ -283,7 +283,7 @@ def get_group_chat_invite_code(
             detail="Don't have permission to view this chat.",
         )
 
-    if reset:
+    if reset or chat.invite_code is None:
         chat.invite_code = crud.group_chat.generate_invite_code()
         db.add(chat)
         db.commit()
