@@ -353,10 +353,12 @@ def join_chat_by_code(
             detail="Invite code doesn't match any chat.",
         )
 
-    if current_user not in chat.users:
-        crud.group_chat.add_user(db, chat, current_user)
+    # do nothing is user already is a chat participant
+    if current_user in chat.users:
+        return {"chat_id": chat.chat_id}
 
-    # TODO: add message with new user and send socket message
+    crud.group_chat.add_user(db, chat, current_user)
+
     action = models.ChatAction(chat_action_type=schemas.ChatActionTypeEnum.join)
     message = crud.message.create(
         db,
