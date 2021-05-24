@@ -39,7 +39,7 @@ export function Topbar() {
                         type="text"
                         placeholder="Search"
                         value={query}
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={setQuery}
                     />
                 </form>
 

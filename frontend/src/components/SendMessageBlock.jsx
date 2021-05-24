@@ -21,9 +21,7 @@ export function SendMessageBlock({ onSubmit }) {
                 type="text"
                 placeholder="Write a message"
                 value={text}
-                onChange={(event) => {
-                    setText(event.target.value);
-                }}
+                onChange={setText}
             />
             {isSmallScreen ? (
                 <button className="w-8 text-secondary-600">

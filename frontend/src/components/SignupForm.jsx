@@ -40,7 +40,7 @@ export function SignupForm({ username: usernameProp }) {
     return (
         <Container className="p-4">
             <form
-                className="flex flex-col gap-4 w-64 max-w-64"
+                className="flex flex-col w-64 gap-4 max-w-64"
                 onSubmit={handleSubmit}
             >
                 <div className="flex flex-col gap-1">
@@ -56,28 +56,28 @@ export function SignupForm({ username: usernameProp }) {
                     placeholder="First Name"
                     value={firstName}
                     required
-                    onChange={(event) => setFirstName(event.target.value)}
+                    onChange={setFirstName}
                 />
                 <Input
                     type="text"
                     placeholder="Last Name"
                     value={lastName}
                     required
-                    onChange={(event) => setLastName(event.target.value)}
+                    onChange={setLastName}
                 />
                 <Input
                     type="text"
                     placeholder="Username"
                     value={username}
                     required
-                    onChange={(event) => setUsername(event.target.value)}
+                    onChange={setUsername}
                 />
                 <Input
                     type="password"
                     placeholder="Password"
                     value={password}
                     required
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={setPassword}
                 />
                 {error && <FormError text={error} />}
                 <Button>Sign Up</Button>

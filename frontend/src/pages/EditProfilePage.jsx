@@ -132,21 +132,15 @@ function UserInfoTab() {
                         value={userInfo.birthdate || ""}
                         min="1900-01-01"
                         max="2020-01-01"
-                        onChange={(event) =>
-                            setUserInfo({
-                                birthdate: event.target.value,
-                            })
-                        }
+                        onChange={(value) => setUserInfo({ birthdate: value })}
                     />
                     <FormField
                         id="relationshipStatus"
                         type="text"
                         label="Relationship:"
                         value={userInfo.relationshipStatus || ""}
-                        onChange={(event) =>
-                            setUserInfo({
-                                relationshipStatus: event.target.value,
-                            })
+                        onChange={(value) =>
+                            setUserInfo({ relationshipStatus: value })
                         }
                     />
                     <FormField
@@ -154,44 +148,28 @@ function UserInfoTab() {
                         type="text"
                         label="Country:"
                         value={userInfo.country || ""}
-                        onChange={(event) =>
-                            setUserInfo({
-                                country: event.target.value,
-                            })
-                        }
+                        onChange={(value) => setUserInfo({ country: value })}
                     />
                     <FormField
                         id="city"
                         type="text"
                         label="City:"
                         value={userInfo.city || ""}
-                        onChange={(event) =>
-                            setUserInfo({
-                                city: event.target.value,
-                            })
-                        }
+                        onChange={(value) => setUserInfo({ city: value })}
                     />
                     <FormField
                         id="website"
                         type="url"
                         label="Website:"
                         value={userInfo.website || ""}
-                        onChange={(event) =>
-                            setUserInfo({
-                                website: event.target.value,
-                            })
-                        }
+                        onChange={(value) => setUserInfo({ website: value })}
                     />
                     <FormField
                         id="email"
                         type="email"
                         label="Email:"
                         value={userInfo.email || ""}
-                        onChange={(event) =>
-                            setUserInfo({
-                                email: event.target.value,
-                            })
-                        }
+                        onChange={(value) => setUserInfo({ email: value })}
                     />
                 </div>
 

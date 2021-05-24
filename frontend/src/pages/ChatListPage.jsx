@@ -159,9 +159,7 @@ export function ChatListPage() {
                                 className="flex-grow"
                                 value={search}
                                 placeholder="Search"
-                                onChange={(event) =>
-                                    setSearch(event.target.value)
-                                }
+                                onChange={setSearch}
                             />
                         </div>
 

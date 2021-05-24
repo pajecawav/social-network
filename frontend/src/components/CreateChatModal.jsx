@@ -7,9 +7,7 @@ import { ModalBase } from "../ui/ModalBase";
 export function CreateChatModal(props) {
     const [title, setTitle] = useState("");
 
-    const handleCreateChat = (event) => {
-        event.preventDefault();
-
+    const handleCreateChat = () => {
         createChat({ title })
             .then((response) => {
                 props?.onChatCreated?.(response.data);
@@ -25,16 +23,17 @@ export function CreateChatModal(props) {
             {...props}
             style={{ content: { width: "18rem" } }}
         >
-            <form className="flex flex-col gap-4" onSubmit={handleCreateChat}>
+            <div className="flex flex-col gap-4">
                 <Input
                     type="text"
                     value={title}
                     placeholder="Title"
                     required
-                    onChange={(event) => setTitle(event.target.value)}
+                    onChange={setTitle}
+                    onEnterPressed={handleCreateChat}
                 />
-                <Button>Create</Button>
-            </form>
+                <Button onClick={handleCreateChat}>Create</Button>
+            </div>
         </ModalBase>
     );
 }

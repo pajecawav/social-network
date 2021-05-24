@@ -43,14 +43,14 @@ export function SidebarForm() {
                 placeholder="Username"
                 value={username}
                 required
-                onChange={(event) => setUsername(event.target.value)}
+                onChange={setUsername}
             />
             <Input
                 type="password"
                 placeholder="Password"
                 value={password}
                 required
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={setPassword}
             />
             <Button size="thin">Sign In</Button>
             <Button size="thin" onClick={navigateLandingPage}>

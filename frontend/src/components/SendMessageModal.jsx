@@ -41,7 +41,7 @@ export function SendMessageModal({
             {...props}
         >
             <form
-                className="flex flex-col w-72 gap-4"
+                className="flex flex-col gap-4 w-72"
                 onSubmit={handleSendMessage}
             >
                 <Input
@@ -50,7 +50,7 @@ export function SendMessageModal({
                     placeholder="Write a message"
                     required
                     autoFocus={autofocus}
-                    onChange={(event) => setText(event.target.value)}
+                    onChange={setText}
                 />
                 <Button>Send</Button>
             </form>

@@ -6,6 +6,7 @@ import { getUsers } from "../api";
 import { Container } from "../components/Container";
 import { HeaderWithCount } from "../components/HeaderWithCount";
 import { UserCard } from "../components/UserCard";
+import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { useSearchParams } from "../hooks/useSearchParams";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
@@ -25,6 +26,8 @@ export function UsersSearchPage() {
     const [nextCursor, setNextCursor] = useState(null);
     const [totalMatches, setTotalMatches] = useState(null);
 
+    const isSmallScreen = useIsSmallScreen();
+
     useTitle(`Search results` + (search ? ` for ${search}` : ""));
 
     useEffect(() => {
@@ -39,8 +42,7 @@ export function UsersSearchPage() {
         setNextCursor(null);
     }, [queryParam]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSearch = () => {
         setSearch(query);
         history.push({
             pathname: "/users/search",
@@ -63,25 +65,25 @@ export function UsersSearchPage() {
         <Container className="flex flex-col">
             <HeaderWithCount title="People" count={totalMatches} />
 
-            <form
-                className="flex gap-4 p-4 border-b-2 border-primary-700"
-                onSubmit={handleSubmit}
-            >
+            <div className="flex gap-4 p-4 border-b-2 border-primary-700">
                 <Input
                     className="flex-grow"
                     type="text"
                     placeholder="Search"
                     value={query || ""}
-                    onChange={(event) => setQuery(event.target.value)}
+                    onChange={setQuery}
+                    onEnterPressed={handleSearch}
                 />
-                <Button>Search</Button>
-            </form>
+                {!isSmallScreen && (
+                    <Button onClick={handleSearch}>Search</Button>
+                )}
+            </div>
 
             <div className="mx-6">
                 {users.length > 0 &&
                     users.map((user) => (
                         <UserCard
-                            className="my-4 pb-4 border-b border-primary-700"
+                            className="pb-4 my-4 border-b border-primary-700"
                             key={user.userId}
                             user={user}
                         />
@@ -101,7 +103,7 @@ export function UsersSearchPage() {
                 )}
 
                 {noResults && (
-                    <div className="flex justify-center items-center h-24 text-primary-400">
+                    <div className="flex items-center justify-center h-24 text-primary-400">
                         Your search returned no results
                     </div>
                 )}

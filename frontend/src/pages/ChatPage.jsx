@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { deleteChatMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
@@ -29,26 +29,29 @@ export function ChatPage({ chatId }) {
     const isAdmin =
         !isLoading && chat.admin && user.userId === chat.admin.userId;
 
-    const handleSendMessage = (text) => {
-        if (text) {
-            sendSocketMessage(chatId, { text });
-        }
-    };
+    const handleSendMessage = useCallback(
+        (text) => {
+            if (text) {
+                sendSocketMessage(chatId, { text });
+            }
+        },
+        [chatId, sendSocketMessage]
+    );
 
-    const handleEditMessage = () => {
+    const handleEditMessage = useCallback(() => {
         editMessage(editingMessage.messageId, editingMessage)
             .then(() => setEditingMessage(null))
             .catch(console.error);
-    };
+    }, [editingMessage]);
 
-    const handleDeleteSelectedMessages = () => {
+    const handleDeleteSelectedMessages = useCallback(() => {
         if (selectedMessages.length === 0) return;
         deleteChatMessages(chatId, {
             messageIds: selectedMessages.map((msg) => msg.messageId),
         })
             .then(() => setSelectedMessages([]))
             .catch(console.error);
-    };
+    }, [chatId, selectedMessages]);
 
     return (
         <ChatContext.Provider value={chatHookValues}>

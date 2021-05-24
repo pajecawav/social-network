@@ -17,7 +17,7 @@ export function ChatMessage({
     return (
         <div
             className={clsx(
-                "flex gap-2 mr-2 px-2 py-1 group transition-colors duration-100",
+                "flex gap-2 mr-2 px-2 py-1 group transition-all duration-100",
                 isSelectable && "cursor-pointer",
                 isSelected && "bg-primary-600",
                 // TODO: probably not the best solution

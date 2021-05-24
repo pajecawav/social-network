@@ -49,7 +49,7 @@ export function UserProfileInfo({ user }) {
                 <LoadingPlaceholder className="h-full min-h-96" />
             ) : (
                 <>
-                    <div className="mb-2 pb-2 border-b-2 border-primary-700">
+                    <div className="pb-2 mb-2 border-b-2 border-primary-700">
                         <div className="flex items-center gap-2">
                             <div className="text-lg font-medium">
                                 {user.firstName} {user.lastName}
@@ -88,7 +88,7 @@ export function UserProfileInfo({ user }) {
                             {isMe && (
                                 <Dropdown
                                     isOpen={isEditStatusOpen}
-                                    className="p-3 shadow-md rounded-md border border-primary-800 bg-primary-600"
+                                    className="p-3 border rounded-md shadow-md border-primary-800 bg-primary-600"
                                     onRequestClose={() => {
                                         setNewStatus("");
                                         setIsEditStatusOpen(false);
@@ -102,9 +102,7 @@ export function UserProfileInfo({ user }) {
                                             className="w-72"
                                             autoFocus={true}
                                             value={newStatus}
-                                            onChange={(event) =>
-                                                setNewStatus(event.target.value)
-                                            }
+                                            onChange={setNewStatus}
                                         />
                                         <Button onClick={handleUpdateStatus}>
                                             Save

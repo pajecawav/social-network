@@ -1,6 +1,13 @@
 import clsx from "clsx";
 
-export function Input({ className, flat = false, children, ...props }) {
+export function Input({
+    className,
+    flat = false,
+    onChange,
+    onEnterPressed = null,
+    children,
+    ...props
+}) {
     return (
         <input
             className={clsx(
@@ -9,6 +16,12 @@ export function Input({ className, flat = false, children, ...props }) {
                 className
             )}
             size={1}
+            onChange={(event) => onChange?.(event.target.value)}
+            onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                    onEnterPressed?.();
+                }
+            }}
             {...props}
         />
     );

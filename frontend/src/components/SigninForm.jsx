@@ -39,14 +39,14 @@ export function SigninForm({ username: usernameProp, error: errorProp }) {
                     placeholder="Username"
                     value={username}
                     required
-                    onChange={(event) => setUsername(event.target.value)}
+                    onChange={setUsername}
                 />
                 <Input
                     type="password"
                     placeholder="Password"
                     value={password}
                     required
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={setPassword}
                 />
                 {error && <FormError text={error} />}
                 <Button>Sign In</Button>

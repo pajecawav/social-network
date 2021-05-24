@@ -17,7 +17,7 @@ export function EditMessageBlock({ message, setMessage, onCancel, onSubmit }) {
             <div className="flex w-full gap-2">
                 <div>Edit</div>
                 <button
-                    className="text-secondary-500 cursor-pointer hover:underline"
+                    className="cursor-pointer text-secondary-500 hover:underline"
                     onClick={() => {
                         document
                             .getElementById(`message_${message.messageId}`)
@@ -26,9 +26,9 @@ export function EditMessageBlock({ message, setMessage, onCancel, onSubmit }) {
                 >
                     message
                 </button>
-                <div className="flex w-8 ml-auto items-center justify-center">
+                <div className="flex items-center justify-center w-8 ml-auto">
                     <XIcon
-                        className="inline w-6 text-primary-500 cursor-pointer transition-colors duration-100 hover:text-primary-400"
+                        className="inline w-6 transition-colors duration-100 cursor-pointer text-primary-500 hover:text-primary-400"
                         onClick={onCancel}
                     />
                 </div>
@@ -39,10 +39,10 @@ export function EditMessageBlock({ message, setMessage, onCancel, onSubmit }) {
                     type="text"
                     placeholder="Write a message"
                     value={message.text}
-                    onChange={(event) => {
+                    onChange={(value) => {
                         setMessage({
                             ...message,
-                            text: event.target.value,
+                            text: value,
                         });
                     }}
                 />

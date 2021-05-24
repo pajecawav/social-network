@@ -68,7 +68,7 @@ export function InviteToChatModal({ ...props }) {
                         <Input
                             className="w-auto"
                             placeholder="Search"
-                            onChange={(event) => setSearch(event.target.value)}
+                            onChange={setSearch}
                         />
                         <div className="flex flex-col gap-3 -mr-3 overflow-y-scroll max-h-80">
                             {matchingUsers.map((user) => (
