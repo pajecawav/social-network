@@ -68,7 +68,7 @@ export function Topbar() {
                         <div className="flex flex-col gap-1 transition-colors duration-200">
                             <Link
                                 className="flex gap-4 p-2 cursor-pointer hover:bg-primary-600"
-                                to={`/users/${user.userId}`}
+                                to="/me"
                             >
                                 <div className="flex-shrink-0 w-8">
                                     <CircleAvatar

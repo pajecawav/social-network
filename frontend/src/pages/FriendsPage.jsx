@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
 import { getFriends, unfriend } from "../api";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { TabsHeader } from "../components/TabsHeader";
@@ -21,6 +22,7 @@ export function FriendsPage() {
     const [friends, setFriends] = useState([]);
     const [visibleAmount, setVisibleAmount] = useState(INITIAL_VISIBLE_AMOUNT);
     const [isLoading, setIsLoading] = useState(true);
+    const [unfriendingUser, setUnfriendingUser] = useState(null);
 
     useState(() => {
         getFriends({ userId })
@@ -31,12 +33,15 @@ export function FriendsPage() {
             .catch(console.error);
     }, [userId]);
 
-    const handleUnfriend = ({ userId }) => {
-        unfriend(userId)
+    const handleUnfriend = () => {
+        unfriend(unfriendingUser.userId)
             .then(() => {
                 setFriends(
-                    friends.filter((friend) => friend.userId !== userId)
+                    friends.filter(
+                        (friend) => friend.userId !== unfriendingUser.userId
+                    )
                 );
+                setUnfriendingUser(null);
             })
             .catch(console.error);
     };
@@ -107,14 +112,14 @@ export function FriendsPage() {
                                 .map((user) => (
                                     <React.Fragment key={user.userId}>
                                         <UserCard
-                                            className="my-4 pb-4 border-b border-primary-700"
+                                            className="pb-4 my-4 border-b border-primary-700"
                                             user={user}
                                         >
                                             <Button
-                                                className="ml-auto h-full hidden sm:block"
+                                                className="hidden h-full ml-auto sm:block"
                                                 size="thin"
                                                 onClick={() =>
-                                                    handleUnfriend(user)
+                                                    setUnfriendingUser(user)
                                                 }
                                             >
                                                 Unfriend
@@ -124,7 +129,7 @@ export function FriendsPage() {
                                 ))}
 
                         {!matchingFriends.length && (
-                            <div className="flex justify-center items-center m-auto my-6 h-20 text-primary-400">
+                            <div className="flex items-center justify-center h-20 m-auto my-6 text-primary-400">
                                 No friends were found
                             </div>
                         )}
@@ -142,6 +147,24 @@ export function FriendsPage() {
                     </div>
                 </>
             )}
+
+            <ConfirmationModal
+                isOpen={unfriendingUser !== null}
+                title="Unfriend user"
+                onConfirm={handleUnfriend}
+                onRequestClose={() => setUnfriendingUser(null)}
+            >
+                {unfriendingUser && (
+                    <div>
+                        Are you sure you want to unfriend{" "}
+                        <span className="font-semibold text-secondary-500">
+                            {unfriendingUser.firstName}{" "}
+                            {unfriendingUser.lastName}
+                        </span>
+                        ?
+                    </div>
+                )}
+            </ConfirmationModal>
         </Container>
     );
 }
