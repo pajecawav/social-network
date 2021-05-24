@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { getMe } from "../api";
 import { getSocket } from "../sockets";
 import { deleteLocalToken, saveLocalToken } from "../utils";
@@ -36,19 +36,19 @@ export function UserProvider({ children }) {
         };
     }, [user]);
 
-    const login = (token) => {
+    const login = useCallback((token) => {
         saveLocalToken(token);
         getMe().then((response) => {
             setUser(response.data);
             setLoggedIn(true);
         });
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         deleteLocalToken();
         setUser(null);
         setLoggedIn(false);
-    };
+    }, []);
 
     return (
         <UserContext.Provider

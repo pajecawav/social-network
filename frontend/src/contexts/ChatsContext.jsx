@@ -1,5 +1,5 @@
 import { camelizeKeys, decamelizeKeys } from "humps";
-import { createContext, useEffect, useRef } from "react";
+import { createContext, useCallback, useEffect, useRef } from "react";
 import { getSocket } from "../sockets";
 
 export const ChatsContext = createContext();
@@ -44,34 +44,34 @@ export function ChatsProvider({ children }) {
         return () => sio.disconnect();
     }, []);
 
-    const subscribeToChat = (chatId, cb) => {
+    const subscribeToChat = useCallback((chatId, cb) => {
         const currentListeners = listeners.current[chatId];
         if (currentListeners) {
             currentListeners.push(cb);
         } else {
             listeners.current[chatId] = [cb];
         }
-    };
+    }, []);
 
-    const unsubscribeFromChat = (chatId, cb) => {
+    const unsubscribeFromChat = useCallback((chatId, cb) => {
         const currentListeners = listeners.current[chatId];
         if (!currentListeners) return;
         listeners.current[chatId] = currentListeners.filter(
             (listener) => listener !== cb
         );
-    };
+    }, []);
 
-    const subscribeToNewChats = (cb) => {
+    const subscribeToNewChats = useCallback((cb) => {
         newChatListeners.current.push(cb);
-    };
+    }, []);
 
-    const unsubscribeFromNewChats = (cb) => {
+    const unsubscribeFromNewChats = useCallback((cb) => {
         newChatListeners.current = newChatListeners.current.filter(
             (listener) => listener !== cb
         );
-    };
+    }, []);
 
-    const sendSocketMessage = (chatId, message, cb) => {
+    const sendSocketMessage = useCallback((chatId, message, cb) => {
         if (socket.current === null) {
             return;
         }
@@ -82,7 +82,7 @@ export function ChatsProvider({ children }) {
         });
 
         socket.current.emit("new_message", data, cb);
-    };
+    }, []);
 
     return (
         <ChatsContext.Provider

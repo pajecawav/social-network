@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { getChat, getChatMessages, getChatUsers } from "../api";
 import { ChatsContext } from "../contexts/ChatsContext";
 
@@ -81,11 +81,11 @@ export function useChat(chatId) {
     }, [chat]);
 
     // TODO: should this function also make an API request?
-    const removeUser = (userId) => {
+    const removeUser = useCallback((userId) => {
         setUsers((oldUsers) =>
             oldUsers.filter((user) => user.userId !== userId)
         );
-    };
+    }, []);
 
     return {
         isLoading: isChatLoading || isMessagesLoading || isUsersLoading,
