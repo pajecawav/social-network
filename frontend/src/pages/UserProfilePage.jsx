@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import { addFriend, getFriends, getUser, unfriend } from "../api";
 import { Avatar } from "../components/Avatar";
 import { CircleAvatar } from "../components/CircleAvatar";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 import { Container } from "../components/Container";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { SendMessageModal } from "../components/SendMessageModal";
@@ -16,15 +17,14 @@ import { buildSearchString } from "../utils";
 function ImageBlock({ user, isMe, className }) {
     const history = useHistory();
     const [isFriend, setIsFriend] = useState(user?.isFriend === true);
-    const [sendMessageModalIsOpen, setSendMessageModalIsOpen] = useState(false);
+    const [isSendMessageModalOpen, setIsSendMessageModalOpen] = useState(false);
+    const [isUnfriendModalOpen, setIsUnfriendModalOpen] = useState(false);
 
     const navigateEditProfilePage = () => {
         history.push("/edit");
     };
 
-    const handleToggleFriend = (event) => {
-        event.preventDefault();
-
+    const handleToggleFriend = () => {
         if (isFriend) {
             unfriend(user.userId)
                 .then(() => {
@@ -66,23 +66,48 @@ function ImageBlock({ user, isMe, className }) {
                 <>
                     <Button
                         size="thin"
-                        onClick={() => setSendMessageModalIsOpen(true)}
+                        onClick={() => setIsSendMessageModalOpen(true)}
                     >
                         Write message
                     </Button>
 
-                    <Button size="thin" onClick={handleToggleFriend}>
+                    <Button
+                        size="thin"
+                        onClick={() => {
+                            if (isFriend) {
+                                setIsUnfriendModalOpen(true);
+                            } else {
+                                handleToggleFriend();
+                            }
+                        }}
+                    >
                         {isFriend === true ? "Unfriend" : "Add friend"}
                     </Button>
                 </>
             )}
 
             <SendMessageModal
-                isOpen={sendMessageModalIsOpen}
+                isOpen={isSendMessageModalOpen}
                 toUserId={user.userId}
-                onRequestClose={() => setSendMessageModalIsOpen(false)}
-                onMessageSent={() => setSendMessageModalIsOpen(false)}
+                onRequestClose={() => setIsSendMessageModalOpen(false)}
+                onMessageSent={() => setIsSendMessageModalOpen(false)}
             />
+            {!isMe && (
+                <ConfirmationModal
+                    isOpen={isFriend && isUnfriendModalOpen}
+                    title="Unfriend user"
+                    onConfirm={handleToggleFriend}
+                    onRequestClose={() => setIsUnfriendModalOpen(false)}
+                >
+                    <div>
+                        Are you sure you want to unfriend{" "}
+                        <span className="font-semibold text-secondary-500">
+                            {user.firstName} {user.lastName}
+                        </span>
+                        ?
+                    </div>
+                </ConfirmationModal>
+            )}
         </Container>
     );
 }

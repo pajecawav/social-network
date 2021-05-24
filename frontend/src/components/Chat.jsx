@@ -89,7 +89,6 @@ export function Chat({
         );
     });
 
-    // TODO: implement better scrolling (scrollbar should be at the right of the page)
     return (
         <div className="relative">
             <div className="flex flex-col pt-4 pr-2 ml-4 overflow-y-auto max-h-80">

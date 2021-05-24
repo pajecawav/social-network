@@ -11,11 +11,11 @@ export function ConfirmationModal({
 }) {
     return (
         <ModalBase title={title} {...props}>
-            <div className="w-96 pb-4 border-b-2 border-primary-700">
+            <div className="max-w-full pb-4 border-b-2 w-96 border-primary-700">
                 {children}
             </div>
 
-            <div className="mt-4 ml-auto w-max flex gap-4">
+            <div className="flex gap-4 mt-4 ml-auto w-max">
                 <Button size="thin" onClick={() => props?.onRequestClose()}>
                     {cancelText}
                 </Button>
