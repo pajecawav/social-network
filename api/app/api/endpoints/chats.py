@@ -238,6 +238,7 @@ def remove_chat_user(
         chat_id=chat.chat_id,
         action=action,
     )
+    crud.chat.set_last_message(db, chat, message)
 
     db.add(chat)
     db.commit()
