@@ -7,7 +7,7 @@ export function CircleAvatar({ fileName, isOnline = null, ...props }) {
                 <div>
                     {fileName ? (
                         <img
-                            className="object-cover h-full"
+                            className="object-cover"
                             src={`/storage/${fileName}`}
                             alt={"user avatar"}
                             {...props}
