@@ -87,7 +87,11 @@ export function TabsHeader({ tabs, selectedTab, onTabSelected, children }) {
 
     return (
         <div className="px-4 py-3 border-b border-primary-700">
-            <Component {...{ tabs, selectedTab, onTabSelected }} />
+            <Component
+                tabs={tabs}
+                selectedTab={selectedTab}
+                onTabSelected={onTabSelected}
+            />
 
             {children}
         </div>
