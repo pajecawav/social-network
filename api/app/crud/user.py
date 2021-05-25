@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models import User, UserInfo, friends_association_table
 from app.schemas import UserCreate, UserUpdate
+from app.schemas.user import FriendStatusEnum
 from app.security import get_password_hash, verify_password
 
 from .base import CRUDBase
@@ -55,16 +56,17 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.add_all([user, friend])
         db.commit()
 
-    def are_friends(self, db: Session, first_user_id: int, second_user_id: int) -> bool:
-        friendship = (
-            db.query(friends_association_table)
-            .filter(
-                friends_association_table.c.first_user_id == first_user_id,
-                friends_association_table.c.second_user_id == second_user_id,
-            )
-            .first()
-        )
-        return friendship is not None
+    def get_friend_status(
+        self, db: Session, user: User, other_user: User
+    ) -> FriendStatusEnum:
+        if other_user in user.friends:
+            return FriendStatusEnum.friend
+        elif other_user in user.incoming_friend_requests:
+            return FriendStatusEnum.request_received
+        elif other_user in user.sent_friend_requests:
+            return FriendStatusEnum.request_sent
+        else:
+            return FriendStatusEnum.not_friend
 
     def update_last_seen(self, db: Session, user: User) -> None:
         user.last_seen = datetime.utcnow()

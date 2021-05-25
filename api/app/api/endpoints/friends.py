@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -70,8 +70,20 @@ def get_friends(
     }
 
 
-@router.post("", response_model=schemas.User)
-def add_friend(
+@router.get("/requests", response_model=List[schemas.User])
+def get_friend_request(
+    incoming: bool = True,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    if incoming:
+        return current_user.incoming_friend_requests.all()
+    else:
+        return current_user.sent_friend_requests.all()
+
+
+@router.post("")
+def send_or_accept_friend_request(
     user_id: int = Body(..., embed=True),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
@@ -84,19 +96,27 @@ def add_friend(
 
     other_user = crud.user.get_or_404(db, user_id)
 
-    existing_friend = other_user.friends.filter(
-        models.User.user_id == current_user.user_id
-    ).first()
-    if existing_friend is not None:
+    if current_user in other_user.friends:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Already friends with this user.",
         )
 
-    crud.user.add_friend(db, user=other_user, friend=current_user)
-    db.refresh(other_user)
+    if other_user in current_user.sent_friend_requests:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Already sent request to this user.",
+        )
 
-    return other_user
+    if other_user in current_user.incoming_friend_requests:
+        current_user.incoming_friend_requests.remove(other_user)
+        crud.user.add_friend(db, user=other_user, friend=current_user)
+        return {"friend_status": "friend"}
+    else:
+        other_user.incoming_friend_requests.append(current_user)
+        db.add(other_user)
+        db.commit()
+        return {"friend_status": "request_sent"}
 
 
 @router.delete("")
@@ -107,15 +127,23 @@ def delete_friend(
 ):
     other_user = crud.user.get_or_404(db, user_id)
 
-    existing_friend = other_user.friends.filter(
-        models.User.user_id == current_user.user_id
-    ).first()
-    if existing_friend is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Not friends with user.",
-        )
+    if other_user in current_user.incoming_friend_requests:
+        current_user.incoming_friend_requests.remove(other_user)
+        db.add(current_user)
+        db.commit()
+        return JSONResponse()
 
-    crud.user.remove_friend(db, user=other_user, friend=current_user)
+    if other_user in current_user.sent_friend_requests:
+        current_user.sent_friend_requests.remove(other_user)
+        db.add(current_user)
+        db.commit()
+        return JSONResponse()
 
-    return JSONResponse()
+    if other_user in current_user.friends:
+        crud.user.remove_friend(db, user=other_user, friend=current_user)
+        return JSONResponse()
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Not friends with user and there is not pending friend request.",
+    )

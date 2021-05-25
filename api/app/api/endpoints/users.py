@@ -76,7 +76,7 @@ def get_user(
     response = jsonable_encoder(schemas.User.from_orm(user))
 
     if current_user is not None and current_user.user_id != user_id:
-        response["is_friend"] = crud.user.are_friends(db, user_id, current_user.user_id)
+        response["friend_status"] = crud.user.get_friend_status(db, current_user, user)
 
     return response
 

@@ -1,5 +1,6 @@
 from .association_tables import (  # noqa: F401
     chat_user_association_table,
+    friend_requests_association_table,
     friends_association_table,
 )
 from .chat import Chat, DirectChat, GroupChat  # noqa: F401

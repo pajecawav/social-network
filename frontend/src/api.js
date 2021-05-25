@@ -88,7 +88,7 @@ export async function getFriends(params) {
     });
 }
 
-export async function addFriend(userId) {
+export async function sendOrAcceptFriendRequest(userId) {
     return axios.post("/api/friends", { userId });
 }
 

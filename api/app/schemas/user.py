@@ -1,9 +1,17 @@
 from datetime import datetime
+from enum import Enum
 from typing import List, Optional
 
 from pydantic import BaseModel, Field, PositiveInt
 
 from .file import Image
+
+
+class FriendStatusEnum(str, Enum):
+    friend = "friend"
+    not_friend = "not_friend"
+    request_sent = "request_sent"
+    request_received = "request_received"
 
 
 class UserCreate(BaseModel):
@@ -23,7 +31,7 @@ class User(BaseModel):
     is_online: bool
     last_seen: datetime
 
-    is_friend: Optional[bool]
+    friend_status: Optional[FriendStatusEnum]
 
     class Config:
         orm_mode = True

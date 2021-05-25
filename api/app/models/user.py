@@ -6,7 +6,11 @@ from sqlalchemy.orm import backref, relationship
 
 from app.db.database import Base
 
-from .association_tables import chat_user_association_table, friends_association_table
+from .association_tables import (
+    chat_user_association_table,
+    friend_requests_association_table,
+    friends_association_table,
+)
 
 USER_IS_OFFLINE_TIMEOUT_SECONDS = 5 * 60  # 5 minutes
 
@@ -35,6 +39,20 @@ class User(Base):
         lazy="dynamic",
         primaryjoin=user_id == friends_association_table.c.first_user_id,
         secondaryjoin=user_id == friends_association_table.c.second_user_id,
+    )
+    sent_friend_requests = relationship(
+        "User",
+        secondary=friend_requests_association_table,
+        lazy="dynamic",
+        primaryjoin=user_id == friend_requests_association_table.c.from_user_id,
+        secondaryjoin=user_id == friend_requests_association_table.c.to_user_id,
+    )
+    incoming_friend_requests = relationship(
+        "User",
+        secondary=friend_requests_association_table,
+        lazy="dynamic",
+        primaryjoin=user_id == friend_requests_association_table.c.to_user_id,
+        secondaryjoin=user_id == friend_requests_association_table.c.from_user_id,
     )
 
     messages = relationship("Message", back_populates="user", lazy="dynamic")

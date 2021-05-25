@@ -1,7 +1,12 @@
 import clsx from "clsx";
 import { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { addFriend, getFriends, getUser, unfriend } from "../api";
+import {
+    getFriends,
+    getUser,
+    sendOrAcceptFriendRequest,
+    unfriend,
+} from "../api";
 import { Avatar } from "../components/Avatar";
 import { CircleAvatar } from "../components/CircleAvatar";
 import { ConfirmationModal } from "../components/ConfirmationModal";
@@ -14,9 +19,15 @@ import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { buildSearchString } from "../utils";
 
-function ImageBlock({ user, isMe, className }) {
+const FRIEND_STATUS_TO_ACTION_TEXT = {
+    friend: "Unfriend",
+    not_friend: "Send request",
+    request_sent: "Request sent",
+    request_received: "Accept request",
+};
+
+function ImageBlock({ user, isMe, onFriendStatusChanged, className }) {
     const history = useHistory();
-    const [isFriend, setIsFriend] = useState(user?.isFriend === true);
     const [isSendMessageModalOpen, setIsSendMessageModalOpen] = useState(false);
     const [isUnfriendModalOpen, setIsUnfriendModalOpen] = useState(false);
 
@@ -24,17 +35,17 @@ function ImageBlock({ user, isMe, className }) {
         history.push("/edit");
     };
 
-    const handleToggleFriend = () => {
-        if (isFriend) {
+    const handleFriendAction = () => {
+        if (user.friendStatus === "friend") {
             unfriend(user.userId)
                 .then(() => {
-                    setIsFriend(false);
+                    onFriendStatusChanged("not_friend");
                 })
                 .catch(console.error);
         } else {
-            addFriend(user.userId)
-                .then(() => {
-                    setIsFriend(true);
+            sendOrAcceptFriendRequest(user.userId)
+                .then((response) => {
+                    onFriendStatusChanged(response.data.friendStatus);
                 })
                 .catch(console.error);
         }
@@ -72,16 +83,11 @@ function ImageBlock({ user, isMe, className }) {
                     </Button>
 
                     <Button
+                        disabled={user.friendStatus === "request_sent"}
                         size="thin"
-                        onClick={() => {
-                            if (isFriend) {
-                                setIsUnfriendModalOpen(true);
-                            } else {
-                                handleToggleFriend();
-                            }
-                        }}
+                        onClick={handleFriendAction}
                     >
-                        {isFriend === true ? "Unfriend" : "Add friend"}
+                        {FRIEND_STATUS_TO_ACTION_TEXT[user.friendStatus]}
                     </Button>
                 </>
             )}
@@ -94,9 +100,11 @@ function ImageBlock({ user, isMe, className }) {
             />
             {!isMe && (
                 <ConfirmationModal
-                    isOpen={isFriend && isUnfriendModalOpen}
+                    isOpen={
+                        user.friendStatus === "friend" && isUnfriendModalOpen
+                    }
                     title="Unfriend user"
-                    onConfirm={handleToggleFriend}
+                    onConfirm={handleFriendAction}
                     onRequestClose={() => setIsUnfriendModalOpen(false)}
                 >
                     <div>
@@ -136,12 +144,20 @@ export function UserProfilePage({ userId }) {
             .catch(console.error);
     }, [userId]);
 
+    const handleFriendStatusChanged = (newFriendStatus) => {
+        setUser({ ...user, friendStatus: newFriendStatus });
+    };
+
     return user === null ? (
         <LoadingPlaceholder className="h-full min-h-96" />
     ) : (
         <div className="flex flex-col flex-grow gap-4 md:flex-row">
             <div className="flex flex-col flex-shrink-0 order-2 w-full gap-4 md:order-1 md:w-60">
-                <ImageBlock user={user} isMe={isMe} />
+                <ImageBlock
+                    user={user}
+                    isMe={isMe}
+                    onFriendStatusChanged={handleFriendStatusChanged}
+                />
                 <Container className="p-4">
                     <Link className="flex" to={`/friends?id=${user.userId}`}>
                         <div>Friends</div>
