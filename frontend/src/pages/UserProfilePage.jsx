@@ -85,7 +85,13 @@ function ImageBlock({ user, isMe, onFriendStatusChanged, className }) {
                     <Button
                         disabled={user.friendStatus === "request_sent"}
                         size="thin"
-                        onClick={handleFriendAction}
+                        onClick={() => {
+                            if (user.friendStatus === "friend") {
+                                setIsUnfriendModalOpen(true);
+                            } else {
+                                handleFriendAction();
+                            }
+                        }}
                     >
                         {FRIEND_STATUS_TO_ACTION_TEXT[user.friendStatus]}
                     </Button>
