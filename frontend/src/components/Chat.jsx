@@ -57,7 +57,9 @@ export function Chat({
 
         const isSelected = isSomeMessageSelected(message.messageId);
         const isFirstSelected =
-            isSelected && !isSomeMessageSelected(previousMessage.messageId);
+            isSelected &&
+            (previousMessage === null ||
+                !isSomeMessageSelected(previousMessage.messageId));
         const isLastSelected =
             isSelected &&
             (nextMessage === null ||
