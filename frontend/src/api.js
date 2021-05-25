@@ -92,6 +92,13 @@ export async function sendOrAcceptFriendRequest(userId) {
     return axios.post("/api/friends", { userId });
 }
 
+export async function getFriendRequests(params) {
+    return axios.get("/api/friends/requests", {
+        params,
+    });
+}
+
+// TODO: better name
 export async function unfriend(userId) {
     return axios.delete("/api/friends", {
         data: { userId },

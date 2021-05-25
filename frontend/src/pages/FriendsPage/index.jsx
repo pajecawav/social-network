@@ -5,6 +5,7 @@ import { TabsHeader } from "../../components/TabsHeader";
 import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
 import { useSearchParams } from "../../hooks/useSearchParams";
 import { buildSearchString } from "../../utils";
+import { FriendRequestsSubpage } from "./FriendRequestsSubpage";
 import { MyFriendsSubpage } from "./MyFriendsSubpage";
 
 // TODO: figure out how to implement counts for tabs in subpages
@@ -21,8 +22,8 @@ const MY_FRIENDS_TABS = [
 ];
 const FRIEND_REQUESTS_TABS = [
     {
-        tab: "requests_received",
-        title: "Received requests",
+        tab: "requests_incoming",
+        title: "Incoming requests",
     },
     {
         tab: "requests_sent",
@@ -35,11 +36,12 @@ const SIDEBAR_TABS = [
         title: "My friends",
     },
     {
-        tab: "requests_received",
+        tab: "requests_incoming",
         title: "Friend requests",
     },
 ];
 
+// TODO: handle invalid section from url params
 export function FriendsPage() {
     const { id: userId = null, section: selectedTab = "all" } =
         useSearchParams();
@@ -47,13 +49,10 @@ export function FriendsPage() {
     const isSmallScreen = useIsSmallScreen();
 
     let subpage;
-    // let
     if (selectedTab === "all" || selectedTab === "online") {
-        subpage = <MyFriendsSubpage filterOnline={selectedTab === "online"} />;
+        subpage = <MyFriendsSubpage />;
     } else {
-        subpage = (
-            <div className="m-auto text-4xl text-bold">NOT IMPLEMENTED</div>
-        );
+        subpage = <FriendRequestsSubpage />;
     }
 
     let tabs;
@@ -66,7 +65,7 @@ export function FriendsPage() {
             tabsBlockSelectedTab = "all";
         } else {
             tabs = FRIEND_REQUESTS_TABS;
-            tabsBlockSelectedTab = "requests_received";
+            tabsBlockSelectedTab = "requests_incoming";
         }
     }
 
