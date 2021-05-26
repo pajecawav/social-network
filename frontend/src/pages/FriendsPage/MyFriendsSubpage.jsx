@@ -70,8 +70,8 @@ export function MyFriendsSubpage() {
                             type="text"
                             placeholder="Search friends"
                             value={query || ""}
-                            onChange={(event) => {
-                                setQuery(event.target.value);
+                            onChange={(value) => {
+                                setQuery(value);
                                 setVisibleAmount(
                                     INITIAL_VISIBLE_FRIENDS_AMOUNT
                                 );
