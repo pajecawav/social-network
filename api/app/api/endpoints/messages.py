@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
 from app.api.dependencies import get_current_user, get_db
-from app.sockets.namespaces.chat import notify_message_edited, send_message_to_chat
+from app.sockets import namespaces
 
 router = APIRouter()
 
@@ -51,7 +51,7 @@ def send_message(
     crud.chat.set_last_message(db, chat, message)
 
     background_tasks.add_task(
-        send_message_to_chat,
+        namespaces.chat.send_message,
         chat.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )
@@ -76,7 +76,7 @@ def update_message(
     message = crud.message.update(db, object_db=message, object_update=message_update)
 
     background_tasks.add_task(
-        notify_message_edited,
+        namespaces.chat.notify_message_edited,
         message.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )

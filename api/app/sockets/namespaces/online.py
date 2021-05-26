@@ -29,4 +29,4 @@ class OnlineNamespace(AsyncNamespace):
             crud.user.update_last_seen(db, user)
 
 
-namespace = OnlineNamespace("/online")
+online = OnlineNamespace("/online")

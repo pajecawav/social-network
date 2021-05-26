@@ -10,11 +10,7 @@ from starlette import status
 from app import crud, models, schemas
 from app.api.dependencies import get_current_user, get_db
 from app.schemas.chat import ChatTypeEnum
-from app.sockets.namespaces.chat import (
-    notify_messages_deleted,
-    notify_user_new_chat,
-    send_message_to_chat,
-)
+from app.sockets import namespaces
 
 router = APIRouter()
 
@@ -39,7 +35,7 @@ def create_chat(
     crud.chat.set_last_message(db, chat, message)
 
     background_tasks.add_task(
-        notify_user_new_chat,
+        namespaces.chat.notify_user_new_chat,
         current_user.user_id,
         jsonable_encoder(schemas.GroupChat.from_orm(chat)),
     )
@@ -179,13 +175,13 @@ def add_chat_user(
     crud.chat.set_last_message(db, chat, message)
 
     background_tasks.add_task(
-        send_message_to_chat,
+        namespaces.chat.notify_new_message,
         chat.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )
 
     background_tasks.add_task(
-        notify_user_new_chat,
+        namespaces.chat.notify_user_new_chat,
         user_id,
         jsonable_encoder(schemas.GroupChat.from_orm(chat)),
     )
@@ -244,7 +240,7 @@ def remove_chat_user(
     db.commit()
 
     background_tasks.add_task(
-        send_message_to_chat,
+        namespaces.chat.notify_new_message,
         chat.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )
@@ -330,7 +326,9 @@ def delete_chat_messages(
         db.delete(message)
     db.commit()
 
-    background_tasks.add_task(notify_messages_deleted, chat.chat_id, list(message_ids))
+    background_tasks.add_task(
+        namespaces.chat.notify_messages_deleted, chat.chat_id, list(message_ids)
+    )
 
     return JSONResponse()
 
@@ -371,7 +369,7 @@ def join_chat_by_code(
     crud.chat.set_last_message(db, chat, message)
 
     background_tasks.add_task(
-        send_message_to_chat,
+        namespaces.chat.notify_new_message,
         chat.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )

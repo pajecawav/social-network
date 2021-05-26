@@ -1,3 +1,4 @@
+import { PlusIcon } from "@heroicons/react/outline";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getChats } from "../api";
@@ -7,6 +8,7 @@ import { CreateChatModal } from "../components/CreateChatModal";
 import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { ChatsContext } from "../contexts/ChatsContext";
+import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { useTitle } from "../hooks/useTitle";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -86,6 +88,7 @@ export function ChatListPage() {
     const [search, setSearch] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [createChatModalIsOpen, setCreateChatModalIsOpen] = useState(false);
+    const isSmallScreen = useIsSmallScreen();
 
     useTitle("Chats");
 
@@ -144,13 +147,22 @@ export function ChatListPage() {
                         title="Chats"
                         count={matchingChats.length}
                     >
-                        <Button
-                            className="ml-auto"
-                            size="thin"
-                            onClick={() => setCreateChatModalIsOpen(true)}
-                        >
-                            Create
-                        </Button>
+                        {isSmallScreen ? (
+                            <button
+                                className="w-8 ml-auto text-secondary-600"
+                                onClick={() => setCreateChatModalIsOpen(true)}
+                            >
+                                <PlusIcon />
+                            </button>
+                        ) : (
+                            <Button
+                                className="ml-auto"
+                                size="thin"
+                                onClick={() => setCreateChatModalIsOpen(true)}
+                            >
+                                Create
+                            </Button>
+                        )}
                     </HeaderWithCount>
 
                     <div className="flex flex-col py-4">

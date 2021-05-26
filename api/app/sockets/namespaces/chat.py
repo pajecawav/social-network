@@ -58,7 +58,7 @@ class ChatNamespace(AsyncNamespace):
             crud.chat.set_last_message(db, chat, message)
             message_out = jsonable_encoder(schemas.Message.from_orm(message))
 
-        await send_message_to_chat(chat_id, message_out)
+        await notify_new_message(chat_id, message_out)
 
     async def on_join_chat(self, sid, data):
         if "chat_id" not in data:
@@ -76,11 +76,11 @@ class ChatNamespace(AsyncNamespace):
         self.enter_room(sid, f"chat_{chat_id}")
 
 
-namespace = ChatNamespace("/chat")
+chat = ChatNamespace("/chat")
 
 
-async def send_message_to_chat(chat_id: int, message: Dict[str, str]) -> None:
-    await namespace.emit(
+async def notify_new_message(chat_id: int, message: Dict[str, str]) -> None:
+    await chat.emit(
         "new_message",
         data={"chat_id": chat_id, "message": message},
         room=f"chat_{chat_id}",
@@ -88,7 +88,7 @@ async def send_message_to_chat(chat_id: int, message: Dict[str, str]) -> None:
 
 
 async def notify_message_edited(chat_id: int, message: Dict[str, str]) -> None:
-    await namespace.emit(
+    await chat.emit(
         "message_edited",
         data={"chat_id": chat_id, "message": message},
         room=f"chat_{chat_id}",
@@ -96,12 +96,12 @@ async def notify_message_edited(chat_id: int, message: Dict[str, str]) -> None:
 
 
 async def notify_messages_deleted(chat_id: int, message_ids: List[int]) -> None:
-    await namespace.emit(
+    await chat.emit(
         "messages_deleted",
         data={"chat_id": chat_id, "message_ids": message_ids},
         room=f"chat_{chat_id}",
     )
 
 
-async def notify_user_new_chat(user_id: int, chat: Dict[str, str]) -> None:
-    await namespace.emit("new_chat", data=chat, room=f"user_{user_id}")
+async def notify_user_new_chat(user_id: int, new_chat: Dict[str, str]) -> None:
+    await chat.emit("new_chat", data=new_chat, room=f"user_{user_id}")
