@@ -1,14 +1,14 @@
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
-import { getUserInfo, updateUserInfo } from "../api";
-import { UserContext } from "../contexts/UserContext";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
-import { formatLastSeen } from "../utils";
-import { Container } from "./Container";
-import { Dropdown } from "./Dropdown";
-import { LoadingPlaceholder } from "./LoadingPlaceholder";
+import { getUserInfo, updateUserInfo } from "../../api";
+import { Container } from "../../components/Container";
+import { Dropdown } from "../../components/Dropdown";
+import { LoadingPlaceholder } from "../../components/LoadingPlaceholder";
+import { UserContext } from "../../contexts/UserContext";
+import { Button } from "../../ui/Button";
+import { Input } from "../../ui/Input";
+import { formatLastSeen } from "../../utils";
 
 function InfoField({ label, text, children }) {
     return (

@@ -22,7 +22,7 @@ export function MyFriendsSubpage() {
     const [unfriendingUser, setUnfriendingUser] = useState(null);
 
     useState(() => {
-        getFriends({ userId })
+        getFriends({ userId, orderBy: "random" })
             .then((response) => {
                 setFriends(response.data.friends);
                 setIsLoading(false);
