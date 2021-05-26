@@ -9,7 +9,7 @@ export function Button({ className, size = "normal", children, ...props }) {
     return (
         <button
             className={clsx(
-                "base-button bg-secondary disabled:bg-primary-600",
+                "px-6 py-2 transition-all duration-200 rounded hover:bg-opacity-90 disabled:cursor-auto bg-secondary disabled:bg-primary-600",
                 sizeClassnames[size],
                 className
             )}

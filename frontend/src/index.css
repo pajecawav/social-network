@@ -63,12 +63,6 @@ body,
     border-radius: 9px;
 }
 
-@layer components {
-    .base-button {
-        @apply px-6 py-2 transition-all duration-200 rounded hover:bg-opacity-90 disabled:cursor-auto;
-    }
-}
-
 .ReactModal__Overlay {
     opacity: 0;
     transition: opacity 50ms ease-in-out;

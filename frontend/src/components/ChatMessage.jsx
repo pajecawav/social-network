@@ -65,7 +65,7 @@ export const ChatMessage = memo(
                     )}
 
                     <div>
-                        <span>{message.text}</span>
+                        <span className="break-all">{message.text}</span>
                         {message.timeEdited && (
                             <span
                                 className="ml-1 text-primary-500"

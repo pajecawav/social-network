@@ -1,7 +1,9 @@
-import { DotsHorizontalIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, DotsHorizontalIcon } from "@heroicons/react/outline";
+import clsx from "clsx";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChatContext } from "../contexts/ChatContext";
+import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { getChatTitle } from "../utils";
 import { ChatActionsDropdown } from "./ChatActionsDropdown";
 import { CircleAvatar } from "./CircleAvatar";
@@ -14,11 +16,7 @@ export function ChatHeader({
     const { chat } = useContext(ChatContext);
     const isGroupChat = chat.chatType === "group";
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-    const handleAvatarClick = (event) => {
-        event.preventDefault();
-        onOpenChatInfo();
-    };
+    const isSmallScreen = useIsSmallScreen();
 
     const avatar = (
         <div className="flex-shrink-0 w-8 cursor-pointer">
@@ -29,10 +27,17 @@ export function ChatHeader({
     return (
         <div className="flex items-center h-12 border-b border-primary-700">
             <Link
-                className="flex items-center w-20 h-full px-4 py-2 text-center transition-all duration-200 text-primary-200 hover:bg-primary-700"
+                className={clsx(
+                    "flex items-center h-full px-4 py-2 text-center transition-all duration-200 text-primary-200 hover:bg-primary-700",
+                    isSmallScreen ? "" : "w-20"
+                )}
                 to="/chats"
             >
-                Back
+                {isSmallScreen ? (
+                    <ArrowLeftIcon className="w-6 text-secondary-600" />
+                ) : (
+                    "Back"
+                )}
             </Link>
 
             <div className="flex-grow text-center text-semibold">
@@ -60,7 +65,7 @@ export function ChatHeader({
                 </div>
 
                 {isGroupChat ? (
-                    <div onClick={handleAvatarClick}>{avatar}</div>
+                    <div onClick={onOpenChatInfo}>{avatar}</div>
                 ) : (
                     <Link to={`/users/${chat.peer.userId}`}>{avatar}</Link>
                 )}

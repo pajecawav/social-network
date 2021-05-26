@@ -16,9 +16,13 @@ export function ConfirmationModal({
             </div>
 
             <div className="flex gap-4 mt-4 ml-auto w-max">
-                <Button size="thin" onClick={() => props?.onRequestClose()}>
+                <button
+                    className="bg-transparent"
+                    size="thin"
+                    onClick={() => props?.onRequestClose()}
+                >
                     {cancelText}
-                </Button>
+                </button>
                 <Button size="thin" onClick={onConfirm}>
                     {confirmText}
                 </Button>
