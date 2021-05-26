@@ -2,6 +2,7 @@ import { useCallback, useContext, useState } from "react";
 import { deleteChatMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 import { Container } from "../components/Container";
 import { EditMessageBlock } from "../components/EditMessageBlock";
 import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
@@ -25,6 +26,7 @@ export function ChatPage({ chatId }) {
     const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
     const [isInviteLinkOpen, setIsInviteLinkOpen] = useState(false);
+    const [isDeleteMessagesOpen, setIsDeleteteMessagesOpen] = useState(false);
 
     const isAdmin =
         !isLoading && chat.admin && user.userId === chat.admin.userId;
@@ -49,7 +51,9 @@ export function ChatPage({ chatId }) {
         deleteChatMessages(chatId, {
             messageIds: selectedMessages.map((msg) => msg.messageId),
         })
-            .then(() => setSelectedMessages([]))
+            .then(() => {
+                setSelectedMessages([]);
+            })
             .catch(console.error);
     }, [chatId, selectedMessages]);
 
@@ -121,8 +125,8 @@ export function ChatPage({ chatId }) {
                                                 )
                                             );
                                         }}
-                                        onDeleteSelectedMessages={
-                                            handleDeleteSelectedMessages
+                                        onDeleteSelectedMessages={() =>
+                                            setIsDeleteteMessagesOpen(true)
                                         }
                                     />
                                 ) : editingMessage === null ? (
@@ -162,6 +166,21 @@ export function ChatPage({ chatId }) {
                                         }
                                     />
                                 )}
+                                <ConfirmationModal
+                                    isOpen={isDeleteMessagesOpen}
+                                    confirmText="Delete"
+                                    title="Delete messages"
+                                    onConfirm={() => {
+                                        setIsDeleteteMessagesOpen(false);
+                                        handleDeleteSelectedMessages();
+                                    }}
+                                    onRequestClose={() =>
+                                        setIsDeleteteMessagesOpen(false)
+                                    }
+                                >
+                                    Are you sure you want to delete{" "}
+                                    {selectedMessages.length} messages?
+                                </ConfirmationModal>
                             </>
                         )}
                     </>
