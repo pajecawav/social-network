@@ -62,7 +62,7 @@ export function UserProfileInfo({ user }) {
                                       )}`}
                             </div>
                         </div>
-                        <div>
+                        <div className="relative">
                             <div
                                 className={clsx(
                                     "-mx-2 px-2 text-sm",
@@ -88,7 +88,7 @@ export function UserProfileInfo({ user }) {
                             {isMe && (
                                 <Dropdown
                                     isOpen={isEditStatusOpen}
-                                    className="p-3 border rounded-md shadow-md border-primary-800 bg-primary-600"
+                                    className="max-w-full p-3 border rounded-md shadow-md border-primary-800 bg-primary-600"
                                     onRequestClose={() => {
                                         setNewStatus("");
                                         setIsEditStatusOpen(false);
