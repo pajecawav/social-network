@@ -1,10 +1,18 @@
 import { camelizeKeys, decamelizeKeys } from "humps";
-import { createContext, useCallback, useEffect, useRef } from "react";
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+} from "react";
 import { getSocket } from "../sockets";
+import { UserContext } from "./UserContext";
 
 export const ChatsContext = createContext();
 
 export function ChatsProvider({ children }) {
+    const { loggedIn } = useContext(UserContext);
     const socket = useRef(null);
     const listeners = useRef({});
     const newChatListeners = useRef([]);
@@ -42,7 +50,7 @@ export function ChatsProvider({ children }) {
         });
 
         return () => sio.disconnect();
-    }, []);
+    }, [loggedIn]);
 
     const subscribeToChat = useCallback((chatId, cb) => {
         const currentListeners = listeners.current[chatId];
@@ -84,6 +92,10 @@ export function ChatsProvider({ children }) {
         socket.current.emit("new_message", data, cb);
     }, []);
 
+    const joinChat = useCallback((chatId) => {
+        socket.current?.emit("join_chat", { chat_id: chatId });
+    }, []);
+
     return (
         <ChatsContext.Provider
             value={{
@@ -92,6 +104,7 @@ export function ChatsProvider({ children }) {
                 sendSocketMessage,
                 subscribeToNewChats,
                 unsubscribeFromNewChats,
+                joinChat,
             }}
         >
             {children}

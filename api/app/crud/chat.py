@@ -3,7 +3,7 @@ from typing import Any, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.models import Chat
+from app.models import Chat, chat_user_association_table
 from app.models.message import Message
 
 
@@ -35,6 +35,17 @@ class CRUDChat:
         db.refresh(chat)
 
         return chat
+
+    def is_user_in_chat(self, db: Session, chat_id: int, user_id: int) -> bool:
+        return (
+            db.query(chat_user_association_table)
+            .filter(
+                chat_user_association_table.c.user_id == user_id,
+                chat_user_association_table.c.chat_id == chat_id,
+            )
+            .first()
+            is not None
+        )
 
 
 chat = CRUDChat()

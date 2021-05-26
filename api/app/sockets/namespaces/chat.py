@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 from socketio import AsyncNamespace
 
-from app import crud, schemas
+from app import crud, models, schemas
 from app.security import TokenParsingError, parse_token
 from app.sockets.utils import get_db
 
@@ -61,9 +61,19 @@ class ChatNamespace(AsyncNamespace):
         await send_message_to_chat(chat_id, message_out)
 
     async def on_join_chat(self, sid, data):
-        if "chat_id" in data:
-            chat_id = data["chat_id"]
-            self.enter_room(sid, f"chat_{chat_id}")
+        if "chat_id" not in data:
+            return False
+
+        chat_id = data["chat_id"]
+
+        session = await self.get_session(sid)
+        user_id = session["user_id"]
+
+        with get_db() as db:
+            if not crud.chat.is_user_in_chat(db, chat_id, user_id):
+                return False
+
+        self.enter_room(sid, f"chat_{chat_id}")
 
 
 namespace = ChatNamespace("/chat")
