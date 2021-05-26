@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { getMe } from "../api";
+import { getMe } from "../getMe";
 import { getSocket } from "../sockets";
 import { deleteLocalToken, saveLocalToken } from "../utils";
 
