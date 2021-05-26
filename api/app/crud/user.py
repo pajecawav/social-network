@@ -3,7 +3,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from app.models import User, UserInfo, friends_association_table
+from app.models import User, UserInfo
 from app.schemas import UserCreate, UserUpdate
 from app.schemas.user import FriendStatusEnum
 from app.security import get_password_hash, verify_password

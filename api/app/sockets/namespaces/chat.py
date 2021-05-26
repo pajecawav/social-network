@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 from socketio import AsyncNamespace
 
-from app import crud, models, schemas
+from app import crud, schemas
 from app.security import TokenParsingError, parse_token
 from app.sockets.utils import get_db
 

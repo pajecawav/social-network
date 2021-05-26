@@ -8,11 +8,13 @@ import { useSearchParams } from "../../hooks/useSearchParams";
 import { useTitle } from "../../hooks/useTitle";
 import { buildSearchString } from "../../utils";
 import { AccountInfoSubpage } from "./AccountInfoSubpage";
+import { PasswordSubpage } from "./PasswordSubpage";
 import { ProfilePictureSubpage } from "./ProfilePictureSubpage";
 import { UserInfoSubpage } from "./UserInfoSubpage";
 
 const TABS = [
     { tab: "account", title: "Account" },
+    { tab: "password", title: "Password" },
     { tab: "info", title: "User information" },
     { tab: "avatar", title: "Profile picture" },
 ];
@@ -35,6 +37,9 @@ export function EditProfilePage() {
     switch (selectedTab) {
         case "account":
             component = <AccountInfoSubpage />;
+            break;
+        case "password":
+            component = <PasswordSubpage />;
             break;
         case "avatar":
             component = <ProfilePictureSubpage />;

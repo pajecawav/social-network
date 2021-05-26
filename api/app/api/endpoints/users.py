@@ -1,14 +1,16 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, UploadFile, status
+from fastapi import APIRouter, Body, Depends, File, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
+from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
 from app.api import dependencies
 from app.api.dependencies import get_current_user, get_current_user_or_none, get_db
+from app.security import get_password_hash
 
 router = APIRouter()
 
@@ -109,6 +111,27 @@ def update_user(
         )
     updated_user = crud.user.update(db, object_db=user, object_update=user_update)
     return updated_user
+
+
+@router.post("/{user_id}/password")
+def update_password(
+    user_id: int,
+    new_password: str = Body(..., embed=True, min_length=1),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    user = crud.user.get_or_404(db, user_id)
+    if current_user != user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can only update your profile.",
+        )
+
+    user.password_hashed = get_password_hash(new_password)
+    db.add(user)
+    db.commit()
+
+    return JSONResponse()
 
 
 @router.patch(

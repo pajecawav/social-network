@@ -1,21 +1,22 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { updateUser } from "../../api";
+import { updatePassword } from "../../api";
 import { UserContext } from "../../contexts/UserContext";
 import { Button } from "../../ui/Button";
 import { FormError } from "../../ui/FormError";
 import { FormSuccess } from "../../ui/FormSuccess";
 import { FormField } from "./FormField";
 
-export function AccountInfoSubpage() {
-    const { user, setUser } = useContext(UserContext);
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
+export function PasswordSubpage() {
+    const { user } = useContext(UserContext);
+    const [newPassword, setNewPassword] = useState("");
+    const [repeatNewPassword, setRepeatNewPassword] = useState("");
     const [success, setSuccess] = useState(null);
     const formRef = useRef(null);
+    const repeatNewPasswordRef = useRef(null);
 
     useEffect(() => {
-        setSuccess(null);
-    }, [firstName, lastName]);
+        repeatNewPasswordRef.current?.setCustomValidity("");
+    }, [repeatNewPassword]);
 
     const handleUpdateAccount = (event) => {
         setSuccess(null);
@@ -24,10 +25,18 @@ export function AccountInfoSubpage() {
 
         event.preventDefault();
 
-        updateUser(user.userId, { firstName, lastName })
+        if (newPassword !== repeatNewPassword) {
+            repeatNewPasswordRef.current?.setCustomValidity(
+                "Passwords do not match."
+            );
+            return;
+        }
+
+        updatePassword(user.userId, { newPassword })
             .then(() => {
                 setSuccess(true);
-                setUser({ ...user, firstName, lastName });
+                setNewPassword("");
+                setRepeatNewPassword("");
             })
             .catch((error) => {
                 setSuccess(false);
@@ -37,8 +46,7 @@ export function AccountInfoSubpage() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-4 my-4">
-            <h2 className="text-xl">Update account info</h2>
-            {/* TODO: refactor the form into a reusable component */}
+            <h2 className="text-xl">Update account password</h2>
             <form
                 className="flex flex-col w-full gap-4 sm:w-auto"
                 onSubmit={handleUpdateAccount}
@@ -46,27 +54,32 @@ export function AccountInfoSubpage() {
             >
                 <div className="grid items-center gap-y-4 gap-x-2 px-4 sm:px-0 grid-cols-1 sm:grid-cols-[max-content,auto]">
                     <FormField
-                        id="firstName"
-                        label="First name:"
-                        type="text"
-                        value={firstName}
-                        onChange={(value) => setFirstName(value)}
+                        id="newPassword"
+                        label="New password:"
+                        type="password"
+                        value={newPassword}
+                        required
+                        minLength={1}
+                        onChange={(value) => setNewPassword(value)}
                     />
                     <FormField
-                        id="lastName"
-                        label="Last name:"
-                        type="text"
-                        value={lastName}
-                        onChange={(value) => setLastName(value)}
+                        id="repeatNewPassword"
+                        label="Repeat password:"
+                        type="password"
+                        value={repeatNewPassword}
+                        required
+                        minLength={1}
+                        onChange={(value) => setRepeatNewPassword(value)}
+                        ref={repeatNewPasswordRef}
                     />
                 </div>
 
                 {success !== null && (
                     <div className="w-full mt-4">
                         {success ? (
-                            <FormSuccess text="Successfully updated profile." />
+                            <FormSuccess text="Successfully updated password." />
                         ) : (
-                            <FormError text="Error updating profile." />
+                            <FormError text="Error updating password." />
                         )}
                     </div>
                 )}

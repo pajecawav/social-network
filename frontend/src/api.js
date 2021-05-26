@@ -58,6 +58,10 @@ export async function updateUser(userId, data) {
     return axios.patch(`/api/users/${userId}`, data);
 }
 
+export async function updatePassword(userId, data) {
+    return axios.post(`/api/users/${userId}/password`, data);
+}
+
 export async function getUserInfo(userId) {
     return axios.get(`/api/users/${userId}/info`);
 }
