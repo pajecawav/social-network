@@ -6,7 +6,7 @@ from pydantic import BaseSettings, PostgresDsn, validator
 class Settings(BaseSettings):
     SECRET_KEY: str
 
-    ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30
 
     POSTGRES_SERVER: str
     POSTGRES_USER: str

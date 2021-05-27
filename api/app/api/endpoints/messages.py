@@ -23,7 +23,7 @@ def send_message(
 ):
     if chat_id is None and user_id is None:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST(),
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Either chat or user id is required.",
         )
 

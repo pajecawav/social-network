@@ -96,6 +96,13 @@ export function ChatsProvider({ children }) {
         socket.current?.emit("join_chat", { chat_id: chatId });
     }, []);
 
+    const updateLastSeenMessage = useCallback((chatId, messageId) => {
+        socket.current?.emit("update_last_seen_message", {
+            chat_id: chatId,
+            message_id: messageId,
+        });
+    }, []);
+
     return (
         <ChatsContext.Provider
             value={{
@@ -105,6 +112,7 @@ export function ChatsProvider({ children }) {
                 subscribeToNewChats,
                 unsubscribeFromNewChats,
                 joinChat,
+                updateLastSeenMessage,
             }}
         >
             {children}

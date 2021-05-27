@@ -48,17 +48,25 @@ def get_chats(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    chats = current_user.chats.order_by(
-        models.Chat.last_message_id.desc(), models.Chat.chat_id.desc()
-    ).all()
+    chats = (
+        db.query(models.Chat, models.chat_user_association_table.c.last_seen_message_id)
+        .join(models.chat_user_association_table)
+        .filter(models.chat_user_association_table.c.user_id == current_user.user_id)
+        .order_by(models.Chat.last_message_id.desc(), models.Chat.chat_id.desc())
+        .all()
+    )
 
-    # TODO: figure out a better way to return peers
-    for chat in chats:
-        if chat.chat_type != ChatTypeEnum.direct:
-            continue
-        chat.peer = crud.direct_chat.get_peer(db, chat, current_user.user_id)
+    response = []
+    for (chat, last_seen_message_id) in chats:
+        chat.last_seen_message_id = last_seen_message_id
 
-    return chats
+        # TODO: figure out a better way to return peers
+        if chat.chat_type == ChatTypeEnum.direct:
+            chat.peer = crud.direct_chat.get_peer(db, chat, current_user.user_id)
+
+        response.append(chat)
+
+    return response
 
 
 @router.get("/{chat_id}", response_model=Union[schemas.GroupChat, schemas.DirectChat])

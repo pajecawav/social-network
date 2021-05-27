@@ -21,4 +21,10 @@ chat_user_association_table = Table(
     Base.metadata,
     Column("user_id", Integer, ForeignKey("users.user_id"), nullable=False),
     Column("chat_id", Integer, ForeignKey("chats.chat_id"), nullable=False),
+    Column(
+        "last_seen_message_id",
+        Integer,
+        ForeignKey("messages.message_id"),
+        nullable=True,
+    ),
 )

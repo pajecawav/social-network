@@ -10,8 +10,12 @@ export function useChat(chatId) {
     const [chat, setChat] = useState(null);
     const [messages, setMessages] = useState(null);
     const [users, setUsers] = useState(null);
-    const { subscribeToChat, unsubscribeFromChat, sendSocketMessage } =
-        useContext(ChatsContext);
+    const {
+        subscribeToChat,
+        unsubscribeFromChat,
+        sendSocketMessage,
+        updateLastSeenMessage: updateLastSeenMessageImpl,
+    } = useContext(ChatsContext);
 
     useEffect(() => {
         setIsChatLoading(true);
@@ -87,6 +91,13 @@ export function useChat(chatId) {
         );
     }, []);
 
+    const updateLastSeenMessage = useCallback(
+        (messageId) => {
+            updateLastSeenMessageImpl(chatId, messageId);
+        },
+        [chatId, updateLastSeenMessageImpl]
+    );
+
     return {
         isLoading: isChatLoading || isMessagesLoading || isUsersLoading,
         chat,
@@ -94,5 +105,6 @@ export function useChat(chatId) {
         users,
         sendSocketMessage,
         removeUser,
+        updateLastSeenMessage,
     };
 }

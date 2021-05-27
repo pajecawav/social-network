@@ -26,7 +26,8 @@ class OnlineNamespace(AsyncNamespace):
 
         with get_db() as db:
             user = crud.user.get(db, session["user_id"])
-            crud.user.update_last_seen(db, user)
+            if user is not None:
+                crud.user.update_last_seen(db, user)
 
 
 online = OnlineNamespace("/online")

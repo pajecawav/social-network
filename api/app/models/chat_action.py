@@ -1,9 +1,15 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Column, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import relationship
 
 from app.db.database import Base
 from app.schemas.chat_action import ChatActionTypeEnum
+
+if TYPE_CHECKING:
+    from .message import Message  # noqa
+    from .user import User  # noqa
 
 
 class ChatAction(Base):

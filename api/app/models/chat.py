@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
@@ -5,6 +7,10 @@ from app.db.database import Base
 from app.schemas.chat import ChatTypeEnum
 
 from .association_tables import chat_user_association_table
+
+if TYPE_CHECKING:
+    from .message import Message  # noqa
+    from .user import User  # noqa
 
 
 class Chat(Base):

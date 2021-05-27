@@ -58,7 +58,7 @@ class ChatNamespace(AsyncNamespace):
             crud.chat.set_last_message(db, chat, message)
             message_out = jsonable_encoder(schemas.Message.from_orm(message))
 
-        await notify_new_message(chat_id, message_out)
+        await self.notify_new_message(chat_id, message_out)
 
     async def on_join_chat(self, sid, data):
         if "chat_id" not in data:
@@ -75,33 +75,47 @@ class ChatNamespace(AsyncNamespace):
 
         self.enter_room(sid, f"chat_{chat_id}")
 
+    async def on_update_last_seen_message(self, sid, data):
+        if "chat_id" not in data or "message_id" not in data:
+            return False
+
+        session = await self.get_session(sid)
+        chat_id = data["chat_id"]
+        message_id = data["message_id"]
+        user_id = session["user_id"]
+
+        with get_db() as db:
+            crud.chat.update_last_seen_message(db, chat_id, user_id, message_id)
+
+    async def notify_new_message(self, chat_id: int, message: Dict[str, str]) -> None:
+        await self.emit(
+            "new_message",
+            data={"chat_id": chat_id, "message": message},
+            room=f"chat_{chat_id}",
+        )
+
+    async def notify_message_edited(
+        self, chat_id: int, message: Dict[str, str]
+    ) -> None:
+        await self.emit(
+            "message_edited",
+            data={"chat_id": chat_id, "message": message},
+            room=f"chat_{chat_id}",
+        )
+
+    async def notify_messages_deleted(
+        self, chat_id: int, message_ids: List[int]
+    ) -> None:
+        await self.emit(
+            "messages_deleted",
+            data={"chat_id": chat_id, "message_ids": message_ids},
+            room=f"chat_{chat_id}",
+        )
+
+    async def notify_user_new_chat(
+        self, user_id: int, new_chat: Dict[str, str]
+    ) -> None:
+        await self.emit("new_chat", data=new_chat, room=f"user_{user_id}")
+
 
 chat = ChatNamespace("/chat")
-
-
-async def notify_new_message(chat_id: int, message: Dict[str, str]) -> None:
-    await chat.emit(
-        "new_message",
-        data={"chat_id": chat_id, "message": message},
-        room=f"chat_{chat_id}",
-    )
-
-
-async def notify_message_edited(chat_id: int, message: Dict[str, str]) -> None:
-    await chat.emit(
-        "message_edited",
-        data={"chat_id": chat_id, "message": message},
-        room=f"chat_{chat_id}",
-    )
-
-
-async def notify_messages_deleted(chat_id: int, message_ids: List[int]) -> None:
-    await chat.emit(
-        "messages_deleted",
-        data={"chat_id": chat_id, "message_ids": message_ids},
-        room=f"chat_{chat_id}",
-    )
-
-
-async def notify_user_new_chat(user_id: int, new_chat: Dict[str, str]) -> None:
-    await chat.emit("new_chat", data=new_chat, room=f"user_{user_id}")

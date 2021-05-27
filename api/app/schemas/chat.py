@@ -16,6 +16,7 @@ class Chat(BaseModel):
     chat_id: int
     chat_type: ChatTypeEnum
     last_message: Optional[Message]
+    last_seen_message_id: Optional[int]
 
     class Config:
         orm_mode = True

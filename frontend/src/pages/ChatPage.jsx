@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { deleteChatMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
@@ -19,7 +19,13 @@ export function ChatPage({ chatId }) {
     const { user } = useContext(UserContext);
 
     const chatHookValues = useChat(chatId);
-    const { isLoading, chat, messages, sendSocketMessage } = chatHookValues;
+    const {
+        isLoading,
+        chat,
+        messages,
+        sendSocketMessage,
+        updateLastSeenMessage,
+    } = chatHookValues;
 
     const [selectedMessages, setSelectedMessages] = useState([]);
     const [editingMessage, setEditingMessage] = useState(null);
@@ -30,6 +36,12 @@ export function ChatPage({ chatId }) {
 
     const isAdmin =
         !isLoading && chat.admin && user.userId === chat.admin.userId;
+
+    useEffect(() => {
+        if (messages) {
+            updateLastSeenMessage(messages[messages.length - 1].messageId);
+        }
+    }, [messages, updateLastSeenMessage]);
 
     const handleSendMessage = useCallback(
         (text) => {

@@ -47,5 +47,16 @@ class CRUDChat:
             is not None
         )
 
+    def update_last_seen_message(
+        self, db: Session, chat_id: int, user_id: int, message_id: int
+    ) -> None:
+        db.query(chat_user_association_table).filter(
+            chat_user_association_table.c.user_id == user_id,
+            chat_user_association_table.c.chat_id == chat_id,
+            # do not overwrite larger value
+            chat_user_association_table.c.last_seen_message_id < message_id,
+        ).update({chat_user_association_table.c.last_seen_message_id: message_id})
+        db.commit()
+
 
 chat = CRUDChat()

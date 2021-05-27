@@ -1,4 +1,5 @@
 import { PlusIcon } from "@heroicons/react/outline";
+import clsx from "clsx";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getChats } from "../api";
@@ -21,10 +22,13 @@ import {
 
 function ChatBlock({ chat }) {
     const lastMessage = chat.lastMessage;
+    const seenLastMessage =
+        chat.lastSeenMessageId !== null &&
+        lastMessage.messageId === chat.lastSeenMessageId;
 
     return (
         <Link
-            className="relative flex gap-4 px-4 py-3 transition-colors duration-200 border-b group border-primary-700 hover:bg-primary-700 "
+            className="relative flex gap-4 px-4 py-3 transition-colors duration-200 border-b group border-primary-700 hover:bg-primary-700 hover:bg-opacity-50"
             to={`/chats/${chat.chatId}`}
         >
             <div className="flex-shrink-0 w-14">
@@ -34,14 +38,18 @@ function ChatBlock({ chat }) {
                 />
             </div>
 
-            <div className="min-w-0">
+            <div className="w-full min-w-0">
                 <div className="mb-2 font-medium text-primary-300">
                     {getChatTitle(chat)}
                 </div>
                 {lastMessage &&
-                    (lastMessage.action ? (
-                        // TODO render message based on action type
-                        <div className="text-sm text-primary-500">
+                    (lastMessage.action ? ( // TODO: render message based on action type
+                        <div
+                            className={clsx(
+                                "text-sm text-primary-500 py-1 px-2 rounded-sm",
+                                !seenLastMessage && "bg-primary-700"
+                            )}
+                        >
                             {chatActionToText(
                                 lastMessage.user,
                                 lastMessage.action
@@ -54,7 +62,12 @@ function ChatBlock({ chat }) {
                                     fileName={lastMessage.user.avatar?.fullName}
                                 />
                             </div>
-                            <div className="h-6 overflow-hidden text-sm text-primary-300 whitespace-nowrap overflow-ellipsis">
+                            <div
+                                className={clsx(
+                                    "h-7 py-1 px-2 rounded-sm overflow-hidden text-sm text-primary-300 whitespace-nowrap overflow-ellipsis",
+                                    !seenLastMessage && "bg-primary-700"
+                                )}
+                            >
                                 {lastMessage.text}
                             </div>
                         </div>
@@ -100,7 +113,7 @@ export function ChatListPage() {
             })
             .catch(console.error);
 
-        const handleNewMessage = (message, chatId) => {
+        const handleNewMessage = (_, { message, chatId }) => {
             setChats((currentChats_) => {
                 const currentChats = [...currentChats_];
                 const index = currentChats.findIndex(

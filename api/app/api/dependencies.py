@@ -12,7 +12,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/token")
 oauth2_scheme_no_error = OAuth2PasswordBearer(tokenUrl="login/token", auto_error=False)
 
 
-def get_db() -> Generator:
+def get_db() -> Generator[Session, None, None]:
     try:
         db = SessionLocal()
         yield db

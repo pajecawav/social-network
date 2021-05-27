@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
@@ -12,6 +13,12 @@ from .association_tables import (
     friends_association_table,
 )
 
+if TYPE_CHECKING:
+    from .chat import Chat  # noqa
+    from .file import Image  # noqa
+    from .message import Message  # noqa
+    from .user_info import UserInfo  # noqa
+
 USER_IS_OFFLINE_TIMEOUT_SECONDS = 5 * 60  # 5 minutes
 
 
@@ -24,7 +31,6 @@ class User(Base):
 
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
-    # avatar = relationship("Image"
     avatar_id = Column(UUID, ForeignKey("images.file_id"), nullable=True)
     avatar = relationship("Image")
 
