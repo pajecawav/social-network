@@ -1,6 +1,7 @@
 from typing import Any, Optional
 
 from fastapi import HTTPException, status
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.models import Chat, chat_user_association_table
@@ -54,7 +55,10 @@ class CRUDChat:
             chat_user_association_table.c.user_id == user_id,
             chat_user_association_table.c.chat_id == chat_id,
             # do not overwrite larger value
-            chat_user_association_table.c.last_seen_message_id < message_id,
+            or_(
+                chat_user_association_table.c.last_seen_message_id < message_id,
+                chat_user_association_table.c.last_seen_message_id.is_(None),
+            ),
         ).update({chat_user_association_table.c.last_seen_message_id: message_id})
         db.commit()
 
