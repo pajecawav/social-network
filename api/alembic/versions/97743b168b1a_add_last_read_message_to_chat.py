@@ -21,19 +21,7 @@ def upgrade():
         "chat_user_association",
         sa.Column("last_seen_message_id", sa.Integer(), nullable=True),
     )
-    op.create_foreign_key(
-        "chat_user_association_last_seend_message_id_fkey",
-        "chat_user_association",
-        "messages",
-        ["last_seen_message_id"],
-        ["message_id"],
-    )
 
 
 def downgrade():
-    op.drop_constraint(
-        "chat_user_association_last_seend_message_id_fkey",
-        "chat_user_association",
-        type_="foreignkey",
-    )
     op.drop_column("chat_user_association", "last_seen_message_id")
