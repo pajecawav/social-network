@@ -178,23 +178,24 @@ export function ChatPage({ chatId }) {
                                         }
                                     />
                                 )}
-                                <ConfirmationModal
-                                    isOpen={isDeleteMessagesOpen}
-                                    confirmText="Delete"
-                                    title="Delete messages"
-                                    onConfirm={() => {
-                                        setIsDeleteteMessagesOpen(false);
-                                        handleDeleteSelectedMessages();
-                                    }}
-                                    onRequestClose={() =>
-                                        setIsDeleteteMessagesOpen(false)
-                                    }
-                                >
-                                    Are you sure you want to delete{" "}
-                                    {selectedMessages.length} messages?
-                                </ConfirmationModal>
                             </>
                         )}
+
+                        <ConfirmationModal
+                            isOpen={isDeleteMessagesOpen}
+                            confirmText="Delete"
+                            title="Delete messages"
+                            onConfirm={() => {
+                                setIsDeleteteMessagesOpen(false);
+                                handleDeleteSelectedMessages();
+                            }}
+                            onRequestClose={() =>
+                                setIsDeleteteMessagesOpen(false)
+                            }
+                        >
+                            Are you sure you want to delete{" "}
+                            {selectedMessages.length} messages?
+                        </ConfirmationModal>
                     </>
                 )}
             </Container>
