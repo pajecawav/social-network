@@ -64,7 +64,7 @@ function ChatBlock({ chat }) {
                             </div>
                             <div
                                 className={clsx(
-                                    "h-7 py-1 px-2 rounded-sm overflow-hidden text-sm text-primary-300 whitespace-nowrap overflow-ellipsis",
+                                    "w-full h-7 py-1 px-2 rounded-sm overflow-hidden text-sm text-primary-300 whitespace-nowrap overflow-ellipsis",
                                     !seenLastMessage && "bg-primary-700"
                                 )}
                             >
