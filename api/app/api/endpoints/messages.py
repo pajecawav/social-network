@@ -51,7 +51,7 @@ def send_message(
     crud.chat.set_last_message(db, chat, message)
 
     background_tasks.add_task(
-        namespaces.chat.send_message,
+        namespaces.chat.notify_new_message,
         chat.chat_id,
         jsonable_encoder(schemas.Message.from_orm(message)),
     )
