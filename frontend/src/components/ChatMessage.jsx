@@ -4,6 +4,7 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import { formatLastEdited } from "../utils";
 import { CircleAvatar } from "./CircleAvatar";
+import { LinkifiedText } from "./LinkifiedText";
 
 export const ChatMessage = memo(
     ({
@@ -65,7 +66,9 @@ export const ChatMessage = memo(
                     )}
 
                     <div>
-                        <span className="break-all">{message.text}</span>
+                        <span className="break-all">
+                            <LinkifiedText text={message.text} />
+                        </span>
                         {message.timeEdited && (
                             <span
                                 className="ml-1 text-primary-500"

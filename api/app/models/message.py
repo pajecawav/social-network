@@ -11,7 +11,6 @@ if TYPE_CHECKING:
     from .chat import Chat  # noqa
     from .chat_action import ChatAction  # noqa
     from .user import User  # noqa
-    
 
 
 class Message(Base):
