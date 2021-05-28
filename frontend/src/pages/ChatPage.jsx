@@ -14,6 +14,7 @@ import { SendMessageBlock } from "../components/SendMessageBlock";
 import { ChatContext } from "../contexts/ChatContext";
 import { UserContext } from "../contexts/UserContext";
 import { useChat } from "../hooks/useChat";
+import { useIsPageVisible } from "../hooks/useIsPageVisible";
 
 export function ChatPage({ chatId }) {
     const { user } = useContext(UserContext);
@@ -34,14 +35,16 @@ export function ChatPage({ chatId }) {
     const [isInviteLinkOpen, setIsInviteLinkOpen] = useState(false);
     const [isDeleteMessagesOpen, setIsDeleteteMessagesOpen] = useState(false);
 
+    const isPageVisible = useIsPageVisible();
+
     const isAdmin =
         !isLoading && chat.admin && user.userId === chat.admin.userId;
 
     useEffect(() => {
-        if (messages) {
+        if (messages && isPageVisible) {
             updateLastSeenMessage(messages[messages.length - 1].messageId);
         }
-    }, [messages, updateLastSeenMessage]);
+    }, [messages, updateLastSeenMessage, isPageVisible]);
 
     const handleSendMessage = useCallback(
         (text) => {

@@ -1,9 +1,10 @@
 import clsx from "clsx";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { CircleAvatar } from "./CircleAvatar";
 
-export function UserCard({ user, className, avatarClassName, children }) {
-    return (
+export const UserCard = memo(
+    ({ user, className, avatarClassName, children }) => (
         <div className={clsx("flex", className)}>
             <Link
                 className={clsx(avatarClassName || "flex-shrink-0 w-16")}
@@ -24,5 +25,5 @@ export function UserCard({ user, className, avatarClassName, children }) {
             </div>
             {children}
         </div>
-    );
-}
+    )
+);
