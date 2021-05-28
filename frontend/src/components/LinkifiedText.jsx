@@ -18,6 +18,7 @@ export const LinkifiedText = memo(({ text }) => {
             <a
                 className="break-words text-secondary-500 hover:underline"
                 href={match[0]}
+                onClick={(event) => event.stopPropagation()}
                 key={index}
             >
                 {match[0]}
