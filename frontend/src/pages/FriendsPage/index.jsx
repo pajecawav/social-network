@@ -1,5 +1,6 @@
 import { useHistory } from "react-router";
 import { Container } from "../../components/Container";
+import { RecommendedFriendsBlock } from "../../components/RecommendedFriendsBlock";
 import { TabsBlock } from "../../components/TabsBlock";
 import { TabsHeader } from "../../components/TabsHeader";
 import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
@@ -93,12 +94,15 @@ export function FriendsPage() {
             </Container>
 
             {!isSmallScreen && (
-                <TabsBlock
-                    className="w-48"
-                    tabs={SIDEBAR_TABS}
-                    selectedTab={tabsBlockSelectedTab}
-                    onTabSelected={handleTabSelected}
-                />
+                <div className="flex flex-col gap-4 w-52">
+                    <TabsBlock
+                        className="w-full"
+                        tabs={SIDEBAR_TABS}
+                        selectedTab={tabsBlockSelectedTab}
+                        onTabSelected={handleTabSelected}
+                    />
+                    <RecommendedFriendsBlock className="w-full" />
+                </div>
             )}
         </div>
     );

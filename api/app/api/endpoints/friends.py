@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
-from sqlalchemy import func
+from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -147,3 +147,39 @@ def delete_friend(
         status_code=status.HTTP_400_BAD_REQUEST,
         detail="Not friends with user and there is not pending friend request.",
     )
+
+
+@router.get(
+    "/recommended", response_model=List[schemas.User], response_model_exclude_none=True
+)
+def get_recommended_friends(
+    limit: int = 6,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    friends_subquery = (
+        db.query(models.friends_association_table.c.second_user_id.label("friend_id"))
+        .filter(
+            models.friends_association_table.c.first_user_id == current_user.user_id
+        )
+        .subquery()
+    )
+    recommended_friends = (
+        db.query(models.User)
+        .join(
+            friends_subquery,
+            models.User.user_id == friends_subquery.c.friend_id,
+            isouter=True,
+        )
+        .filter(
+            and_(
+                friends_subquery.c.friend_id.is_(None),
+                models.User.user_id != current_user.user_id,
+            )
+        )
+        .order_by(func.random())
+        .limit(limit)
+        .all()
+    )
+
+    return recommended_friends

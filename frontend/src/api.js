@@ -102,6 +102,12 @@ export async function getFriendRequests(params) {
     });
 }
 
+export async function getRecommendedFriends(params) {
+    return axios.get("/api/friends/recommended", {
+        params,
+    });
+}
+
 // TODO: better name
 export async function unfriend(userId) {
     return axios.delete("/api/friends", {

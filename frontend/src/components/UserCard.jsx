@@ -7,7 +7,7 @@ export const UserCard = memo(
     ({ user, className, avatarClassName, children }) => (
         <div className={clsx("flex", className)}>
             <Link
-                className={clsx(avatarClassName || "flex-shrink-0 w-16")}
+                className={clsx("flex-shrink-0", avatarClassName || "w-16")}
                 to={`/users/${user.userId}`}
             >
                 <CircleAvatar
@@ -17,7 +17,7 @@ export const UserCard = memo(
             </Link>
             <div className="h-auto mx-4">
                 <Link
-                    className="text-primary-200 hover:underline"
+                    className="break-all text-primary-200 hover:underline"
                     to={`/users/${user.userId}`}
                 >
                     {user.firstName} {user.lastName}
