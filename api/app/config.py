@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 from pydantic import BaseSettings, PostgresDsn, validator
@@ -13,6 +14,8 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     DATABASE_URI: Optional[PostgresDsn]
+
+    FILE_STORAGE_ROOT: Path
 
     @validator("DATABASE_URI", pre=True)
     def build_database_uri(cls, value: Optional[str], values: Dict[str, Any]) -> Any:

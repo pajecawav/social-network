@@ -16,7 +16,7 @@ class File(Base):
     ext = Column(String, nullable=False)
 
     @property
-    def full_name(self) -> str:
+    def filename(self) -> str:
         return f"{self.file_id}.{self.ext}"
 
     __mapper_args__ = {

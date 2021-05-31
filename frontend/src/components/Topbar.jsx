@@ -54,7 +54,7 @@ export function Topbar() {
                     >
                         <div>{user.firstName}</div>
                         <div className="flex-shrink-0 w-8">
-                            <CircleAvatar fileName={user.avatar?.fullName} />
+                            <CircleAvatar fileName={user.avatar?.filename} />
                         </div>
                     </div>
                 )}
@@ -72,7 +72,7 @@ export function Topbar() {
                             >
                                 <div className="flex-shrink-0 w-8">
                                     <CircleAvatar
-                                        fileName={user.avatar?.fullName}
+                                        fileName={user.avatar?.filename}
                                     />
                                 </div>
                                 {user.firstName} {user.lastName}

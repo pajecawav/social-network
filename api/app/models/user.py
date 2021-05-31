@@ -32,7 +32,7 @@ class User(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     avatar_id = Column(UUID, ForeignKey("images.file_id"), nullable=True)
-    avatar = relationship("Image")
+    avatar = relationship("Image", cascade="all,delete")
 
     last_seen = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
 

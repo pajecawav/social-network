@@ -68,7 +68,7 @@ export function UserProfilePage({ userId }) {
                                         <div className="flex-shrink-0 w-full">
                                             <CircleAvatar
                                                 fileName={
-                                                    friend.avatar?.fullName
+                                                    friend.avatar?.filename
                                                 }
                                                 isOnline={friend.isOnline}
                                             />

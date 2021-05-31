@@ -20,7 +20,7 @@ export function ChatHeader({
 
     const avatar = (
         <div className="flex-shrink-0 w-8 cursor-pointer">
-            <CircleAvatar fileName={chat.peer?.avatar?.fullName} />
+            <CircleAvatar fileName={chat.peer?.avatar?.filename} />
         </div>
     );
 

@@ -34,7 +34,7 @@ function ChatBlock({ chat }) {
             <div className="flex-shrink-0 w-14">
                 <CircleAvatar
                     isOnline={chat.chatType === "direct" && chat.peer.isOnline}
-                    fileName={chat.peer?.avatar?.fullName}
+                    fileName={chat.peer?.avatar?.filename}
                 />
             </div>
 
@@ -59,7 +59,7 @@ function ChatBlock({ chat }) {
                         <div className="flex items-center gap-2">
                             <div className="flex-shrink-0 w-7">
                                 <CircleAvatar
-                                    fileName={lastMessage.user.avatar?.fullName}
+                                    fileName={lastMessage.user.avatar?.filename}
                                 />
                             </div>
                             <div

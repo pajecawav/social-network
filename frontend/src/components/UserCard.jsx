@@ -11,7 +11,7 @@ export const UserCard = memo(
                 to={`/users/${user.userId}`}
             >
                 <CircleAvatar
-                    fileName={user.avatar?.fullName}
+                    fileName={user.avatar?.filename}
                     isOnline={user.isOnline}
                 />
             </Link>

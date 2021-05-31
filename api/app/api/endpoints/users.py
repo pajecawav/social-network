@@ -1,13 +1,13 @@
 from typing import Optional
 
-from fastapi import APIRouter, Body, Depends, File, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, File, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from app import crud, models, schemas
+from app import crud, models, schemas, storage
 from app.api import dependencies
 from app.api.dependencies import get_current_user, get_current_user_or_none, get_db
 from app.security import get_password_hash
@@ -157,10 +157,15 @@ def update_user_info(
 
 @router.post("/{user_id}/avatar", response_model=schemas.Image)
 def upload_user_avatar(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    if current_user.avatar is not None:
+        background_tasks.add_task(storage.delete_file, current_user.avatar.filename)
+        db.delete(current_user.avatar)
+
     # TODO: support more image types
     image = models.Image(ext="jpg")
     current_user.avatar = image
@@ -171,7 +176,6 @@ def upload_user_avatar(
     db.refresh(image)
 
     # TODO: save file in the background
-    with open(f"/storage/{image.full_name}", "wb") as out_file:
-        out_file.write(file.file.read())
+    storage.save_file(file.file, image.filename)
 
     return image

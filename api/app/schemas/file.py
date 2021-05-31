@@ -13,7 +13,7 @@ class FileTypeEnum(str, Enum):
 class File(BaseModel):
     file_id: UUID4
     file_type: FileTypeEnum
-    full_name: str
+    filename: str
 
 
 class Image(File):
