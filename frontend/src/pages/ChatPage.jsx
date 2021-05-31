@@ -99,6 +99,7 @@ export function ChatPage({ chatId }) {
                                 }
                                 onSelectMessage={(message) => {
                                     if (
+                                        editingMessage !== null ||
                                         selectedMessages.findIndex(
                                             (msg) =>
                                                 msg.messageId ===
