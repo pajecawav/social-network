@@ -1,4 +1,10 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import {
+    useCallback,
+    useContext,
+    useEffect,
+    useReducer,
+    useState,
+} from "react";
 import { deleteChatMessages, editMessage } from "../api";
 import { Chat } from "../components/Chat";
 import { ChatHeader } from "../components/ChatHeader";
@@ -15,6 +21,7 @@ import { ChatContext } from "../contexts/ChatContext";
 import { UserContext } from "../contexts/UserContext";
 import { useChat } from "../hooks/useChat";
 import { useIsPageVisible } from "../hooks/useIsPageVisible";
+import { selectedMessagesReducer } from "../reducers/selectedMessagesReducer";
 
 export function ChatPage({ chatId }) {
     const { user } = useContext(UserContext);
@@ -28,7 +35,10 @@ export function ChatPage({ chatId }) {
         updateLastSeenMessage,
     } = chatHookValues;
 
-    const [selectedMessages, setSelectedMessages] = useState([]);
+    const [selectedMessages, dispatchSelectedMessages] = useReducer(
+        selectedMessagesReducer,
+        []
+    );
     const [editingMessage, setEditingMessage] = useState(null);
     const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
@@ -67,7 +77,7 @@ export function ChatPage({ chatId }) {
             messageIds: selectedMessages.map((msg) => msg.messageId),
         })
             .then(() => {
-                setSelectedMessages([]);
+                dispatchSelectedMessages({ type: "reset" });
             })
             .catch(console.error);
     }, [chatId, selectedMessages]);
@@ -98,29 +108,19 @@ export function ChatPage({ chatId }) {
                                         : selectedMessages
                                 }
                                 onSelectMessage={(message) => {
-                                    if (
-                                        editingMessage !== null ||
-                                        selectedMessages.findIndex(
-                                            (msg) =>
-                                                msg.messageId ===
-                                                message.messageId
-                                        ) !== -1
-                                    ) {
+                                    if (editingMessage !== null) {
                                         return;
                                     }
-                                    setSelectedMessages([
-                                        ...selectedMessages,
+                                    dispatchSelectedMessages({
+                                        type: "add_message",
                                         message,
-                                    ]);
+                                    });
                                 }}
                                 onUnselectMessage={(message) => {
-                                    setSelectedMessages(
-                                        selectedMessages.filter(
-                                            (msg) =>
-                                                msg.messageId !==
-                                                message.messageId
-                                        )
-                                    );
+                                    dispatchSelectedMessages({
+                                        type: "remove_message",
+                                        messageId: message.messageId,
+                                    });
                                 }}
                             />
 
@@ -129,10 +129,14 @@ export function ChatPage({ chatId }) {
                                     <MessagesActionsBlock
                                         selectedMessages={selectedMessages}
                                         onUnselectAll={() =>
-                                            setSelectedMessages([])
+                                            dispatchSelectedMessages({
+                                                type: "reset",
+                                            })
                                         }
                                         onEditMessage={(message) => {
-                                            setSelectedMessages([]);
+                                            dispatchSelectedMessages({
+                                                type: "reset",
+                                            });
                                             setEditingMessage(
                                                 messages.find(
                                                     (msg) =>
