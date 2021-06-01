@@ -1,0 +1,22 @@
+import clsx from "clsx";
+import { DetailedHTMLProps, LabelHTMLAttributes } from "react";
+
+type LabelProps = DetailedHTMLProps<
+    LabelHTMLAttributes<HTMLLabelElement>,
+    HTMLLabelElement
+> & {
+    text: string;
+};
+
+export const Label = ({ text }: LabelProps) => {
+    return (
+        <label
+            className={clsx(
+                "self-center block max-w-36 text-primary-500",
+                "-mb-2 sm:mb-0 text-justify sm:text-right"
+            )}
+        >
+            {text}
+        </label>
+    );
+};

@@ -17,9 +17,36 @@ export type User = {
     friendStatus?: FriendStatus;
 };
 
+export type UserInfo = {
+    status?: string;
+    gender?: "male" | "female" | null;
+    birthdate?: Date;
+    relationshipStatus?: string;
+    country?: string;
+    city?: string;
+    website?: string;
+    email?: string;
+};
+
+export type Chat = {
+    chatId: number;
+    lastMessage?: Message;
+    lastSeenMessageId?: number;
+} & (
+    | {
+          chatType: "direct";
+          peer: User;
+      }
+    | {
+          chatType: "group";
+          title: string;
+          admin: User;
+      }
+);
+
 export type Message = {
     messageId: number;
-    text?: string;
+    text: string;
     timeSent: Date;
     timeEdited?: Date;
     user: User;
@@ -29,7 +56,7 @@ export type Message = {
 export type ChatAction =
     | {
           chatActionType: "invite" | "kick";
-          towardsUser?: User;
+          towardsUser: User;
       }
     | {
           chatActionType: "create" | "leave" | "join";
