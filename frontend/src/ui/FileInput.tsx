@@ -22,7 +22,7 @@ export const FileInput = ({
     return (
         <div
             className={clsx(
-                "flex relative w-full border-2 border-dashed border-primary-500",
+                "py-4 flex relative w-full border-2 border-dashed border-primary-500",
                 className
             )}
         >

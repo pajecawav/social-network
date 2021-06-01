@@ -3,6 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from .file import Image
 from .message import Message
 from .user import User
 
@@ -44,6 +45,7 @@ class GroupChatCreate(BaseModel):
 class GroupChat(Chat):
     title: str
     admin: User
+    avatar: Optional[Image]
 
 
 class GroupChatUpdate(BaseModel):

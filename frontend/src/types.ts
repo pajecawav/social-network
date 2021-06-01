@@ -41,6 +41,7 @@ export type Chat = {
           chatType: "group";
           title: string;
           admin: User;
+          avatar?: Image;
       }
 );
 

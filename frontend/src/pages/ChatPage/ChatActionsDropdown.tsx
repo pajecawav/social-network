@@ -1,6 +1,7 @@
 import {
     LinkIcon,
     PaperClipIcon,
+    PhotographIcon,
     SearchIcon,
     UserAddIcon,
 } from "@heroicons/react/outline";
@@ -14,12 +15,14 @@ type ChatActionsDropdownProps = DropdownProps & {
     chat: Chat;
     onOpenInviteToChat: () => void;
     onOpenInviteLink: () => void;
+    onOpenUpdateAvatar: () => void;
 };
 
 export const ChatActionsDropdown = ({
     chat,
     onOpenInviteToChat,
     onOpenInviteLink,
+    onOpenUpdateAvatar,
     ...props
 }: ChatActionsDropdownProps) => {
     const { user } = useContext(UserContext);
@@ -50,6 +53,13 @@ export const ChatActionsDropdown = ({
                             icon={LinkIcon}
                             text="Invite link"
                             onClick={onOpenInviteLink}
+                        />
+                    )}
+                    {isAdmin && (
+                        <DropdownMenuItem
+                            icon={PhotographIcon}
+                            text="Update avatar"
+                            onClick={onOpenUpdateAvatar}
                         />
                     )}
                 </>

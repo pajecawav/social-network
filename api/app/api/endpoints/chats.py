@@ -1,13 +1,13 @@
 from typing import List, Set, Union
 
-from fastapi import APIRouter, BackgroundTasks, Body, Depends, Query
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, File, Query, UploadFile
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from starlette import status
 
-from app import crud, models, schemas
+from app import crud, models, schemas, storage
 from app.api.dependencies import get_current_user, get_db
 from app.schemas.chat import ChatTypeEnum
 from app.sockets import namespaces
@@ -383,3 +383,38 @@ def join_chat_by_code(
     )
 
     return {"chat_id": chat.chat_id}
+
+
+@router.post("/{chat_id}/avatar", response_model=schemas.Image)
+def upload_group_chat_avatar(
+    chat_id: int,
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    chat = crud.group_chat.get_or_404(db, chat_id)
+
+    if current_user != chat.admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Don't have permission to update this chat.",
+        )
+
+    if chat.avatar is not None:
+        background_tasks.add_task(storage.delete_file, chat.avatar.filename)
+        db.delete(chat.avatar)
+
+    # TODO: support more image types
+    image = models.Image(ext="jpg")
+    chat.avatar = image
+
+    db.add(chat)
+    db.add(image)
+    db.commit()
+    db.refresh(image)
+
+    # TODO: save file in the background
+    storage.save_file(file.file, image.filename)
+
+    return image

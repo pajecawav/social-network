@@ -23,6 +23,7 @@ import { InviteLinkModal } from "./InviteLinkModal";
 import { InviteToChatModal } from "./InviteToChatModal";
 import { MessagesActionsBlock } from "./MessagesActionsBlock";
 import { SendMessageBlock } from "./SendMessageBlock";
+import { UpdateGroupChatAvatarModal } from "./UpdateGroupChatAvatarModal";
 
 type ChatPageProps = {
     chatId: number;
@@ -49,6 +50,7 @@ export const ChatPage = ({ chatId }: ChatPageProps) => {
     const [isInviteToChatOpen, setIsInviteToChatOpen] = useState(false);
     const [isInviteLinkOpen, setIsInviteLinkOpen] = useState(false);
     const [isDeleteMessagesOpen, setIsDeleteteMessagesOpen] = useState(false);
+    const [isUpdateAvatarOpen, setIsUpdateAvatarOpen] = useState(false);
 
     const isPageVisible = useIsPageVisible();
 
@@ -109,6 +111,9 @@ export const ChatPage = ({ chatId }: ChatPageProps) => {
                                 }
                                 onOpenInviteLink={() =>
                                     setIsInviteLinkOpen(true)
+                                }
+                                onOpenUpdateAvatar={() =>
+                                    setIsUpdateAvatarOpen(true)
                                 }
                             />
                             <Chat
@@ -191,12 +196,20 @@ export const ChatPage = ({ chatId }: ChatPageProps) => {
                                     }
                                 />
                                 {isAdmin && (
-                                    <InviteLinkModal
-                                        isOpen={isInviteLinkOpen}
-                                        onRequestClose={() =>
-                                            setIsInviteLinkOpen(false)
-                                        }
-                                    />
+                                    <>
+                                        <InviteLinkModal
+                                            isOpen={isInviteLinkOpen}
+                                            onRequestClose={() =>
+                                                setIsInviteLinkOpen(false)
+                                            }
+                                        />
+                                        <UpdateGroupChatAvatarModal
+                                            isOpen={isUpdateAvatarOpen}
+                                            onRequestClose={() =>
+                                                setIsUpdateAvatarOpen(false)
+                                            }
+                                        />
+                                    </>
                                 )}
                             </>
                         )}

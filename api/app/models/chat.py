@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from app.db.database import Base
@@ -67,6 +68,9 @@ class GroupChat(Chat):
 
     admin_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     admin = relationship("User", foreign_keys=[admin_id])
+
+    avatar_id = Column(UUID, ForeignKey("images.file_id"), nullable=True)
+    avatar = relationship("Image", cascade="all,delete")
 
     __mapper_args__ = {
         "polymorphic_identity": ChatTypeEnum.group,

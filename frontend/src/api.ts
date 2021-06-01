@@ -154,6 +154,16 @@ export const deleteChatMessages = (
         data: data,
     });
 
+export const updateGroupChatAvatar = (chatId: number, file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return axios.post(`/api/chats/${chatId}/avatar`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+};
+
 export const sendMessage = (data: {
     userId: number;
     message: { text: string };

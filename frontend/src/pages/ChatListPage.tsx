@@ -43,7 +43,7 @@ const ChatBlock = ({ chat }: ChatBlockProps) => {
                     fileName={
                         chat.chatType === "direct"
                             ? chat.peer.avatar?.filename
-                            : null
+                            : chat.avatar?.filename
                     }
                 />
             </div>

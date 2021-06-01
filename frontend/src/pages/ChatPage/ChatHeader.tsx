@@ -12,12 +12,14 @@ type ChatHeaderProps = {
     onOpenChatInfo: () => void;
     onOpenInviteToChat: () => void;
     onOpenInviteLink: () => void;
+    onOpenUpdateAvatar: () => void;
 };
 
 export const ChatHeader = ({
     onOpenChatInfo,
     onOpenInviteToChat,
     onOpenInviteLink,
+    onOpenUpdateAvatar,
 }: ChatHeaderProps) => {
     const { chat } = useContext(ChatContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -25,13 +27,15 @@ export const ChatHeader = ({
 
     const avatar = (
         <div className="flex-shrink-0 w-8 cursor-pointer">
-            <CircleAvatar
-                fileName={
-                    chat !== null && chat.chatType === "direct"
-                        ? chat.peer.avatar?.filename
-                        : null
-                }
-            />
+            {chat && (
+                <CircleAvatar
+                    fileName={
+                        chat.chatType === "direct"
+                            ? chat.peer.avatar?.filename
+                            : chat.avatar?.filename
+                    }
+                />
+            )}
         </div>
     );
 
@@ -72,6 +76,7 @@ export const ChatHeader = ({
                         onRequestClose={() => setIsDropdownOpen(false)}
                         onOpenInviteToChat={onOpenInviteToChat}
                         onOpenInviteLink={onOpenInviteLink}
+                        onOpenUpdateAvatar={onOpenUpdateAvatar}
                     />
                 </div>
 
