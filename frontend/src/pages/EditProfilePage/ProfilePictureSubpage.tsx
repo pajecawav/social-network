@@ -1,10 +1,10 @@
-import { UploadIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { updateUserAvatar } from "../../api";
 import { UserContext } from "../../contexts/UserContext";
 import { Button } from "../../ui/Button";
+import { FileInput } from "../../ui/FileInput";
 import { FormError } from "../../ui/FormError";
 import { Spinner } from "../../ui/Spinner";
 
@@ -37,36 +37,13 @@ export const ProfilePictureSubpage = () => {
             <div className="m-auto text-2xl text-center">
                 Upload new profile picture
             </div>
-            <div className="relative flex m-auto w-full min-h-[10rem] py-4 max-w-[36rem] border-2 border-dashed border-primary-500">
-                <div className="flex flex-col gap-3 px-12 m-auto text-xl text-primary-400">
-                    {file ? (
-                        <div className="max-w-full text-center">
-                            <div>Selected file </div>
-                            <div className="break-all text-secondary-500">
-                                {file.name}
-                            </div>
-                        </div>
-                    ) : (
-                        <>
-                            <UploadIcon className="w-10 h-10 mx-auto" />
-                            <h1 className="text-center">
-                                Choose an image or drag it here
-                            </h1>
-                        </>
-                    )}
-                </div>
-                <input
-                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                    type="file"
-                    accept="image/jpeg"
-                    onChange={(event) => {
-                        const file = event.target.files![0];
-                        setFile(file);
-                        // TODO: refactor this random number into a constant
-                        if (file.size > 3 * 1024 * 1024) {
-                            setError("File is too big (max size 3Mb)");
-                        }
-                    }}
+            <div className="flex m-auto w-full min-h-[10rem] py-4 max-w-[36rem]">
+                <FileInput
+                    placeholderText="Choose an image or drag it here"
+                    file={file}
+                    maxSizeMB={3}
+                    onFileSelected={(selectedFile) => setFile(selectedFile)}
+                    onError={(error) => setError(error)}
                 />
             </div>
 
