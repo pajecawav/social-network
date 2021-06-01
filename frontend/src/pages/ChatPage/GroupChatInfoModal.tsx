@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { removeChatUser } from "../api";
-import { ChatContext } from "../contexts/ChatContext";
-import { UserContext } from "../contexts/UserContext";
-import { Button } from "../ui/Button";
-import { CircleAvatar } from "./CircleAvatar";
-import { ModalBase, ModalBaseProps } from "./ModalBase";
-import { UserCard } from "./UserCard";
+import { removeChatUser } from "../../api";
+import { CircleAvatar } from "../../components/CircleAvatar";
+import { ModalBase, ModalBaseProps } from "../../components/ModalBase";
+import { UserCard } from "../../components/UserCard";
+import { ChatContext } from "../../contexts/ChatContext";
+import { UserContext } from "../../contexts/UserContext";
+import { Button } from "../../ui/Button";
 
 type GroupChatInfoModalProps = Omit<ModalBaseProps, "title">;
 

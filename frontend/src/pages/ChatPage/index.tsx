@@ -5,24 +5,24 @@ import {
     useReducer,
     useState,
 } from "react";
-import { deleteChatMessages, editMessage } from "../api";
-import { Chat } from "../components/Chat";
-import { ChatHeader } from "../components/ChatHeader";
-import { ConfirmationModal } from "../components/ConfirmationModal";
-import { Container } from "../components/Container";
-import { EditMessageBlock } from "../components/EditMessageBlock";
-import { GroupChatInfoModal } from "../components/GroupChatInfoModal";
-import { InviteLinkModal } from "../components/InviteLinkModal";
-import { InviteToChatModal } from "../components/InviteToChatModal";
-import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
-import { MessagesActionsBlock } from "../components/MessagesActionsBlock";
-import { SendMessageBlock } from "../components/SendMessageBlock";
-import { ChatContext } from "../contexts/ChatContext";
-import { UserContext } from "../contexts/UserContext";
-import { useChat } from "../hooks/useChat";
-import { useIsPageVisible } from "../hooks/useIsPageVisible";
-import { selectedMessagesReducer } from "../reducers/selectedMessagesReducer";
-import { Message } from "../types";
+import { deleteChatMessages, editMessage } from "../../api";
+import { ConfirmationModal } from "../../components/ConfirmationModal";
+import { Container } from "../../components/Container";
+import { LoadingPlaceholder } from "../../components/LoadingPlaceholder";
+import { ChatContext } from "../../contexts/ChatContext";
+import { UserContext } from "../../contexts/UserContext";
+import { useChat } from "../../hooks/useChat";
+import { useIsPageVisible } from "../../hooks/useIsPageVisible";
+import { selectedMessagesReducer } from "../../reducers/selectedMessagesReducer";
+import { Message } from "../../types";
+import { Chat } from "./Chat";
+import { ChatHeader } from "./ChatHeader";
+import { EditMessageBlock } from "./EditMessageBlock";
+import { GroupChatInfoModal } from "./GroupChatInfoModal";
+import { InviteLinkModal } from "./InviteLinkModal";
+import { InviteToChatModal } from "./InviteToChatModal";
+import { MessagesActionsBlock } from "./MessagesActionsBlock";
+import { SendMessageBlock } from "./SendMessageBlock";
 
 type ChatPageProps = {
     chatId: number;

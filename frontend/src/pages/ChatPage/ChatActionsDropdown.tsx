@@ -5,10 +5,10 @@ import {
     UserAddIcon,
 } from "@heroicons/react/outline";
 import { useContext } from "react";
-import { Dropdown, DropdownProps } from "../components/Dropdown";
-import { UserContext } from "../contexts/UserContext";
-import { Chat } from "../types";
-import { DropdownMenuItem } from "../ui/DropdownMenuItem";
+import { Dropdown, DropdownProps } from "../../components/Dropdown";
+import { UserContext } from "../../contexts/UserContext";
+import { Chat } from "../../types";
+import { DropdownMenuItem } from "../../ui/DropdownMenuItem";
 
 type ChatActionsDropdownProps = DropdownProps & {
     chat: Chat;

@@ -2,11 +2,11 @@ import { ArrowLeftIcon, DotsHorizontalIcon } from "@heroicons/react/outline";
 import clsx from "clsx";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChatContext } from "../contexts/ChatContext";
-import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
-import { getChatTitle } from "../utils";
+import { CircleAvatar } from "../../components/CircleAvatar";
+import { ChatContext } from "../../contexts/ChatContext";
+import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
+import { getChatTitle } from "../../utils";
 import { ChatActionsDropdown } from "./ChatActionsDropdown";
-import { CircleAvatar } from "./CircleAvatar";
 
 type ChatHeaderProps = {
     onOpenChatInfo: () => void;

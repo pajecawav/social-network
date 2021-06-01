@@ -62,7 +62,7 @@ export const UserProfileInfo = ({ user }: UserProfileInfoProps) => {
     return (
         <Container className="p-4">
             {userInfo === null ? (
-                <LoadingPlaceholder className="h-full min-h-96" />
+                <LoadingPlaceholder />
             ) : (
                 <>
                     <div className="pb-2 mb-2 border-b-2 border-primary-700">

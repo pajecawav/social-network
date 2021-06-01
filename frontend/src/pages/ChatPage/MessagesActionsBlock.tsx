@@ -1,8 +1,8 @@
 import { XIcon } from "@heroicons/react/outline";
 import { useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
-import { Message } from "../types";
-import { Button } from "../ui/Button";
+import { UserContext } from "../../contexts/UserContext";
+import { Message } from "../../types";
+import { Button } from "../../ui/Button";
 
 type MessagesActionsBlockProps = {
     selectedMessages: Message[];

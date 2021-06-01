@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import { ChatAction as ChatActionType, User } from "../types";
+import { ChatAction as ChatActionType, User } from "../../types";
 
 const UserProfileLink = ({ user }: { user: User }) => (
     <Link className="hover:underline" to={`/users/${user.userId}`}>

@@ -2,10 +2,10 @@ import clsx from "clsx";
 import dayjs from "dayjs";
 import { memo } from "react";
 import { Link } from "react-router-dom";
-import { Message } from "../types";
-import { formatLastEdited } from "../utils";
-import { CircleAvatar } from "./CircleAvatar";
-import { LinkifiedText } from "./LinkifiedText";
+import { CircleAvatar } from "../../components/CircleAvatar";
+import { LinkifiedText } from "../../components/LinkifiedText";
+import { Message } from "../../types";
+import { formatLastEdited } from "../../utils";
 
 type ChatMessageProps = {
     message: Message;

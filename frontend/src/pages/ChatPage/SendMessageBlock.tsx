@@ -1,8 +1,8 @@
 import React, { FormEvent, useState } from "react";
-import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
-import { ReactComponent as SendIcon } from "../icons/send.svg";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
+import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
+import { ReactComponent as SendIcon } from "../../icons/send.svg";
+import { Button } from "../../ui/Button";
+import { Input } from "../../ui/Input";
 
 type SendMessageBlockProps = {
     onSubmit: (text: string) => void;

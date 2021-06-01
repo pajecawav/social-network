@@ -1,9 +1,9 @@
 import { CheckCircleIcon, XIcon } from "@heroicons/react/outline";
 import { FormEvent } from "react";
-import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
-import { Message } from "../types";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
+import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
+import { Message } from "../../types";
+import { Button } from "../../ui/Button";
+import { Input } from "../../ui/Input";
 
 type EditMessageBlockProps = {
     message: Message;

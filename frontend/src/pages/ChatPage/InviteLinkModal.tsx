@@ -1,10 +1,10 @@
 import { ClipboardCopyIcon } from "@heroicons/react/outline";
 import { useContext, useEffect, useState } from "react";
-import { getChatInviteCode } from "../api";
-import { ChatContext } from "../contexts/ChatContext";
-import { Input } from "../ui/Input";
-import { LoadingPlaceholder } from "./LoadingPlaceholder";
-import { ModalBase, ModalBaseProps } from "./ModalBase";
+import { getChatInviteCode } from "../../api";
+import { LoadingPlaceholder } from "../../components/LoadingPlaceholder";
+import { ModalBase, ModalBaseProps } from "../../components/ModalBase";
+import { ChatContext } from "../../contexts/ChatContext";
+import { Input } from "../../ui/Input";
 
 type InviteLinkModalProps = Omit<ModalBaseProps, "title">;
 

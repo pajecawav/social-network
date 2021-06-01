@@ -3,11 +3,11 @@ import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useRef, useState } from "react";
 import { Waypoint } from "react-waypoint";
-import { Message } from "../types";
-import { formatDate } from "../utils";
+import { LoadingPlaceholder } from "../../components/LoadingPlaceholder";
+import { Message } from "../../types";
+import { formatDate } from "../../utils";
 import { ChatAction } from "./ChatAction";
 import { ChatMessage } from "./ChatMessage";
-import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 type ChatProps = {
     isLoading: boolean;
