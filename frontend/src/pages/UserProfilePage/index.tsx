@@ -39,7 +39,7 @@ export const UserProfilePage = ({ userId }: { userId: number }) => {
     };
 
     return user === null ? (
-        <LoadingPlaceholder className="h-full min-h-96" />
+        <LoadingPlaceholder />
     ) : (
         <div className="flex flex-col flex-grow gap-4 md:flex-row">
             <div className="flex flex-col flex-shrink-0 order-2 w-full gap-4 md:order-1 md:w-60">
