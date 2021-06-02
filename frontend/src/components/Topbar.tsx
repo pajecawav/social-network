@@ -24,7 +24,7 @@ export const Topbar = () => {
     };
 
     return (
-        <div className="sticky top-0 z-50 h-12 border-b-2 shadow-md bg-primary-900 border-primary-700">
+        <div className="sticky top-0 z-50 w-full h-12 border-b-2 shadow-md bg-primary-900 border-primary-700">
             <div className="relative flex items-center w-full h-full max-w-5xl px-3 mx-auto">
                 <div className="w-48">
                     <Link className="flex w-max" to="/">

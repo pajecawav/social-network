@@ -43,7 +43,7 @@ type ChatActionProps = {
 
 export const ChatAction = ({ user, action, className }: ChatActionProps) => {
     return (
-        <div className={clsx("m-auto text-primary-500", className)}>
+        <div className={clsx("mx-auto text-primary-500", className)}>
             {renderActionText(user, action)}
         </div>
     );

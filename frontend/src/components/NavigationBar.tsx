@@ -29,7 +29,7 @@ export const NavigationBar = ({ isFullPage = false }: NavigationBarProps) => {
         <div
             className={clsx(
                 "flex flex-col flex-shrink-0 h-full",
-                isFullPage ? "" : "sticky top-16 w-48 pr-4"
+                isFullPage ? "p-4" : "sticky top-16 w-48 pr-4"
             )}
         >
             {loggedIn ? (

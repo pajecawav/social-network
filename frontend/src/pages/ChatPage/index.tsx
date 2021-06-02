@@ -98,12 +98,12 @@ export const ChatPage = ({ chatId }: ChatPageProps) => {
 
     return (
         <ChatContext.Provider value={chatHookValues}>
-            <Container>
+            <Container className="md:max-h-[calc(100vh-4rem)] h-full">
                 {chat === null || isLoading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <>
-                        <div className="flex flex-col">
+                        <div className="relative flex flex-col h-full">
                             <ChatHeader
                                 onOpenChatInfo={() => setIsChatInfoOpen(true)}
                                 onOpenInviteToChat={() =>
@@ -141,7 +141,7 @@ export const ChatPage = ({ chatId }: ChatPageProps) => {
                                 }}
                             />
 
-                            <div className="flex flex-col gap-2 px-4 py-4 border-t border-primary-600">
+                            <div className="flex flex-col w-full gap-2 px-4 py-4 border-t bg-primary-700 border-primary-600">
                                 {selectedMessages.length > 0 ? (
                                     <MessagesActionsBlock
                                         selectedMessages={selectedMessages}

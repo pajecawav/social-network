@@ -24,7 +24,7 @@ const NavigationItem = ({ to, icon: Icon }: NavigationItemProps) => (
 
 export function MobileNavigationBar() {
     return (
-        <div className="fixed bottom-0 left-0 flex items-center justify-around w-screen h-12 bg-primary-700 ">
+        <div className="fixed bottom-0 left-0 flex items-center justify-around w-screen h-12 p-4 bg-primary-700 ">
             <NavigationItem to="/me" icon={UserCircleIcon} />
             <NavigationItem to="/feed" icon={NewspaperIcon} />
             <NavigationItem to="/users/search" icon={SearchIcon} />
