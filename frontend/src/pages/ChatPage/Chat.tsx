@@ -102,9 +102,10 @@ export const Chat = ({
     });
 
     return (
-        <div className="relative flex-grow h-0">
-            <div className="flex flex-col h-full pt-4 pr-2 ml-4 overflow-y-auto">
+        <div className="relative flex flex-grow h-0">
+            <div className="flex flex-col w-full h-full pt-4 pr-2 ml-4 overflow-y-auto">
                 {isLoading && <LoadingPlaceholder />}
+                <div className="h-0 mt-auto" />
                 {renderedMessages}
 
                 <Waypoint
