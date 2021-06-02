@@ -10,7 +10,7 @@ export const Layout = () => {
     return (
         <div
             className={clsx(
-                "w-full flex flex-grow max-w-5xl pb-12 m-auto md:mb-4 md:flex-row md:pb-0",
+                "w-full flex flex-grow max-w-5xl pb-12 m-auto md:pb-4 md:flex-row",
                 !isSmallScreen && "px-3 mt-4"
             )}
         >

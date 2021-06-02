@@ -40,7 +40,7 @@ export const ChatHeader = ({
     );
 
     return (
-        <div className="flex items-center w-full h-12 border-b bg-primary-700 border-primary-700">
+        <div className="flex items-center w-full h-12 border-b bg-primary-800 border-primary-700">
             <Link
                 className={clsx(
                     "flex items-center h-full px-4 py-2 text-center transition-all duration-200 text-primary-200 hover:bg-primary-700",

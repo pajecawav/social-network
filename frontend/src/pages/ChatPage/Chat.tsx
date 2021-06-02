@@ -117,7 +117,7 @@ export const Chat = ({
 
                 <button
                     className={clsx(
-                        "absolute z-20 w-10 h-10 ml-auto right-7 bottom-3 p-1 rounded-full border text-secondary-800 bg-primary-700 border-primary-600 transform-colors duration-200 outline-none focus:outline-none hover:bg-primary-600",
+                        "absolute z-20 w-10 h-10 ml-auto right-3 bottom-3 md:right-7 md:bottom-7 p-1 rounded-full border text-secondary-800 bg-primary-700 border-primary-600 transform-colors duration-200 outline-none focus:outline-none hover:bg-primary-600",
                         isScrollAnchored
                             ? "opacity-0 pointer-events-none"
                             : "opacity-100 pointer-events-auto"

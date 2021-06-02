@@ -37,7 +37,7 @@ export const MessagesActionsBlock = ({
             </div>
             <div className="flex flex-wrap gap-3">
                 <Button
-                    className="w-max disabled:bg-primary-700"
+                    className="w-max disabled:bg-primary-600"
                     size="thin"
                     disabled={
                         selectedMessages.length > 1 || !onlyMyMessagesSelected
@@ -48,14 +48,14 @@ export const MessagesActionsBlock = ({
                 </Button>
                 {/* TODO: implement replies */}
                 <Button
-                    className="w-max disabled:bg-primary-700"
+                    className="w-max disabled:bg-primary-600"
                     size="thin"
                     disabled={true}
                 >
                     Reply
                 </Button>
                 <Button
-                    className="w-max disabled:bg-primary-700"
+                    className="w-max disabled:bg-primary-600"
                     size="thin"
                     disabled={!onlyMyMessagesSelected}
                     onClick={onDeleteSelectedMessages}
