@@ -57,6 +57,7 @@ export const ChatMessage = memo(
                         >
                             <CircleAvatar
                                 fileName={message.user.avatar?.filename}
+                                identiconSeed={message.user.userId}
                             />
                         </Link>
                     )}

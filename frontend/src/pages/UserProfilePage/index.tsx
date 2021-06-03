@@ -71,6 +71,7 @@ export const UserProfilePage = ({ userId }: { userId: number }) => {
                                                 fileName={
                                                     friend.avatar?.filename
                                                 }
+                                                identiconSeed={friend.userId}
                                                 isOnline={friend.isOnline}
                                             />
                                         </div>

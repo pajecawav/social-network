@@ -34,6 +34,11 @@ export const ChatHeader = ({
                             ? chat.peer.avatar?.filename
                             : chat.avatar?.filename
                     }
+                    identiconSeed={
+                        chat.chatType === "direct"
+                            ? chat.peer.userId
+                            : chat.chatId
+                    }
                 />
             )}
         </div>

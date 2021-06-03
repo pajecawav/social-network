@@ -54,7 +54,10 @@ export const Topbar = () => {
                     >
                         <div>{user.firstName}</div>
                         <div className="flex-shrink-0 w-8">
-                            <CircleAvatar fileName={user.avatar?.filename} />
+                            <CircleAvatar
+                                fileName={user.avatar?.filename}
+                                identiconSeed={user.userId}
+                            />
                         </div>
                     </div>
                 )}
@@ -73,6 +76,7 @@ export const Topbar = () => {
                                 <div className="flex-shrink-0 w-8">
                                     <CircleAvatar
                                         fileName={user.avatar?.filename}
+                                        identiconSeed={user.userId}
                                     />
                                 </div>
                                 {user.firstName} {user.lastName}

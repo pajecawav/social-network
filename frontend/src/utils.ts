@@ -109,3 +109,12 @@ export const chatActionToText = (user: User, action: ChatAction) => {
             return `${fromUser} joined`;
     }
 };
+
+export const randomSequence = function* (seed: number) {
+    for (;;) {
+        seed ^= seed << 13;
+        seed ^= seed >> 17;
+        seed ^= seed << 5;
+        yield Math.abs(seed);
+    }
+};

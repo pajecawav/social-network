@@ -42,6 +42,7 @@ export const NavigationBar = ({ isFullPage = false }: NavigationBarProps) => {
                             <div className="flex-shrink-0 w-12">
                                 <CircleAvatar
                                     fileName={user!.avatar?.filename}
+                                    identiconSeed={user?.userId}
                                 />
                             </div>
                             <div>

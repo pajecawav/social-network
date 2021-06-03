@@ -45,7 +45,10 @@ export const GroupChatInfoModal = (props: GroupChatInfoModalProps) => {
                 {/* header */}
                 <div className="flex gap-4 pb-4 border-b-2 border-primary-700">
                     <div className="flex-shrink-0 w-16">
-                        <CircleAvatar fileName={chat.avatar?.filename} />
+                        <CircleAvatar
+                            fileName={chat.avatar?.filename}
+                            identiconSeed={chat.chatId}
+                        />
                     </div>
                     <div>
                         <div className="font-medium">{chat!.title}</div>

@@ -30,7 +30,8 @@ const ChatBlock = ({ chat }: ChatBlockProps) => {
     const seenLastMessage =
         chat.lastSeenMessageId !== null &&
         lastMessage &&
-        lastMessage.messageId === chat.lastSeenMessageId;
+        chat.lastSeenMessageId &&
+        lastMessage.messageId <= chat.lastSeenMessageId;
 
     return (
         <Link
@@ -45,6 +46,7 @@ const ChatBlock = ({ chat }: ChatBlockProps) => {
                             ? chat.peer.avatar?.filename
                             : chat.avatar?.filename
                     }
+                    identiconSeed={chat.chatId}
                 />
             </div>
 
@@ -70,6 +72,7 @@ const ChatBlock = ({ chat }: ChatBlockProps) => {
                             <div className="flex-shrink-0 w-7">
                                 <CircleAvatar
                                     fileName={lastMessage.user.avatar?.filename}
+                                    identiconSeed={lastMessage.user.userId}
                                 />
                             </div>
                             <div

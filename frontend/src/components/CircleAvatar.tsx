@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, ImgHTMLAttributes } from "react";
+import { Identicon } from "../ui/Identicon";
 import { AvatarPlaceholder } from "./AvatarPlaceholder";
 
 type CircleAvatarProps = DetailedHTMLProps<
@@ -6,14 +7,16 @@ type CircleAvatarProps = DetailedHTMLProps<
     HTMLImageElement
 > & {
     fileName?: string | null;
+    identiconSeed?: number | null;
     isOnline?: boolean;
 };
 
-export function CircleAvatar({
-    fileName,
+export const CircleAvatar = ({
+    fileName = null,
+    identiconSeed = null,
     isOnline = false,
     ...props
-}: CircleAvatarProps) {
+}: CircleAvatarProps) => {
     return (
         <div className="relative">
             <div className="overflow-hidden rounded-full aspect-w-1 aspect-h-1">
@@ -23,6 +26,13 @@ export function CircleAvatar({
                         src={`/storage/${fileName}`}
                         alt={"user avatar"}
                         {...props}
+                    />
+                ) : identiconSeed ? (
+                    <Identicon
+                        className="p-[20%] bg-primary-600"
+                        width={5}
+                        height={5}
+                        seed={identiconSeed}
                     />
                 ) : (
                     <AvatarPlaceholder />
@@ -35,4 +45,4 @@ export function CircleAvatar({
             )}
         </div>
     );
-}
+};

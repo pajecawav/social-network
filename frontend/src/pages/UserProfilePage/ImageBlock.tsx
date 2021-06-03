@@ -57,7 +57,10 @@ export const ImageBlock = ({
     return (
         <Container className={clsx("flex flex-col gap-4 p-4", className)}>
             <div className="relative">
-                <Avatar fileName={user.avatar?.filename} />
+                <Avatar
+                    fileName={user.avatar?.filename}
+                    identiconSeed={user.userId}
+                />
                 {isMe && !user.avatar && (
                     <Link
                         className="absolute text-primary-400 text-center w-full bottom-[7%] hover:underline "
