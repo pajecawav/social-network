@@ -24,7 +24,13 @@ chat_user_association_table = Table(
     Column(
         "last_seen_message_id",
         Integer,
-        ForeignKey("messages.message_id"),
         nullable=True,
     ),
+)
+
+group_user_association_table = Table(
+    "group_user_association",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.user_id"), nullable=False),
+    Column("group_id", Integer, ForeignKey("groups.group_id"), nullable=False),
 )

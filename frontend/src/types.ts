@@ -72,3 +72,15 @@ export type File = {
 };
 
 export type Image = File;
+
+export type Group = {
+    groupId: number;
+    name: string;
+    shortDescription?: string;
+    description?: string;
+
+    admin: User;
+    avatar?: Image;
+
+    isFollowing?: boolean;
+};

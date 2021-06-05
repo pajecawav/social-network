@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, BackgroundTasks, Body, Depends, File, UploadFile, status
 from fastapi.encoders import jsonable_encoder
@@ -179,3 +179,66 @@ def upload_user_avatar(
     storage.save_file(file.file, image.filename)
 
     return image
+
+
+@router.get("/{user_id}/groups", response_model=List[schemas.Group])
+def get_groups(user_id: int, db: Session = Depends(get_db)):
+    user = crud.user.get_or_404(db, user_id)
+    return user.groups.all()
+
+
+@router.post("/{user_id}/groups", response_model=List[schemas.Group])
+def follow_group(
+    user_id: int,
+    group_id: int = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    if current_user.user_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can only follow groups on your own profile.",
+        )
+
+    group = crud.group.get_or_404(db, group_id)
+
+    if current_user in group.users:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Already following this group.",
+        )
+
+    group.users.append(current_user)
+    db.add(group)
+    db.commit()
+
+    return JSONResponse()
+
+
+@router.delete("/{user_id}/groups", response_model=List[schemas.Group])
+def unfollow_group(
+    user_id: int,
+    group_id: int = Body(..., embed=True),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    # TODO: force transfer admin rights if admin leaves
+    if current_user.user_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Can only unfollow groups on your own profile.",
+        )
+
+    group = crud.group.get_or_404(db, group_id)
+
+    if current_user not in group.users:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Not following this group.",
+        )
+
+    group.users.remove(current_user)
+    db.add(group)
+    db.commit()
+
+    return JSONResponse()

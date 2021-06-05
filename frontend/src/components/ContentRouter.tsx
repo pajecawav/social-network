@@ -6,8 +6,10 @@ import { ChatListPage } from "../pages/ChatListPage";
 import { ChatPage } from "../pages/ChatPage";
 import { EditProfilePage } from "../pages/EditProfilePage";
 import { FriendsPage } from "../pages/FriendsPage";
+import { GroupPage } from "../pages/GroupPage";
 import { JoinChatPage } from "../pages/JoinChatPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
+import { UsersGroupsPage } from "../pages/UsersGroupsPage";
 import { UsersSearchPage } from "../pages/UsersSearchPage";
 import { NavigationBar } from "./NavigationBar";
 
@@ -46,6 +48,17 @@ export const ContentRouter = () => {
                         <ChatPage chatId={+props.match.params.id} />
                     )}
                     key="/chats/id"
+                />,
+                <Route
+                    exact
+                    path="/groups"
+                    component={UsersGroupsPage}
+                    key="/groups"
+                />,
+                <Route
+                    path="/groups/:groupId"
+                    component={GroupPage}
+                    key="/groups/id"
                 />,
                 // routes only present on devices with small screen
                 ...(isSmallScreen

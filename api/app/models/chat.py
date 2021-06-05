@@ -10,6 +10,7 @@ from app.schemas.chat import ChatTypeEnum
 from .association_tables import chat_user_association_table
 
 if TYPE_CHECKING:
+    from .file import Image  # noqa
     from .message import Message  # noqa
     from .user import User  # noqa
 
@@ -37,7 +38,6 @@ class Chat(Base):
         secondary=chat_user_association_table,
         back_populates="chats",
         lazy="dynamic",
-        order_by="User.user_id",
     )
 
     __mapper_args__ = {

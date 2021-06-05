@@ -174,3 +174,29 @@ export const deleteMessage = (messageId: number) =>
 
 export const editMessage = (messageId: number, data: { text: string }) =>
     axios.patch(`/api/messages/${messageId}`, data);
+
+export const createGroup = (data: {
+    name: string;
+    shortDescription: string;
+    description: string;
+}) => {
+    axios.post("/api/groups", data);
+};
+export const getGroup = (groupId: number | string) =>
+    axios.get(`/api/groups/${groupId}`);
+
+export const getUsersGroups = (userId: number | string) =>
+    axios.get(`/api/users/${userId}/groups`);
+
+export const getGroupUsers = (groupId: number | string) =>
+    axios.get(`/api/groups/${groupId}/users`);
+
+export const followGroup = (
+    userId: number | string,
+    groupId: number | string
+) => axios.post(`/api/users/${userId}/groups`, { groupId });
+
+export const unfollowGroup = (
+    userId: number | string,
+    groupId: number | string
+) => axios.delete(`/api/users/${userId}/groups`, { data: { groupId } });

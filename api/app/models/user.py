@@ -11,11 +11,13 @@ from .association_tables import (
     chat_user_association_table,
     friend_requests_association_table,
     friends_association_table,
+    group_user_association_table,
 )
 
 if TYPE_CHECKING:
     from .chat import Chat  # noqa
     from .file import Image  # noqa
+    from .group import Group  # noqa
     from .message import Message  # noqa
     from .user_info import UserInfo  # noqa
 
@@ -66,6 +68,13 @@ class User(Base):
     chats = relationship(
         "Chat",
         secondary=chat_user_association_table,
+        back_populates="users",
+        lazy="dynamic",
+    )
+
+    groups = relationship(
+        "Group",
+        secondary=group_user_association_table,
         back_populates="users",
         lazy="dynamic",
     )
