@@ -83,7 +83,7 @@ export const FriendsPage = () => {
     };
 
     return (
-        <div className="flex gap-4">
+        <div className="flex min-h-full gap-4 md:min-h-0">
             <Container className="flex flex-col flex-grow">
                 <TabsHeader
                     tabs={tabs}

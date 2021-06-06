@@ -1,12 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getFriends, getUser } from "../../api";
-import { CircleAvatar } from "../../components/CircleAvatar";
-import { Container } from "../../components/Container";
 import { LoadingPlaceholder } from "../../components/LoadingPlaceholder";
 import { UserContext } from "../../contexts/UserContext";
 import { useTitle } from "../../hooks/useTitle";
 import { FriendStatus, User } from "../../types";
+import { FriendsBlock } from "./FriendsBlock";
 import { ImageBlock } from "./ImageBlock";
 import { UserProfileInfo } from "./UserProfileInfo";
 
@@ -48,42 +46,11 @@ export const UserProfilePage = ({ userId }: { userId: number }) => {
                     isMe={isMe}
                     onFriendStatusChanged={handleFriendStatusChanged}
                 />
-                <Container className="p-4">
-                    <Link className="flex" to={`/friends?id=${user.userId}`}>
-                        <div>Friends</div>
-                        <div className="ml-2 text-primary-500">
-                            {friendsAmount}
-                        </div>
-                    </Link>
-                    {friends === null ? (
-                        <LoadingPlaceholder className="w-full h-full min-h-40" />
-                    ) : (
-                        friends.length > 0 && (
-                            <div className="grid grid-cols-3 mt-4 gap-y-2 gap-x-6">
-                                {friends.map((friend) => (
-                                    <Link
-                                        className="flex flex-col items-center gap-2"
-                                        to={`/users/${friend.userId}`}
-                                        key={friend.userId}
-                                    >
-                                        <div className="flex-shrink-0 w-full">
-                                            <CircleAvatar
-                                                fileName={
-                                                    friend.avatar?.filename
-                                                }
-                                                identiconSeed={friend.userId}
-                                                isOnline={friend.isOnline}
-                                            />
-                                        </div>
-                                        <div className="text-center hover:underline">
-                                            {friend.firstName}
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        )
-                    )}
-                </Container>
+                <FriendsBlock
+                    randomFriends={friends}
+                    friendsAmount={friendsAmount}
+                    userId={user.userId}
+                />
             </div>
             <div className="flex-grow order-1 md:order-1">
                 <UserProfileInfo user={user} />

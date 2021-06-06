@@ -17,17 +17,20 @@ export type ButtonProps = DetailedHTMLProps<
     PropsWithChildren<{
         size?: keyof typeof sizeClassnames;
         className?: string;
+        secondary?: boolean;
     }>;
 
 export const Button = ({
     className,
     size = "normal",
+    secondary = false,
     children,
     ...props
 }: ButtonProps) => (
     <button
         className={clsx(
-            "px-6 py-2 transition-all duration-200 rounded hover:bg-opacity-90 disabled:cursor-auto bg-secondary disabled:bg-primary-600",
+            "px-6 py-2 transition-all duration-200 rounded disabled:cursor-auto hover:bg-opacity-90 disabled:bg-primary-600",
+            secondary ? "bg-primary-700 bg-opacity-90" : "bg-secondary ",
             sizeClassnames[size],
             className
         )}

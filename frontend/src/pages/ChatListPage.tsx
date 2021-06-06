@@ -166,7 +166,7 @@ export function ChatListPage() {
     });
 
     return (
-        <Container>
+        <Container className="min-h-full md:min-h-0">
             {isLoading ? (
                 <LoadingPlaceholder />
             ) : (

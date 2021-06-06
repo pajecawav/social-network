@@ -29,7 +29,7 @@ const GroupPageContent = () => {
             {group === null ? (
                 <LoadingPlaceholder />
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-[1fr,16rem] gap-4 items-start ">
+                <div className="grid grid-cols-1 md:grid-cols-[1fr,16rem] gap-4 items-start">
                     <GroupHeader />
                     {isSmallScreen ? (
                         <>

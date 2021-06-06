@@ -8,13 +8,14 @@ type LabelProps = DetailedHTMLProps<
     text: string;
 };
 
-export const Label = ({ text }: LabelProps) => {
+export const Label = ({ text, className, ...props }: LabelProps) => {
     return (
         <label
             className={clsx(
-                "self-center block max-w-36 text-primary-500",
-                "-mb-2 sm:mb-0 text-justify sm:text-right"
+                "block -mb-2 text-justify max-w-36 text-primary-500 sm:mb-0 sm:text-right",
+                className
             )}
+            {...props}
         >
             {text}
         </label>

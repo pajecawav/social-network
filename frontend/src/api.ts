@@ -177,11 +177,10 @@ export const editMessage = (messageId: number, data: { text: string }) =>
 
 export const createGroup = (data: {
     name: string;
-    shortDescription: string;
-    description: string;
-}) => {
-    axios.post("/api/groups", data);
-};
+    shortDescription?: string;
+    description?: string;
+}) => axios.post("/api/groups", data);
+
 export const getGroup = (groupId: number | string) =>
     axios.get(`/api/groups/${groupId}`);
 

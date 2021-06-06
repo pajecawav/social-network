@@ -79,7 +79,7 @@ export const ChatMessage = memo(
                     )}
 
                     <div>
-                        <span className="break-all">
+                        <span className="break-all whitespace-pre-wrap">
                             <LinkifiedText text={message.text} />
                         </span>
                         {message.timeEdited && (

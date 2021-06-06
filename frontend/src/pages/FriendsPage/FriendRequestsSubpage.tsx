@@ -69,6 +69,7 @@ export const FriendRequestsSubpage = () => {
                                 )}
                                 <Button
                                     size="thin"
+                                    secondary={isIncoming}
                                     onClick={() => handleDeleteRequest(user)}
                                 >
                                     {isIncoming ? "Decline" : "Cancel"}

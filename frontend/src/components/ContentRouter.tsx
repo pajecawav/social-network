@@ -4,12 +4,13 @@ import { UserContext } from "../contexts/UserContext";
 import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { ChatListPage } from "../pages/ChatListPage";
 import { ChatPage } from "../pages/ChatPage";
+import { CreateGroupPage } from "../pages/CreateGroupPage";
 import { EditProfilePage } from "../pages/EditProfilePage";
 import { FriendsPage } from "../pages/FriendsPage";
+import { GroupListPage } from "../pages/GroupListPage";
 import { GroupPage } from "../pages/GroupPage";
 import { JoinChatPage } from "../pages/JoinChatPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
-import { UsersGroupsPage } from "../pages/UsersGroupsPage";
 import { UsersSearchPage } from "../pages/UsersSearchPage";
 import { NavigationBar } from "./NavigationBar";
 
@@ -51,8 +52,14 @@ export const ContentRouter = () => {
                 />,
                 <Route
                     exact
+                    path="/groups/create"
+                    component={CreateGroupPage}
+                    key="/groups/create"
+                />,
+                <Route
+                    exact
                     path="/groups"
-                    component={UsersGroupsPage}
+                    component={GroupListPage}
                     key="/groups"
                 />,
                 <Route

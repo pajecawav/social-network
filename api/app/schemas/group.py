@@ -23,8 +23,8 @@ class Group(BaseModel):
 
 class GroupCreate(BaseModel):
     name: str
-    short_description: Optional[str] = Field(..., max_length=100)
-    description: Optional[str] = Field(..., max_length=1000)
+    short_description: Optional[str] = Field(None, max_length=100)
+    description: Optional[str] = Field(None, max_length=1000)
 
 
 class GroupUpdate(BaseModel):

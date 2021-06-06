@@ -3,8 +3,8 @@ import { updatePassword } from "../../api";
 import { UserContext } from "../../contexts/UserContext";
 import { Button } from "../../ui/Button";
 import { FormError } from "../../ui/FormError";
+import { FormField } from "../../ui/FormField";
 import { FormSuccess } from "../../ui/FormSuccess";
-import { FormField } from "./FormField";
 
 export const PasswordSubpage = () => {
     const { user } = useContext(UserContext);

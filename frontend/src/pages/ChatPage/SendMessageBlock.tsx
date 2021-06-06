@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from "react";
 import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
 import { ReactComponent as SendIcon } from "../../icons/send.svg";
 import { Button } from "../../ui/Button";
-import { Input } from "../../ui/Input";
+import { Textarea } from "../../ui/Textarea";
 
 type SendMessageBlockProps = {
     onSubmit: (text: string) => void;
@@ -20,19 +20,19 @@ export const SendMessageBlock = ({ onSubmit }: SendMessageBlockProps) => {
 
     return (
         <form className="flex gap-4" onSubmit={handleSendMessage}>
-            <Input
+            <Textarea
                 className="flex-grow"
-                type="text"
                 placeholder="Write a message"
                 value={text}
-                onChange={setText}
+                maxRows={isSmallScreen ? 5 : 10}
+                onChange={(event) => setText(event.target.value)}
             />
             {isSmallScreen ? (
-                <button className="w-8 text-secondary-600">
+                <button className="self-end w-8 text-secondary-600">
                     <SendIcon />
                 </button>
             ) : (
-                <Button>Send</Button>
+                <Button className="self-end">Send</Button>
             )}
         </form>
     );

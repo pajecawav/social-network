@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { getUserInfo, updateUserInfo } from "../../api";
 import { LoadingPlaceholder } from "../../components/LoadingPlaceholder";
@@ -8,10 +8,10 @@ import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
 import { UserInfo } from "../../types";
 import { Button } from "../../ui/Button";
 import { FormError } from "../../ui/FormError";
+import { FormField } from "../../ui/FormField";
 import { FormSuccess } from "../../ui/FormSuccess";
+import { Label } from "../../ui/Label";
 import { SelectInput } from "../../ui/SelectInput";
-import { FormField } from "./FormField";
-import { Label } from "./Label";
 
 export const GENDER_VALUES = [
     { value: null, name: "None selected" },
@@ -23,7 +23,6 @@ export function UserInfoSubpage() {
     const { user } = useContext(UserContext);
     const [userInfo, _setUserInfo] = useState<UserInfo | null>(null);
     const [success, setSuccess] = useState<boolean | null>(null);
-    const formRef = useRef<HTMLFormElement | null>(null);
     const isSmallScreen = useIsSmallScreen();
 
     const setUserInfo = (obj: Partial<UserInfo>) => {
@@ -80,7 +79,6 @@ export function UserInfoSubpage() {
             <form
                 className="flex flex-col w-full sm:w-auto "
                 onSubmit={handleUpdateUserInfo}
-                ref={formRef}
             >
                 <div
                     className={clsx(

@@ -78,7 +78,12 @@ export const Chat = ({
         return (
             <React.Fragment key={message.messageId}>
                 {shouldDisplayDate && (
-                    <div className="mx-auto font-sm text-primary-500">
+                    <div
+                        className={clsx(
+                            "mx-auto font-sm text-primary-500",
+                            previousMessage && "mt-6"
+                        )}
+                    >
                         {formatDate(sentDate)}
                     </div>
                 )}
