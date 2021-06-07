@@ -13,31 +13,40 @@ export const GroupHeader = () => {
     }
 
     return (
-        <Container className="flex gap-4 p-4 md:col-span-2">
+        <Container className="flex flex-col gap-4 p-4 md:col-span-2">
             <div className="flex gap-4">
-                <div className="w-16">
-                    <CircleAvatar
-                        className="flex-shrink-0"
-                        identiconSeed={group.groupId}
-                    />
+                <div className="flex gap-4">
+                    <div className="w-16">
+                        <CircleAvatar
+                            className="flex-shrink-0"
+                            identiconSeed={group.groupId}
+                        />
+                    </div>
+                    <div>
+                        <div>{group.name}</div>
+                        {group.shortDescription && (
+                            <div className="text-primary-500">
+                                {group.shortDescription}
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <div>
-                    <div>{group.name}</div>
-                    {group.shortDescription && (
-                        <div className="text-primary-500">
-                            {group.shortDescription}
-                        </div>
-                    )}
-                </div>
+                {typeof group.isFollowing === "boolean" && (
+                    <Button
+                        className="self-start ml-auto"
+                        size="thin"
+                        onClick={toggleFollow}
+                    >
+                        {group.isFollowing ? "Unfollow" : "Follow"}
+                    </Button>
+                )}
             </div>
-            {typeof group.isFollowing === "boolean" && (
-                <Button
-                    className="self-start ml-auto"
-                    size="thin"
-                    onClick={toggleFollow}
-                >
-                    {group.isFollowing ? "Unfollow" : "Follow"}
-                </Button>
+
+            {group.description && (
+                <div className="pt-2 border-t border-primary-700">
+                    <h2 className="text-primary-500">Description:</h2>
+                    <div>{group.description}</div>
+                </div>
             )}
         </Container>
     );
