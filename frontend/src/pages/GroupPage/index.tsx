@@ -10,6 +10,7 @@ import { GroupContacts } from "./GroupContacts";
 import { GroupHeader } from "./GroupHeader";
 import { GroupPosts } from "./GroupPosts";
 import { GroupUsers } from "./GroupUsers";
+import { ManageGroupBlock } from "./ManageGroupBlock";
 
 export const GroupPage = () => {
     const { groupId } = useParams<{ groupId: string }>();
@@ -27,6 +28,7 @@ const GroupInfoSidebar = () => {
 
     return (
         <div className="flex flex-col gap-4">
+            {group?.isAdmin && <ManageGroupBlock />}
             {!isSmallScreen && <GroupUsers />}
             <GroupContacts admin={group!.admin} />
         </div>

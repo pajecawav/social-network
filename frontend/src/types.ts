@@ -83,4 +83,5 @@ export type Group = {
     avatar?: Image;
 
     isFollowing?: boolean;
+    isAdmin?: boolean;
 };

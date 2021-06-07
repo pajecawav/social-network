@@ -34,6 +34,7 @@ export const GroupHeader = () => {
                 {typeof group.isFollowing === "boolean" && (
                     <Button
                         className="self-start ml-auto"
+                        disabled={group.isAdmin}
                         size="thin"
                         onClick={toggleFollow}
                     >

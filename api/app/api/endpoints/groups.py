@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -16,7 +16,6 @@ def create_group(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    # TODO: add pagination and filtering
     group = crud.group.create(db, group_in, admin=current_user)
     return group
 
@@ -61,6 +60,7 @@ def get_group(
 
     if current_user is not None:
         group_dict["is_following"] = current_user in group.users
+        group_dict["is_admin"] = current_user == group.admin
 
     return group_dict
 
@@ -77,3 +77,23 @@ def get_group_users(
     total_matches = group.users.count()
 
     return {"users": users, "total_matches": total_matches}
+
+
+@router.patch("/{group_id}", response_model=schemas.Group)
+def update_group(
+    group_id: int,
+    group_update: schemas.GroupUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    group = crud.group.get_or_404(db, group_id)
+
+    if group.admin != current_user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only an admin can update group.",
+        )
+
+    group = crud.group.update(db, object_db=group, object_update=group_update)
+
+    return group

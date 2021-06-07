@@ -1,6 +1,6 @@
 import axios from "axios";
 import { camelizeKeys, decamelizeKeys } from "humps";
-import { User, UserInfo } from "./types";
+import { Group, User, UserInfo } from "./types";
 import { getLocalToken } from "./utils";
 
 export const configureAxios = () => {
@@ -180,6 +180,11 @@ export const createGroup = (data: {
     shortDescription?: string;
     description?: string;
 }) => axios.post("/api/groups", data);
+
+export const updateGroup = (
+    groupId: number,
+    data: Partial<Pick<Group, "name" | "shortDescription" | "description">>
+) => axios.patch(`/api/groups/${groupId}`, data);
 
 export const getGroup = (groupId: number | string) =>
     axios.get(`/api/groups/${groupId}`);

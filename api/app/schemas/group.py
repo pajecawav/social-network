@@ -16,6 +16,7 @@ class Group(BaseModel):
     avatar: Optional[Image]
 
     is_following: Optional[bool]
+    is_admin: Optional[bool]
 
     class Config:
         orm_mode = True

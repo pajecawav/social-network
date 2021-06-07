@@ -10,6 +10,7 @@ import { FriendsPage } from "../pages/FriendsPage";
 import { GroupListPage } from "../pages/GroupListPage";
 import { GroupPage } from "../pages/GroupPage";
 import { JoinChatPage } from "../pages/JoinChatPage";
+import { ManageGroupPage } from "../pages/ManageGroupPage";
 import { SearchPage } from "../pages/SearchPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
 import { NavigationBar } from "./NavigationBar";
@@ -63,9 +64,15 @@ export const ContentRouter = () => {
                     key="/groups"
                 />,
                 <Route
+                    exact
                     path="/groups/:groupId"
                     component={GroupPage}
                     key="/groups/id"
+                />,
+                <Route
+                    path="/groups/:groupId/manage"
+                    component={ManageGroupPage}
+                    key="/groups/id/manage"
                 />,
                 // routes only present on devices with small screen
                 ...(isSmallScreen
