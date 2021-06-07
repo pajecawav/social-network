@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router";
+import { Container } from "../../components/Container";
 import { Tab, TabsHeader } from "../../components/TabsHeader";
 import { useSearchParams } from "../../hooks/useSearchParams";
 import { buildSearchString } from "../../utils";
@@ -34,7 +35,7 @@ export const SearchPage = () => {
     }
 
     return (
-        <div className="flex flex-col">
+        <Container className="flex flex-col min-h-full md:min-h-0">
             <TabsHeader
                 tabs={TABS}
                 selectedTab={selectedTab}
@@ -42,6 +43,6 @@ export const SearchPage = () => {
             />
 
             {component}
-        </div>
+        </Container>
     );
 };
