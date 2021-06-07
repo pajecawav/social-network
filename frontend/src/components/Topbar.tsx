@@ -17,7 +17,7 @@ export const Topbar = () => {
     const handleSearch = (event: FormEvent) => {
         event.preventDefault();
         history.push({
-            pathname: "/users/search",
+            pathname: "/search",
             search: buildSearchString({ query }),
         });
         setQuery("");

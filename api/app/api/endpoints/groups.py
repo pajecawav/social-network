@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import func
@@ -21,10 +21,32 @@ def create_group(
     return group
 
 
-@router.get("", response_model=List[schemas.Group])
-def get_groups(db: Session = Depends(get_db)):
-    # TODO: add pagination and filtering
-    return db.query(models.Group).all()
+@router.get("", response_model=schemas.GroupsPaginationOut)
+def get_groups(
+    query: Optional[str] = None,
+    limit: int = 20,
+    cursor: Optional[int] = None,
+    db: Session = Depends(get_db),
+):
+    q = db.query(models.Group).order_by(models.Group.group_id)
+
+    if query:
+        # TODO: figure out full text search in PostgreSQL
+        q = q.filter(models.Group.name.ilike(f"%{query}%"))
+
+    total_matches = q.count()
+
+    if cursor is not None:
+        q = q.filter(models.Group.group_id >= cursor)
+
+    groups = q.limit(limit + 1).all()
+    next_cursor = groups.pop().group_id if (len(groups) == (limit + 1)) else None
+
+    return {
+        "total_matches": total_matches,
+        "groups": groups,
+        "next_cursor": next_cursor,
+    }
 
 
 @router.get("/{group_id}", response_model=schemas.Group)

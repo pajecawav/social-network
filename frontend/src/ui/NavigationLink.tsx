@@ -24,7 +24,7 @@ export const NavigationLink = ({
         {...props}
     >
         {Icon && (
-            <Icon className="stroke-current stroke-1 text-secondary w-7 h-7 md:w-5 md:h-5" />
+            <Icon className="stroke-current stroke-1 text-secondary-700 w-7 h-7 md:w-5 md:h-5" />
         )}
         <div className="text-xl md:text-base">{text}</div>
     </Link>

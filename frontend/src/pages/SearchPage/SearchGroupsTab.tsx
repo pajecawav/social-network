@@ -2,20 +2,18 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Waypoint } from "react-waypoint";
-import { getUsers } from "../api";
-import { Container } from "../components/Container";
-import { HeaderWithCount } from "../components/HeaderWithCount";
-import { UserCard } from "../components/UserCard";
-import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
-import { useSearchParams } from "../hooks/useSearchParams";
-import { useTitle } from "../hooks/useTitle";
-import { User } from "../types";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
-import { Spinner } from "../ui/Spinner";
-import { buildSearchString } from "../utils";
+import { getGroups } from "../../api";
+import { GroupCard } from "../../components/GroupCard";
+import { useIsSmallScreen } from "../../hooks/useIsSmallScreen";
+import { useSearchParams } from "../../hooks/useSearchParams";
+import { useTitle } from "../../hooks/useTitle";
+import { Group } from "../../types";
+import { Button } from "../../ui/Button";
+import { Input } from "../../ui/Input";
+import { Spinner } from "../../ui/Spinner";
+import { buildSearchString } from "../../utils";
 
-export const UsersSearchPage = () => {
+export const SearchGroupsTab = () => {
     const history = useHistory();
     const { query: queryParam = null } = useSearchParams();
 
@@ -23,16 +21,15 @@ export const UsersSearchPage = () => {
     const [search, setSearch] = useState(query);
     const [loadOnScroll, setLoadOnScroll] = useState(true);
 
-    const [users, setUsers] = useState<User[]>([]);
+    const [groups, setGroups] = useState<Group[]>([]);
     const [nextCursor, setNextCursor] = useState<number | null>(null);
-    const [totalMatches, setTotalMatches] = useState<number | null>(null);
 
     const isSmallScreen = useIsSmallScreen();
 
     useTitle(`Search results` + (search ? ` for ${search}` : ""));
 
     useEffect(() => {
-        setUsers([]);
+        setGroups([]);
         setLoadOnScroll(true);
         setNextCursor(null);
     }, [search]);
@@ -44,28 +41,26 @@ export const UsersSearchPage = () => {
     }, [queryParam]);
 
     const handleSearch = () => {
-        setSearch(query);
         history.push({
-            pathname: "/users/search",
-            search: buildSearchString({ query }),
+            pathname: "/search",
+            search: buildSearchString({ query, section: "groups" }),
         });
     };
 
-    const fetchMoreUsers = () => {
-        getUsers({ query: search, cursor: nextCursor }).then((response) => {
-            setUsers([...users, ...response.data.users]);
-            setNextCursor(response.data.nextCursor);
-            setTotalMatches(response.data.totalMatches);
-            setLoadOnScroll(Boolean(response.data.nextCursor));
-        });
+    const fetchMoreGroups = () => {
+        getGroups({ query: search, cursor: nextCursor, limit: 20 }).then(
+            (response) => {
+                setGroups([...groups, ...response.data.groups]);
+                setNextCursor(response.data.nextCursor);
+                setLoadOnScroll(Boolean(response.data.nextCursor));
+            }
+        );
     };
 
-    const noResults = !(loadOnScroll || users.length);
+    const noResults = !(loadOnScroll || groups.length);
 
     return (
-        <Container className="flex flex-col">
-            <HeaderWithCount title="People" count={totalMatches} />
-
+        <div>
             <div className="flex gap-4 p-4 border-b-2 border-primary-700">
                 <Input
                     className="flex-grow"
@@ -81,21 +76,21 @@ export const UsersSearchPage = () => {
             </div>
 
             <div className="mx-6">
-                {users.length > 0 &&
-                    users.map((user) => (
-                        <UserCard
+                {groups.length > 0 &&
+                    groups.map((group) => (
+                        <GroupCard
                             className="pb-4 my-4 border-b border-primary-700"
-                            key={user.userId}
-                            user={user}
+                            key={group.groupId}
+                            group={group}
                         />
                     ))}
 
                 {loadOnScroll && (
-                    <Waypoint onEnter={fetchMoreUsers} bottomOffset={-200}>
+                    <Waypoint onEnter={fetchMoreGroups} bottomOffset={-200}>
                         <div
                             className={clsx(
                                 "flex mt-6 mb-2",
-                                users.length === 0 && "h-20"
+                                groups.length === 0 && "h-20"
                             )}
                         >
                             <Spinner className="m-auto" />
@@ -109,6 +104,6 @@ export const UsersSearchPage = () => {
                     </div>
                 )}
             </div>
-        </Container>
+        </div>
     );
 };

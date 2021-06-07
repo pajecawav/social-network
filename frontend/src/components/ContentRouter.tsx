@@ -10,8 +10,8 @@ import { FriendsPage } from "../pages/FriendsPage";
 import { GroupListPage } from "../pages/GroupListPage";
 import { GroupPage } from "../pages/GroupPage";
 import { JoinChatPage } from "../pages/JoinChatPage";
+import { SearchPage } from "../pages/SearchPage";
 import { UserProfilePage } from "../pages/UserProfilePage";
-import { UsersSearchPage } from "../pages/UsersSearchPage";
 import { NavigationBar } from "./NavigationBar";
 
 export const ContentRouter = () => {
@@ -79,7 +79,7 @@ export const ContentRouter = () => {
                       ]
                     : []),
             ]}
-            <Route path="/users/search" component={UsersSearchPage} />
+            <Route path="/search" component={SearchPage} />
             <Route
                 path="/users/:id"
                 render={(props) => (

@@ -3,8 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { getUsersGroups } from "../api";
-import { CircleAvatar } from "../components/CircleAvatar";
 import { Container } from "../components/Container";
+import { GroupCard } from "../components/GroupCard";
 import { HeaderWithCount } from "../components/HeaderWithCount";
 import { LoadingPlaceholder } from "../components/LoadingPlaceholder";
 import { UserContext } from "../contexts/UserContext";
@@ -12,35 +12,6 @@ import { useIsSmallScreen } from "../hooks/useIsSmallScreen";
 import { useSearchParams } from "../hooks/useSearchParams";
 import { Group } from "../types";
 import { Button } from "../ui/Button";
-
-const GroupCard = ({ group }: { group: Group }) => {
-    return (
-        <div className="flex gap-4 pb-4 mt-4 border-b border-primary-700 ">
-            <Link
-                to={`/groups/${group.groupId}`}
-                className="flex-shrink-0 w-16"
-            >
-                <CircleAvatar
-                    fileName={group.avatar?.filename}
-                    identiconSeed={group.groupId}
-                />
-            </Link>
-            <div>
-                <Link
-                    to={`/groups/${group.groupId}`}
-                    className="hover:underline"
-                >
-                    {group.name}
-                </Link>
-                {group.shortDescription && (
-                    <div className="text-primary-500">
-                        {group.shortDescription}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
 
 export const GroupListPage = () => {
     const { loggedIn, user } = useContext(UserContext);

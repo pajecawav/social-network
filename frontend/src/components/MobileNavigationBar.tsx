@@ -27,7 +27,7 @@ export function MobileNavigationBar() {
         <div className="fixed bottom-0 left-0 flex items-center justify-around w-screen h-12 p-4 bg-primary-700 ">
             <NavigationItem to="/me" icon={UserCircleIcon} />
             <NavigationItem to="/feed" icon={NewspaperIcon} />
-            <NavigationItem to="/users/search" icon={SearchIcon} />
+            <NavigationItem to="/search" icon={SearchIcon} />
             <NavigationItem to="/chats" icon={ChatIcon} />
             <NavigationItem to="/menu" icon={MenuIcon} />
         </div>

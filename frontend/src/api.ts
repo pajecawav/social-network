@@ -184,6 +184,12 @@ export const createGroup = (data: {
 export const getGroup = (groupId: number | string) =>
     axios.get(`/api/groups/${groupId}`);
 
+export const getGroups = (params: {
+    query?: string | null;
+    limit?: number | null;
+    cursor?: number | null;
+}) => axios.get("/api/groups", { params });
+
 export const getUsersGroups = (userId: number | string) =>
     axios.get(`/api/users/${userId}/groups`);
 
